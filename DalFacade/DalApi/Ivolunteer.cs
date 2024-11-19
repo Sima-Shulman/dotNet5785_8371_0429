@@ -1,6 +1,6 @@
 ﻿namespace DalApi;
 using DO;
-internal interface Ivolunteer
+internal interface IVolunteer
 {
     void Create(Volunteer item); //Creates new entity object in DAL
     Volunteer? Read(int id); //Reads entity object by its ID
