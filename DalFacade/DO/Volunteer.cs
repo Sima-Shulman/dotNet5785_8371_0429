@@ -2,25 +2,37 @@
 
 namespace DO;
 /// <summary>
-/// /// Volunteer Entity represents a Volunteer with all its props
+/// 
 /// </summary>
+/// <param name="Id"></param>
+/// <param name="fullName"></param>
+/// <param name="cellphoneNumber"></param>
+/// <param name="email"></param>
+/// <param name="fullAddress"></param>
+/// <param name="latitude"></param>
+/// <param name="longitude"></param>
+/// <param name="role"></param>
+/// <param name="isActive"></param>
+/// <param name="DistanceTypes"></param>
+/// <param name="maxDistance"></param>
+/// <param name="password"></param>
 public record Volunteer
+(
+    int Id,
+    string FullName,
+    string CellphoneNumber,
+    string Email,
+    string? FullAddress,
+    double? Latitude,
+    double? Longitude,
+    Role Role,
+    bool IsActive,
+    DistanceTypes DistanceTypes,
+    double? MaxDistance,
+    string? Password
+)
 {
-    private static DistanceTypes aerial_distance;
-
-    public int Id { get; set; }
-    public string fullName { get; set; }
-    public string cellphoneNumber { get; set; }
-    public string email { get; set; }
-    public string? password { get; set; } = GenerateRandomPassword(10);//initialization the password with a random string.
-    public string? fullAdress { get; set; }
-    public double? latitude { get; set; }
-    public double? longitude { get; set; }
-    public Role role { get; set; }
-    public bool isActive { get; set; }
-    public double? maxDistance { get; set; }
-    public DistanceTypes DistanceTypes { get; set; } = DistanceTypes.aerial_distance;
-
+    public Volunteer() : this(0, "", "", "", null, null, null, Role.Volunteer, false, DistanceTypes.aerial_distance, null, GenerateRandomPassword(10)) { }
     private static string GenerateRandomPassword(int length)//generate a random password including letters and numbers.
     {
         const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -36,7 +48,5 @@ public record Volunteer
 
         return password.ToString();
     }
-  
-
 }
 

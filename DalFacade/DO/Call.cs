@@ -1,14 +1,17 @@
 ﻿namespace DO;
 
 public record Call
+
+( 
+    int id,
+    CallType call_type,
+    int? Verbal_description,
+    string full_address ,
+    double latitude,
+    double longitude ,
+    DateTime opening_time ,
+    DateTime max_finish_time 
+ )
 {
-    public CallType call_type { get; set; }
-    public int? Verbal_description { get; set; }
-    public string full_adress { get; set; }
-    public double latitude { get; set; }
-    public double longitude { get; set; }
-    public DateTime opening_time { get; set; }
-    public DateTime max_finish_time { get; set; }
-
-
+    public Call() : this(0, , null , "",0 , 0 ,DateTime.Now,DateTime.Now) {}
 }
