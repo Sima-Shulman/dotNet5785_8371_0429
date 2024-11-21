@@ -1,6 +1,6 @@
 ﻿namespace Dal;
 
-internal static class Config
+public class Config
 {
     internal const int startCallId = 1;
     private static int nextCallId = startCallId;

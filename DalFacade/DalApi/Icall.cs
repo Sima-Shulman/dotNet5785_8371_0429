@@ -1,6 +1,6 @@
 ﻿namespace DalApi;
 using DO;
-internal interface ICall
+public interface ICall
 {
     void Create(Call item); //Creates new entity object in DAL
     Call? Read(int id); //Reads entity object by its ID 
