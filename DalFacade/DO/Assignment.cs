@@ -1,6 +1,6 @@
 ﻿namespace DO;
 
-public record Iassignment
+public record Asignment
 {
     public int VolunteerId { get; set; }
     public DateTime start_time { get; set; }

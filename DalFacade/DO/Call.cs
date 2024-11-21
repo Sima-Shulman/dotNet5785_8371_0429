@@ -1,4 +1,6 @@
-﻿namespace DO;
+﻿using DalApi;
+
+namespace DO;
 
 public record Call
 {
