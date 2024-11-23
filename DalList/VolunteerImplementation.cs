@@ -3,19 +3,18 @@ using DO;
 
 namespace Dal;
 
-public class VolunteerImplementetion : IVolunteer
+public class VolunteerImplementation : IVolunteer
 {
-    public int Create(Volunteer item)
+    public void Create(Volunteer item)
     {
         Volunteer? existingVolunteer = DataSource.Volunteers.Find(volunteer => volunteer.Id == item.Id);
         if (existingVolunteer != null)
         {
-            throw new ArgumentException("An object with this ID already exists");
+            throw new Exception($"Volunteer with ID={item.Id} already exist");
         }
         else
         {
             DataSource.Volunteers.Add(item);
-            return item.Id; //לשאול את סימי
         }
     }
 
@@ -23,7 +22,7 @@ public class VolunteerImplementetion : IVolunteer
     {
         Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer.Id == id);
         if (newVolunteer == null)
-            throw new NotImplementedException("An object with such an ID does not exist");
+            throw new Exception($"Call with ID={id} does Not exist");
         else
             DataSource.Volunteers.Remove(newVolunteer);
     }
@@ -49,7 +48,7 @@ public class VolunteerImplementetion : IVolunteer
         Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer.Id == item.Id);
         if (newVolunteer == null)
         {
-            throw new NotImplementedException("An object with such an ID does not exist");
+            throw new Exception($"Volunteer with ID={item.Id} does Not exist");
         }
         else
         {

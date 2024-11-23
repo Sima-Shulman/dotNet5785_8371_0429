@@ -12,7 +12,10 @@ public enum DistanceTypes
 }
 public enum CallType
 {
-
+    transportation,
+    car_accident,
+    vehicle_breakdown,
+    search_and_rescue,
 }
 public enum EndType
 {

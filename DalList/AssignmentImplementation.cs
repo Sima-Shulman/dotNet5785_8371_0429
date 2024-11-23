@@ -5,20 +5,18 @@ using System.Collections.Generic;
 
 public class AssignmentImplementation : IAssignment
 {
-    public int Create(Assignment item)
+    public void Create(Assignment item)
     {
         int newId = Config.NextAssignmentId;
-        Assignment copy = new Assignment(item);
-        copy.id = newId;
+        Assignment copy = item with { Id = newId, VolunteerId=item.VolunteerId, CallId= item.CallId, Start_time= item.Start_time, End_time= item.End_time, EndType= item.EndType };
         DataSource.Assignments.Add(copy);
-        return newId;
     }
     
     public void Delete(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.id == id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == id);
         if (newAssignment == null)
-            throw new NotImplementedException("An object with such an ID does not exist");
+            throw new Exception($"Assignment with ID={id} does Not exist");
         else
             DataSource.Assignments.Remove(newAssignment);
     }    
@@ -30,7 +28,7 @@ public class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.id == id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == id);
         return newAssignment;
     }
 
@@ -41,10 +39,10 @@ public class AssignmentImplementation : IAssignment
 
     public void Update(Assignment item)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.id == item.id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == item.Id);
         if (newAssignment == null)
         {
-            throw new NotImplementedException("An object with such an ID does not exist");
+            throw new Exception($"Assignment with ID={item.Id} does Not exist");
         }
         else
         {

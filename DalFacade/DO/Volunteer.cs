@@ -2,20 +2,21 @@
 
 namespace DO;
 /// <summary>
-/// 
+/// Volunteer Entity represents a volunteer with all its props
 /// </summary>
-/// <param name="Id"></param>
-/// <param name="fullName"></param>
-/// <param name="cellphoneNumber"></param>
-/// <param name="email"></param>
-/// <param name="fullAddress"></param>
+/// <param name="Id"> Personal unique ID of the student (as in national id card)</param>
+/// <param name="fullName">First and last Name of the volunteer</param>
+/// <param name="cellphoneNumber">The voluteer's cellphone number</param>
+/// <param name="email">The voluteer's email</param>
+/// <param name="fullAddress">The voluteer's address</param>
 /// <param name="latitude"></param>
 /// <param name="longitude"></param>
-/// <param name="role"></param>
-/// <param name="isActive"></param>
-/// <param name="DistanceTypes"></param>
-/// <param name="maxDistance"></param>
-/// <param name="password"></param>
+/// <param name="role">The voluteer's role: voluteer or manager</param>
+/// <param name="isActive"> Whether the voluteer is active in the organization or whether he left</param>
+/// <param name="DistanceTypes">The type of the maximum distance: Aerial distance, walking distance, driving distance</param>
+/// <param name="DistanceTypes">The type of the maximum distance: Aerial distance, walking distance, driving distance</param>
+/// <param name="maxDistance">Maximum distance for receiving a call. The default is air distance</param>
+/// <param name="password">The volunteer's password foe entering the organization system, default a random string of 10 characters </param>
 public record Volunteer
 (
     int Id,
@@ -32,6 +33,9 @@ public record Volunteer
     string? Password
 )
 {
+    /// <summary>
+    /// Default constructor for stage 3
+    /// </summary>
     public Volunteer() : this(0, "", "", "", null, null, null, Role.Volunteer, false, DistanceTypes.aerial_distance, null, GenerateRandomPassword(10)) { }
     private static string GenerateRandomPassword(int length)//generate a random password including letters and numbers.
     {

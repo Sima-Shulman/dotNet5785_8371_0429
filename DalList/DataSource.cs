@@ -1,5 +1,8 @@
 ﻿
 namespace Dal;
+/// <summary>
+/// 
+/// </summary>
 internal static class DataSource
 {
     internal static List<DO.Call?> Calls { get; } = new();
