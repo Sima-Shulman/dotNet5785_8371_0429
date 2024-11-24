@@ -13,7 +13,6 @@
 public record Assignment
 
 (
-     int Id,
      int VolunteerId,
      int CallId,
      DateTime Start_time,
@@ -21,8 +20,9 @@ public record Assignment
      EndType? EndType
  )
 {
+    public int Id {  get; init; }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Assignment() : this(0, 0, 0,Config.Clock, null, null) { }
+    public Assignment() : this( 0, 0,Config.Clock, null, null) { }
 }

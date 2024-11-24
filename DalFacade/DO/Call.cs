@@ -15,7 +15,6 @@ namespace DO;
 public record Call
 
 ( 
-    int Id,
     CallType Call_type,
     string? Verbal_description,
     string Full_address ,
@@ -25,8 +24,11 @@ public record Call
     DateTime Max_finish_time 
  )
 {
+    public int Id { get; init; }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Call() : this(0, CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now, DateTime.Now) { }
+    ///     int Id,
+    
+    public Call() : this( CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now, DateTime.Now) { }
 }

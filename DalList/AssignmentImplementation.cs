@@ -8,7 +8,7 @@ public class AssignmentImplementation : IAssignment
     public void Create(Assignment item)
     {
         int newId = Config.NextAssignmentId;
-        Assignment copy = item with { Id = newId, VolunteerId=item.VolunteerId, CallId= item.CallId, Start_time= item.Start_time, End_time= item.End_time, EndType= item.EndType };
+        Assignment copy = item with { Id = newId};
         DataSource.Assignments.Add(copy);
     }
     

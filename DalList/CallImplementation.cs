@@ -8,7 +8,7 @@ public class CallImplementation : ICall
     public void Create(Call item)
     {
         int newId = Config.NextCallId;
-        Call copy = item with { Id = newId, Call_type = item.Call_type, Verbal_description = item.Verbal_description, Full_address = item.Full_address, Latitude = item.Latitude, Longitude = item.Longitude, Opening_time = item.Opening_time, Max_finish_time = item.Max_finish_time } ;
+        Call copy = item with { Id = newId };
         DataSource.Calls.Add(copy);
     }
 

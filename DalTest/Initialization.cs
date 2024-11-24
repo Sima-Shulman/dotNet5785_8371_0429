@@ -3,6 +3,7 @@
 using Dal;
 using DalApi;
 using DO;
+using System.Security.Cryptography.X509Certificates;
 
 public static class Initialization
 {
@@ -10,7 +11,6 @@ public static class Initialization
     private static IAssignment? s_dalAssignment; //stage 1
     private static IVolunteer? s_dalVolunteer; //stage 1
     private static IConfig? s_dalConfig; //stage 1
-
     private static readonly Random s_rand = new();
     private static void CreateCalls()
     {
@@ -190,7 +190,8 @@ public static class Initialization
             34.8017, 34.7875, 34.7784, 34.7854, 34.7989, 34.8371, 34.8915, 34.7785, 34.8124, 34.7972,
             34.9076, 34.7915, 34.7761, 34.8527, 34.8183, 34.7928, 34.8034, 34.7569, 34.9075, 34.8063
         };
-        DateTime systemTime = Config.Clock;
+       
+        DateTime systemTime = s_dalConfig!.Clock;
         DateTime[] openingTimes = new DateTime[50];
         DateTime[] finishTimes = new DateTime[50];// מגדירים מערך עם 50 תאים
         DateTime callStartTime;
@@ -207,13 +208,41 @@ public static class Initialization
         }
         for (int i = 0; i < 50; i++)
         {
-            s_dalCall!.Create(new Call(Config.NextCallId, callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], openingTimes[i], finishTimes[i]));
+            s_dalCall!.Create(new Call( callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], openingTimes[i], finishTimes[i]));
         }
     }
     private static void CreateAssignments()
     {
-
+        Random rand = new Random();
+        var calls= s_dalCall!.ReadAll();
+        var volunteers= s_dalVolunteer!.ReadAll();
+        foreach (Call call in calls)
+        {
+            Volunteer randomVolunteer = volunteers[rand.Next(volunteers.Count)];
+            TimeSpan duration = call.Max_finish_time - call.Opening_time;
+            double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
+            DateTime randomStartTime = call.Opening_time.AddMinutes(randomMinutes);
+            DateTime randomEndTime = randomStartTime.AddMinutes(rand.NextDouble());
+            EndType endType;
+            if (randomEndTime > call.Max_finish_time)
+            {
+                endType = EndType.expired; 
+            }
+            else
+            {
+                endType = (EndType)rand.Next(Enum.GetValues(typeof(EndType)).Length-1);
+            }
+            s_dalAssignment!.Create(new Assignment
+            {
+                CallId = call.Id,
+                VolunteerId = randomVolunteer.Id,
+                Start_time = randomStartTime,
+                End_time = randomEndTime,
+                EndType = endType
+            });
+        }
     }
+
 
     private static void CreateVolunteers()
     {
@@ -235,28 +264,7 @@ public static class Initialization
             31.2383, 32.1093, 32.0853, 32.0700, 32.1497, 31.8780, 32.0853, 32.0614, 32.0911, 31.7683 };
         double[] longitudes = { 34.7846, 34.9862, 35.2137, 34.8530, 34.7815, 34.7671, 34.8123, 34.8110, 35.2271, 34.7812,
             34.7707, 34.8722, 34.7818, 34.7665, 34.7881, 34.7933, 34.7660, 34.8075, 34.7833, 35.2137 };
-        DistanceTypes[] distanceArray = {
-            DistanceTypes.aerial_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.aerial_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.aerial_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.aerial_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.aerial_distance,
-            DistanceTypes.driving_distance,
-            DistanceTypes.walking_distance,
-            DistanceTypes.aerial_distance,
-            DistanceTypes.driving_distance 
-        };
+    
         for (int i = 0; i < 19; i++)
         {
             s_dalVolunteer!.Create(new Volunteer() with
@@ -270,7 +278,7 @@ public static class Initialization
                 Longitude = latitudes[i],
                 Role = Role.Volunteer,
                 IsActive = true,
-                DistanceTypes = distanceArray[i],
+                DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
                 MaxDistance = rand.Next(0, 100000)
             });
         }
@@ -288,7 +296,7 @@ public static class Initialization
         s_dalCall.DeleteAll(); //stage 1
         Console.WriteLine("Reset Configuration values and List values...");
         s_dalConfig.Reset(); //stage 1
-        s_dalAssignment.DeleteAll(); //stage 1
+        s_dalAssignment.DeleteAll(); //stage 
         Console.WriteLine("Reset Configuration values and List values...");
         s_dalConfig.Reset(); //stage 1
         s_dalVolunteer.DeleteAll(); //stage 1
@@ -296,6 +304,6 @@ public static class Initialization
         CreateCalls();
         CreateAssignments();
         CreateVolunteers();
-
+       
     }
 }
