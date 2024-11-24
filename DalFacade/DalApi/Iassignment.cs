@@ -1,5 +1,8 @@
 ﻿namespace DalApi;
 using DO;
+/// <summary>
+/// Interface for the Assignment class, with the CRUD functions.
+/// </summary>
 public interface IAssignment
 {
     void Create(DO.Assignment item); //Creates new entity object in DAL

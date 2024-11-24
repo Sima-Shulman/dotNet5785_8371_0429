@@ -2,7 +2,9 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
-
+/// <summary>
+/// The implementation class for the Calls. Implementing all the CRUD functions.
+/// </summary>
 public class CallImplementation : ICall
 {
     public void Create(Call item)

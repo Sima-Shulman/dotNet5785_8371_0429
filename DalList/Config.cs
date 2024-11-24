@@ -1,6 +1,6 @@
 ﻿namespace Dal;
 /// <summary>
-/// 
+/// The configuration class. Holds the system's variables.
 /// </summary>
 public class Config
 {
@@ -11,7 +11,7 @@ public class Config
     private static int nextAssignmentId = startAssignmentId;
     internal static int NextAssignmentId { get => nextAssignmentId++; }
     internal static DateTime Clock { get; set; } = DateTime.Now;
-    internal static TimeSpan RiskRange { get; set; }
+    internal static TimeSpan RiskRange { get; set; }=TimeSpan.FromHours(1);
     internal static void Reset()
     {
         nextCallId = startCallId;

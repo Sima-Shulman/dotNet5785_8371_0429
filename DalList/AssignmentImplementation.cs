@@ -2,7 +2,9 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
-
+/// <summary>
+/// The implementation class for the Assignments. Implementing all the CRUD functions.
+/// </summary>
 public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
@@ -14,7 +16,7 @@ public class AssignmentImplementation : IAssignment
     
     public void Delete(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.Id == id);
         if (newAssignment == null)
             throw new Exception($"Assignment with ID={id} does Not exist");
         else
@@ -28,18 +30,18 @@ public class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.Id == id);
         return newAssignment;
     }
 
     public List<Assignment> ReadAll()
     {
-        return new List<Assignment>(DataSource.Assignments);
+        return new List<Assignment>(DataSource.Assignments!);
     }
 
     public void Update(Assignment item)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment.Id == item.Id);
+        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.Id == item.Id);
         if (newAssignment == null)
         {
             throw new Exception($"Assignment with ID={item.Id} does Not exist");

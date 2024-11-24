@@ -4,7 +4,9 @@ using DO;
 using Microsoft.VisualBasic;
 
 namespace DalTest;
-
+/// <summary>
+/// The test program, for to check that all the classes are defined well.
+/// </summary>
 internal class Program
 {
     private static IAssignment? s_dalAssignment = new AssignmentImplementation(); //stage 1
@@ -35,13 +37,21 @@ internal class Program
                         ShowAssignmentMenu();
                         break;
                     case 4:
+                        Initialization.Do(s_dalCall, s_dalAssignment, s_dalVolunteer, s_dalConfig);
                         break;
                     case 5:
+                        ReadAllCalls();
+                        ReadAllCalls();
+                        ReadAllAssignments();
                         break;
                     case 6:
                         ShowConfigMenu();
                         break;
                     case 7:
+                        s_dalCall!.DeleteAll();
+                        s_dalVolunteer!.DeleteAll();
+                        s_dalAssignment!.DeleteAll();
+                        s_dalConfig!.Reset();
                         break;
                     default:
                         Console.WriteLine("Invalid choice, try again.");
@@ -223,10 +233,10 @@ internal class Program
 
         // קריאה לשדות האחרים
         Console.Write("Enter Call Description: ");
-        string verbal_description = Console.ReadLine();
+        string verbal_description = Console.ReadLine()!;
 
         Console.Write("Enter Full Address: ");
-        string full_address = Console.ReadLine();
+        string full_address = Console.ReadLine()!;
 
         Console.Write("Enter Latitude: ");
         if (!double.TryParse(Console.ReadLine(), out double latitude))
@@ -263,7 +273,7 @@ internal class Program
     {
         Console.Clear();
         Console.Write("Enter Call ID to delete: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         s_dalCall?.Delete(id);
         Console.WriteLine("Call deleted successfully.");
     }
@@ -327,7 +337,7 @@ internal class Program
 
         // קריאה למספר טלפון נייד עם בדיקת תקינות
         Console.Write("Enter Cellphone Number: ");
-        string cellphoneNumber = Console.ReadLine();
+        string cellphoneNumber = Console.ReadLine()!;
         if (string.IsNullOrEmpty(cellphoneNumber) || cellphoneNumber.Length < 10)
         {
             throw new FormatException("Cellphone number is invalid!");
@@ -335,7 +345,7 @@ internal class Program
 
         // קריאה לשם מלא
         Console.Write("Enter Full Name: ");
-        string fullName = Console.ReadLine();
+        string fullName = Console.ReadLine()!;
         if (string.IsNullOrEmpty(fullName))
         {
             throw new FormatException("Full Name is required!");
@@ -343,7 +353,7 @@ internal class Program
 
         // קריאה לכתובת דואר אלקטרוני
         Console.Write("Enter Email: ");
-        string email = Console.ReadLine();
+        string email = Console.ReadLine()!;
         if (!email.Contains("@"))
         {
             throw new FormatException("Email is invalid!");
@@ -571,7 +581,7 @@ internal class Program
     {
         Console.Clear();
         Console.Write("Enter Volunteer ID to delete: ");
-        int id = int.Parse(Console.ReadLine());
+        int id = int.Parse(Console.ReadLine()!);
         s_dalVolunteer?.Delete(id);
         Console.WriteLine("Volunteer deleted successfully.");
     }
@@ -601,7 +611,7 @@ internal class Program
             case 0:
                 return;
             case 1:
-                CreateAssignment();
+                //CreateAssignment();
                 break;
             case 2:
                 ReadAssignmentById();
@@ -610,7 +620,7 @@ internal class Program
                 ReadAllAssignments();
                 break;
             case 4:
-                UpdateAssignment();
+                //UpdateAssignment();
                 break;
             case 5:
                 DeleteAssignment();
@@ -624,6 +634,55 @@ internal class Program
         }
     }
 
+    private static void ReadAssignmentById()
+    {
+        Console.Clear();
+        Console.Write("Enter Assignment ID to read: ");
+        int id = int.Parse(Console.ReadLine()!);
+        var assignment = s_dalAssignment?.Read(id);
+        if (assignment != null)
+        {
+            Console.WriteLine($"Assignment ID: {assignment.Id}, Volunteer ID: {assignment.VolunteerId}, " +
+                $"Call Id: {assignment.CallId},  Start Time: {assignment.Start_time}, " +
+                $"End Time: {assignment.End_time}, End Type: {assignment.EndType}, ");
+        }
+        else
+            Console.WriteLine("Assignment not found.");
+    }
+
+    private static void ReadAllAssignments()
+    {
+        Console.Clear();
+        var assignments = s_dalAssignment?.ReadAll();
+        if (assignments != null)
+        {
+            foreach (var assignment in assignments)
+            {
+                Console.WriteLine($"Assignment ID: {assignment.Id}, Volunteer ID: {assignment.VolunteerId}, " +
+                    $"Call Id: {assignment.CallId},  Start Time: {assignment.Start_time}, " +
+                    $"End Time: {assignment.End_time}, End Type: {assignment.EndType}, ");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No assignments found.");
+        }
+    }
+
+    private static void DeleteAssignment()
+    {
+        Console.Clear();
+        Console.Write("Enter Assignment ID to delete: ");
+        int id = int.Parse(Console.ReadLine()!);
+        s_dalAssignment?.Delete(id);
+        Console.WriteLine("Call deleted successfully.");
+    }
+
+    private static void DeleteAllAssignments()
+    {
+        s_dalAssignment?.DeleteAll();
+        Console.WriteLine("All are assignments successfully deleted.");
+    }
     private static void ShowConfigMenu()
     {
         Console.Clear();
@@ -644,18 +703,25 @@ internal class Program
             case 0:
                 return;
             case 1:
+                s_dalConfig!.Clock.AddMinutes(1);
                 break;
             case 2:
+                s_dalConfig!.Clock.AddHours(1);
                 break;
             case 3:
+                s_dalConfig!.Clock.AddMonths(1);
                 break;
             case 4:
+                s_dalConfig!.Clock.AddYears(1);
                 break;
             case 5:
+                Console.WriteLine(s_dalConfig!.Clock);
                 break;
             case 6:
+                SetClockOrRiskRange();
                 break;
             case 7:
+                ShowClockOrRiskRange();
                 break;
             case 8:
                 ResetConfig();
@@ -666,12 +732,57 @@ internal class Program
         }
     }
 
-    //private static void ShowCurrentConfig()
-    //{
-    //    Console.Clear();
-    //    Console.WriteLine($"Current Clock: {s_dalConfig?.Clock}");
-    //}
+    private static void SetClockOrRiskRange()
+    {
+        Console.WriteLine("Enter C/R for to choose Clock or RiskRange: ");
+        if (!char.TryParse(Console.ReadLine(), out char choice))
+        {
+            throw new FormatException("Invalid input. Please enter a single character.");
+        }
+        switch (choice)
+        {
+            case 'C':
+                Console.WriteLine("Enter new Date: ");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime newClock))
+                {
+                    throw new FormatException("Invalid input. Please enter a single character.");
+                }
+                s_dalConfig!.Clock = newClock;
+                break;
+            case 'R':
+                Console.WriteLine("Enter new Time Span: ");
+                if (!TimeSpan.TryParse(Console.ReadLine(), out TimeSpan newRiskRange))
+                {
+                    throw new FormatException("Invalid input. Please enter a single character.");
+                }
+                s_dalConfig!.RiskRange = newRiskRange;
+                break;
+            default:
+                Console.WriteLine("Wrong choice!");
+                break;
+        }
+    }
 
+    private static void ShowClockOrRiskRange()
+    {
+        Console.WriteLine("Enter C/R for to choose Clock or RiskRange: ");
+        if (!char.TryParse(Console.ReadLine(), out char choice))
+        {
+            throw new FormatException("Invalid input. Please enter a single character.");
+        }
+        switch (choice)
+        {
+            case 'C':
+                Console.WriteLine(s_dalConfig!.Clock);
+                break;
+            case 'R':
+                Console.WriteLine(s_dalConfig!.RiskRange);
+                break;
+            default:
+                Console.WriteLine("Wrong choice!");
+                break;
+        }
+    }
     private static void ResetConfig()
     {
         Console.Clear();

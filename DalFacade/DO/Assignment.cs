@@ -24,5 +24,5 @@ public record Assignment
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Assignment() : this( 0, 0,Config.Clock, null, null) { }
+    public Assignment() : this( 0, 0,DalApi.IConfig.Clock, null, null) { }
 }

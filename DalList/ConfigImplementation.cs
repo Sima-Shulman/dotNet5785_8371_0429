@@ -1,7 +1,9 @@
 ﻿using DalApi;
 
 namespace Dal;
-
+/// <summary>
+/// The config implamentation class.Implementing all the config's interface's functions.
+/// </summary>
 public class ConfigImplementation:IConfig
 {
     public DateTime Clock

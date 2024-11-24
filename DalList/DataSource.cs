@@ -1,7 +1,7 @@
 ﻿
 namespace Dal;
 /// <summary>
-/// 
+/// The DB with the lists where all the objects are stored.
 /// </summary>
 internal static class DataSource
 {

@@ -4,7 +4,9 @@ using Dal;
 using DalApi;
 using DO;
 using System.Security.Cryptography.X509Certificates;
-
+/// <summary>
+/// A class that initializes the DB lists with some data for the test class.
+/// </summary>
 public static class Initialization
 {
     private static ICall? s_dalCall; //stage 1
@@ -12,6 +14,9 @@ public static class Initialization
     private static IVolunteer? s_dalVolunteer; //stage 1
     private static IConfig? s_dalConfig; //stage 1
     private static readonly Random s_rand = new();
+    /// <summary>
+    /// To fill up the calls list in the DataSource with calls.
+    /// </summary>
     private static void CreateCalls()
     {
         CallType[] callsTypes = {
@@ -190,7 +195,7 @@ public static class Initialization
             34.8017, 34.7875, 34.7784, 34.7854, 34.7989, 34.8371, 34.8915, 34.7785, 34.8124, 34.7972,
             34.9076, 34.7915, 34.7761, 34.8527, 34.8183, 34.7928, 34.8034, 34.7569, 34.9075, 34.8063
         };
-       
+
         DateTime systemTime = s_dalConfig!.Clock;
         DateTime[] openingTimes = new DateTime[50];
         DateTime[] finishTimes = new DateTime[50];// מגדירים מערך עם 50 תאים
@@ -208,14 +213,17 @@ public static class Initialization
         }
         for (int i = 0; i < 50; i++)
         {
-            s_dalCall!.Create(new Call( callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], openingTimes[i], finishTimes[i]));
+            s_dalCall!.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], openingTimes[i], finishTimes[i]));
         }
     }
+    /// <summary>
+    /// To fill up the assignment list in the DataSource with assignments.
+    /// </summary>
     private static void CreateAssignments()
     {
         Random rand = new Random();
-        var calls= s_dalCall!.ReadAll();
-        var volunteers= s_dalVolunteer!.ReadAll();
+        var calls = s_dalCall!.ReadAll();
+        var volunteers = s_dalVolunteer!.ReadAll();
         foreach (Call call in calls)
         {
             Volunteer randomVolunteer = volunteers[rand.Next(volunteers.Count)];
@@ -226,11 +234,11 @@ public static class Initialization
             EndType endType;
             if (randomEndTime > call.Max_finish_time)
             {
-                endType = EndType.expired; 
+                endType = EndType.expired;
             }
             else
             {
-                endType = (EndType)rand.Next(Enum.GetValues(typeof(EndType)).Length-1);
+                endType = (EndType)rand.Next(Enum.GetValues(typeof(EndType)).Length - 1);
             }
             s_dalAssignment!.Create(new Assignment
             {
@@ -242,8 +250,9 @@ public static class Initialization
             });
         }
     }
-
-
+    /// <summary>
+    /// To fill up the volunteer list in the DataSource with volunteers.
+    /// </summary>
     private static void CreateVolunteers()
     {
         Random rand = new Random();
@@ -264,7 +273,7 @@ public static class Initialization
             31.2383, 32.1093, 32.0853, 32.0700, 32.1497, 31.8780, 32.0853, 32.0614, 32.0911, 31.7683 };
         double[] longitudes = { 34.7846, 34.9862, 35.2137, 34.8530, 34.7815, 34.7671, 34.8123, 34.8110, 35.2271, 34.7812,
             34.7707, 34.8722, 34.7818, 34.7665, 34.7881, 34.7933, 34.7660, 34.8075, 34.7833, 35.2137 };
-    
+
         for (int i = 0; i < 19; i++)
         {
             s_dalVolunteer!.Create(new Volunteer() with
@@ -285,6 +294,14 @@ public static class Initialization
     }
 
 
+    /// <summary>
+    /// A function that calls all the functions of initializing the DataSource and is called in the main function in the test program for to actually initialize the 'BD'.
+    /// </summary>
+    /// <param name="dalCall"> an ICall object which holds all the CRUD functions and is used for initialize the calls list.</param>
+    /// <param name="dalAssignment">an IAssignment object which holds all the CRUD functions and is used for initialize the assignments list.</param>
+    /// <param name="dalVolunteer">an IVolunteer object which holds all the CRUD functions and is used for initialize the volunteers list.</param>
+    /// <param name="dalConfig">an IConfig object which is used for reset all the system's variables</param>
+    /// <exception cref="NullReferenceException"></exception>
     public static void Do(ICall? dalCall, IAssignment? dalAssignment, IVolunteer? dalVolunteer, IConfig? dalConfig) //stage 1
     {
         s_dalCall = dalCall ?? throw new NullReferenceException("DAL can not be null!");
@@ -304,6 +321,5 @@ public static class Initialization
         CreateCalls();
         CreateAssignments();
         CreateVolunteers();
-       
     }
 }
