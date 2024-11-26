@@ -33,11 +33,8 @@ public record Volunteer
     string? Password
 )
 {
-    /// <summary>
-    /// Default constructor for stage 3
-    /// </summary>
-    public Volunteer() : this(0, "", "", "", null, null, null, Role.Volunteer, false, DistanceTypes.aerial_distance, null, GenerateRandomPassword(10)) { }
-    private static string GenerateRandomPassword(int length)//generate a random password including letters and numbers.
+    //generate a random password including letters and numbers.
+    private static string GenerateRandomPassword(int length)
     {
         const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
@@ -52,5 +49,9 @@ public record Volunteer
 
         return password.ToString();
     }
+    /// <summary>
+    /// Default constructor for stage 3
+    /// </summary>
+    public Volunteer() : this(0, "", "", "", null, null, null, Role.volunteer, false, DistanceTypes.aerial_distance, null, GenerateRandomPassword(10)) { }
 }
 

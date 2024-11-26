@@ -5,7 +5,7 @@
 public enum Role
 {
     manager,
-    Volunteer
+    volunteer
 }
 /// <summary>
 /// Enum for the distance type for the max distance for the volunteer to receive a call.
@@ -27,7 +27,7 @@ public enum CallType
     search_and_rescue,
 }
 /// <summary>
-/// Enum for the type of endung of the call.
+/// Enum for the type of ending of the call.
 /// </summary>
 public enum EndType
 {

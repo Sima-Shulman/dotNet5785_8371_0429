@@ -20,9 +20,9 @@ public record Assignment
      EndType? EndType
  )
 {
-    public int Id {  get; init; }
+    public int Id { get; init; }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Assignment() : this( 0, 0,DalApi.IConfig.Clock, null, null) { }
+    public Assignment() : this(0, 0, DateTime.Now, null, null) { }
 }

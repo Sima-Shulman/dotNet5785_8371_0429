@@ -14,21 +14,19 @@ namespace DO;
 /// <param name="max_finish_time">Time (date and time) when the call was opened by the manager</param>
 public record Call
 
-( 
+(
     CallType Call_type,
     string? Verbal_description,
-    string Full_address ,
+    string Full_address,
     double Latitude,
-    double Longitude ,
-    DateTime Opening_time ,
-    DateTime Max_finish_time 
+    double Longitude,
+    DateTime Opening_time,
+    DateTime? Max_finish_time
  )
 {
     public int Id { get; init; }
-    /// <summary>
+        /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    ///     int Id,
-    
-    public Call() : this( CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now, DateTime.Now) { }
+    public Call() : this(CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now,null) { }
 }

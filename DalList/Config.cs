@@ -17,6 +17,7 @@ public class Config
         nextCallId = startCallId;
         nextAssignmentId = startAssignmentId;
         Clock = DateTime.Now;  
+        RiskRange = TimeSpan.FromHours(1);
     }
 
 }

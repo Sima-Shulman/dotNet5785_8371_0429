@@ -123,64 +123,64 @@ public static class Initialization
             "A vehicle was involved in a major crash and is blocking multiple lanes"
         };
         string[] addressesInIsrael = {
-    "1 Jaffa Street, Jerusalem",
-    "5 Herzl Boulevard, Tel Aviv",
-    "12 HaMeginim Street, Haifa",
-    "22 Beit David Street, Petah Tikva",
-    "13 Ben-Gurion Boulevard, Ashdod",
-    "34 King George Street, Jerusalem",
-    "10 Herzl Street, Rishon Lezion",
-    "4 Moshe Dayan Boulevard, Rehovot",
-    "27 Bethlehem Road, Jerusalem",
-    "45 David Remez Street, Kfar Saba",
-    "33 Jaffa Street, Nazareth",
-    "2 Mea Shearim Street, Jerusalem",
-    "16 Shmuel Hanavi Street, Haifa",
-    "29 Arlozorov Street, Tel Aviv",
-    "8 Chaim Weizmann Boulevard, Beersheba",
-    "20 Yosef Maimon Street, Acre",
-    "56 Allenby Street, Tel Aviv",
-    "18 King George Street, Haifa",
-    "9 Golomb Street, Eilat",
-    "13 Jerusalem Boulevard, Ashkelon",
-    "31 Herzog Street, Netanya",
-    "17 Gaza Street, Ashdod",
-    "11 Revolution Boulevard, Petah Tikva",
-    "50 Keren Hayesod Street, Tiberias",
-    "5 Ha'arba'a Street, Tel Aviv",
-    "34 Chaim Ozer Street, Herzliya",
-    "23 Achuza Street, Herzliya",
-    "15 Duani Boulevard, Ramat Gan",
-    "41 Nordau Street, Bnei Brak",
-    "55 Herzl Boulevard, Holon",
-    "30 Salah A-Din Street, Nazareth",
-    "14 Hebron Road, Jerusalem",
-    "7 Ben-Zvi Boulevard, Bat Yam",
-    "6 Aba Hushi Street, Netanya",
-    "19 HaSolalim Street, Kiryat Shmona",
-    "21 Sheinkin Street, Tel Aviv",
-    "8 Shivtei Israel Street, Haifa",
-    "10 Knesset Street, Jerusalem",
-    "12 Yehuda Halevi Street, Ramat Gan",
-    "4 Eshkol Boulevard, Ashdod",
-    "8 Shmuel Hanavi Street, Tel Aviv",
-    "23 Melche Israel Street, Petah Tikva",
-    "33 Aben-Gurion Street, Rehovot",
-    "4 French Hill Street, Jerusalem",
-    "10 IDF Street, Ashkelon",
-    "2 Yitzhak Navon Street, Rishon Lezion",
-    "19 King David Street, Jerusalem",
-    "8 Tel-High Street, Netanya",
-    "27 Golomb Street, Haifa",
-    "19 Moshe Dayan Boulevard, Herzliya",
-    "11 HaTsoorafim Street, Beersheba",
-    "28 Daniel Street, Ramat Hasharon",
-    "3 Gan Ha'ir Street, Tel Aviv",
-    "10 HaRakavet Street, Hadera",
-    "25 Yirmiyahu Street, Ashkelon",
-    "5 Hana Senesh Street, Givat Shmuel",
-    "18 Yechiel Street, Beersheba"
-};
+            "1 Jaffa Street, Jerusalem",
+            "5 Herzl Boulevard, Tel Aviv",
+            "12 HaMeginim Street, Haifa",
+            "22 Beit David Street, Petah Tikva",
+            "13 Ben-Gurion Boulevard, Ashdod",
+            "34 King George Street, Jerusalem",
+            "10 Herzl Street, Rishon Lezion",
+            "4 Moshe Dayan Boulevard, Rehovot",
+            "27 Bethlehem Road, Jerusalem",
+            "45 David Remez Street, Kfar Saba",
+            "33 Jaffa Street, Nazareth",
+            "2 Mea Shearim Street, Jerusalem",
+            "16 Shmuel Hanavi Street, Haifa",
+            "29 Arlozorov Street, Tel Aviv",
+            "8 Chaim Weizmann Boulevard, Beersheba",
+            "20 Yosef Maimon Street, Acre",
+            "56 Allenby Street, Tel Aviv",
+            "18 King George Street, Haifa",
+            "9 Golomb Street, Eilat",
+            "13 Jerusalem Boulevard, Ashkelon",
+            "31 Herzog Street, Netanya",
+            "17 Gaza Street, Ashdod",
+            "11 Revolution Boulevard, Petah Tikva",
+            "50 Keren Hayesod Street, Tiberias",
+            "5 Ha'arba'a Street, Tel Aviv",
+            "34 Chaim Ozer Street, Herzliya",
+            "23 Achuza Street, Herzliya",
+            "15 Duani Boulevard, Ramat Gan",
+            "41 Nordau Street, Bnei Brak",
+            "55 Herzl Boulevard, Holon",
+            "30 Salah A-Din Street, Nazareth",
+            "14 Hebron Road, Jerusalem",
+            "7 Ben-Zvi Boulevard, Bat Yam",
+            "6 Aba Hushi Street, Netanya",
+            "19 HaSolalim Street, Kiryat Shmona",
+            "21 Sheinkin Street, Tel Aviv",
+            "8 Shivtei Israel Street, Haifa",
+            "10 Knesset Street, Jerusalem",
+            "12 Yehuda Halevi Street, Ramat Gan",
+            "4 Eshkol Boulevard, Ashdod",
+            "8 Shmuel Hanavi Street, Tel Aviv",
+            "23 Melche Israel Street, Petah Tikva",
+            "33 Aben-Gurion Street, Rehovot",
+            "4 French Hill Street, Jerusalem",
+            "10 IDF Street, Ashkelon",
+            "2 Yitzhak Navon Street, Rishon Lezion",
+            "19 King David Street, Jerusalem",
+            "8 Tel-High Street, Netanya",
+            "27 Golomb Street, Haifa",
+            "19 Moshe Dayan Boulevard, Herzliya",
+            "11 HaTsoorafim Street, Beersheba",
+            "28 Daniel Street, Ramat Hasharon",
+            "3 Gan Ha'ir Street, Tel Aviv",
+            "10 HaRakavet Street, Hadera",
+            "25 Yirmiyahu Street, Ashkelon",
+            "5 Hana Senesh Street, Givat Shmuel",
+            "18 Yechiel Street, Beersheba"
+        };
         double[] callsLatitudes = {
             31.7683, 32.0853, 32.8170, 32.0730, 33.1303, 31.7683, 31.9632, 31.8970, 31.7612, 32.0924,
             32.7116, 31.7656, 32.7992, 32.0782, 31.2583, 32.9257, 32.0648, 32.1093, 29.5623, 31.8479,
@@ -195,26 +195,19 @@ public static class Initialization
             34.8017, 34.7875, 34.7784, 34.7854, 34.7989, 34.8371, 34.8915, 34.7785, 34.8124, 34.7972,
             34.9076, 34.7915, 34.7761, 34.8527, 34.8183, 34.7928, 34.8034, 34.7569, 34.9075, 34.8063
         };
-
         DateTime systemTime = s_dalConfig!.Clock;
-        DateTime[] openingTimes = new DateTime[50];
-        DateTime[] finishTimes = new DateTime[50];// מגדירים מערך עם 50 תאים
         DateTime callStartTime;
-        DateTime callEndTime;
+        DateTime? callEndTime;
         Random rand = new Random();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 49; i++)
         {
             int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
             int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callEndTime = callStartTime.AddMinutes(randomPositiveNumber);
-            openingTimes[i] = callStartTime; // שומרים את הזמן במערך
-            finishTimes[i] = callEndTime;
+            callEndTime = (rand.NextDouble()>0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
+            s_dalCall!.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], callStartTime, callEndTime));
         }
-        for (int i = 0; i < 50; i++)
-        {
-            s_dalCall!.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], openingTimes[i], finishTimes[i]));
-        }
+
     }
     /// <summary>
     /// To fill up the assignment list in the DataSource with assignments.
@@ -224,15 +217,26 @@ public static class Initialization
         Random rand = new Random();
         var calls = s_dalCall!.ReadAll();
         var volunteers = s_dalVolunteer!.ReadAll();
-        foreach (Call call in calls)
+        var callsWithAssignment= calls.Skip((int)(calls.Count * 0.2)).ToList();//some of the calls will not be assigned.
+        foreach (Call call in callsWithAssignment)
         {
-            Volunteer randomVolunteer = volunteers[rand.Next(volunteers.Count)];
-            TimeSpan duration = call.Max_finish_time - call.Opening_time;
+            Volunteer randomVolunteer;
+            if (volunteers.Count > 0)
+                randomVolunteer = volunteers[rand.Next(volunteers.Count)];
+            else
+                throw new Exception("No volunteers available.");
+            TimeSpan duration;
+            if (call.Max_finish_time.HasValue)
+                duration = call.Max_finish_time.Value - call.Opening_time;
+            else
+                duration = TimeSpan.Zero;
             double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
             DateTime randomStartTime = call.Opening_time.AddMinutes(randomMinutes);
-            DateTime randomEndTime = randomStartTime.AddMinutes(rand.NextDouble());
-            EndType endType;
-            if (randomEndTime > call.Max_finish_time)
+            DateTime? randomEndTime = (rand.NextDouble() > 0.5) ? randomStartTime.AddMinutes(rand.NextDouble()) : null;
+            EndType? endType;
+            if (randomEndTime == null)
+                endType = null;
+            else if (call.Max_finish_time!=null &&randomEndTime > call.Max_finish_time)
             {
                 endType = EndType.expired;
             }
@@ -273,7 +277,7 @@ public static class Initialization
             31.2383, 32.1093, 32.0853, 32.0700, 32.1497, 31.8780, 32.0853, 32.0614, 32.0911, 31.7683 };
         double[] longitudes = { 34.7846, 34.9862, 35.2137, 34.8530, 34.7815, 34.7671, 34.8123, 34.8110, 35.2271, 34.7812,
             34.7707, 34.8722, 34.7818, 34.7665, 34.7881, 34.7933, 34.7660, 34.8075, 34.7833, 35.2137 };
-
+        //create 19 volunteers.
         for (int i = 0; i < 19; i++)
         {
             s_dalVolunteer!.Create(new Volunteer() with
@@ -285,15 +289,28 @@ public static class Initialization
                 FullAddress = addresses[i],
                 Latitude = latitudes[i],
                 Longitude = latitudes[i],
-                Role = Role.Volunteer,
+                Role = Role.volunteer,
                 IsActive = true,
                 DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
                 MaxDistance = rand.Next(0, 100000)
             });
         }
+        //create 1 manager.
+        s_dalVolunteer!.Create(new Volunteer() with
+        {
+            Id = rand.Next(100000000, 999999999),
+            FullName = fullNames[19],
+            CellphoneNumber = $"0{rand.Next(100000000, 999999999)}",
+            Email = $"{fullNames[19]}@gmail.com",
+            FullAddress = addresses[19],
+            Latitude = latitudes[19],
+            Longitude = latitudes[19],
+            Role = Role.manager,
+            IsActive = true,
+            DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
+            MaxDistance = rand.Next(0, 100000)
+        });
     }
-
-
     /// <summary>
     /// A function that calls all the functions of initializing the DataSource and is called in the main function in the test program for to actually initialize the 'BD'.
     /// </summary>
@@ -317,9 +334,12 @@ public static class Initialization
         Console.WriteLine("Reset Configuration values and List values...");
         s_dalConfig.Reset(); //stage 1
         s_dalVolunteer.DeleteAll(); //stage 1
-        Console.WriteLine("Initializing Students list ...");
+        Console.WriteLine("Initializing Calls list ...");
         CreateCalls();
-        CreateAssignments();
+        Console.WriteLine("Initializing Volunteers list ...");
         CreateVolunteers();
+        Console.WriteLine("Initializing Assignments list ...");
+        CreateAssignments();
+
     }
 }
