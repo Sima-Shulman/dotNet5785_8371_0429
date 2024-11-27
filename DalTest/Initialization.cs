@@ -204,7 +204,7 @@ public static class Initialization
             int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
             int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callEndTime = (rand.NextDouble()>0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
+            callEndTime = (rand.NextDouble() > 0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
             s_dalCall!.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], callStartTime, callEndTime));
         }
 
@@ -217,7 +217,7 @@ public static class Initialization
         Random rand = new Random();
         var calls = s_dalCall!.ReadAll();
         var volunteers = s_dalVolunteer!.ReadAll();
-        var callsWithAssignment= calls.Skip((int)(calls.Count * 0.2)).ToList();//some of the calls will not be assigned.
+        var callsWithAssignment = calls.Skip((int)(calls.Count * 0.2)).ToList();//some of the calls will not be assigned.
         foreach (Call call in callsWithAssignment)
         {
             Volunteer randomVolunteer;
@@ -236,7 +236,7 @@ public static class Initialization
             EndType? endType;
             if (randomEndTime == null)
                 endType = null;
-            else if (call.Max_finish_time!=null &&randomEndTime > call.Max_finish_time)
+            else if (call.Max_finish_time != null && randomEndTime > call.Max_finish_time)
             {
                 endType = EndType.expired;
             }
