@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The implementation class for the Assignments. Implementing all the CRUD functions.
 /// </summary>
-public class AssignmentImplementation : IAssignment
+internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
@@ -30,14 +30,12 @@ public class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        Assignment? newAssignment = DataSource.Assignments.Find(assignment => assignment!.Id == id);
-        return newAssignment;
+        return DataSource.Assignments.FirstOrDefault(item => item!.Id == id); //stage 2
     }
-
-    public List<Assignment> ReadAll()
-    {
-        return new List<Assignment>(DataSource.Assignments!);
-    }
+    public IEnumerable<Assignment?> ReadAll(Func<Assignment?, bool>? filter = null) //stage 2
+        => filter == null
+            ? DataSource.Assignments // החזר את הרשימה כמות שהיא אם אין פילטר
+            : DataSource.Assignments.Where(filter); // אם יש פילטר, החזר את הרשימה אחרי הפילטר
 
     public void Update(Assignment item)
     {

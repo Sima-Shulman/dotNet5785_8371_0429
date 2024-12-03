@@ -5,7 +5,7 @@ namespace Dal;
 /// <summary>
 /// The implementation class for the Volunteers. Implementing all the CRUD functions.
 /// </summary>
-public class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : IVolunteer
 {
     public void Create(Volunteer item)
     {
@@ -36,14 +36,13 @@ public class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-        Volunteer? newVolunteer = DataSource.Volunteers.Find(volunteer => volunteer!.Id == id);
-        return newVolunteer;
+        return DataSource.Volunteers.FirstOrDefault(item => item!.Id == id); //stage 2
     }
 
-    public List<Volunteer> ReadAll()
-    {
-        return new List<Volunteer>(DataSource.Volunteers!);
-    }
+    public IEnumerable<Volunteer?> ReadAll(Func<Volunteer?, bool>? filter = null) //stage 2
+     => filter == null
+         ? DataSource.Volunteers // החזר את הרשימה כמות שהיא אם אין פילטר
+         : DataSource.Volunteers.Where(filter);
 
     public void Update(Volunteer item)
     {

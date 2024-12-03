@@ -9,10 +9,11 @@ using System.Security.Cryptography.X509Certificates;
 /// </summary>
 public static class Initialization
 {
-    private static ICall? s_dalCall; //stage 1
-    private static IAssignment? s_dalAssignment; //stage 1
-    private static IVolunteer? s_dalVolunteer; //stage 1
-    private static IConfig? s_dalConfig; //stage 1
+    //private static ICall? s_dalCall; //stage 1
+    //private static IAssignment? s_dalAssignment; //stage 1
+    //private static IVolunteer? s_dalVolunteer; //stage 1
+    //private static IConfig? s_dalConfig; //stage 1
+    private static IDal? s_dal; //stage 2
     private static readonly Random s_rand = new();
     /// <summary>
     /// To fill up the calls list in the DataSource with calls.
@@ -195,7 +196,7 @@ public static class Initialization
             34.8017, 34.7875, 34.7784, 34.7854, 34.7989, 34.8371, 34.8915, 34.7785, 34.8124, 34.7972,
             34.9076, 34.7915, 34.7761, 34.8527, 34.8183, 34.7928, 34.8034, 34.7569, 34.9075, 34.8063
         };
-        DateTime systemTime = s_dalConfig!.Clock;
+        DateTime systemTime = s_dal!.Config.Clock;
         DateTime callStartTime;
         DateTime? callEndTime;
         Random rand = new Random();
@@ -205,7 +206,7 @@ public static class Initialization
             callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
             int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callEndTime = (rand.NextDouble() > 0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
-            s_dalCall!.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], callStartTime, callEndTime));
+            s_dal!.Call.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], callStartTime, callEndTime));
         }
 
     }
@@ -215,8 +216,8 @@ public static class Initialization
     private static void CreateAssignments()
     {
         Random rand = new Random();
-        var calls = s_dalCall!.ReadAll();
-        var volunteers = s_dalVolunteer!.ReadAll();
+        var calls = s_dal!.Call.ReadAll().ToList();
+        var volunteers = s_dal!.Volunteer.ReadAll().ToList();
         var callsWithAssignment = calls.Skip((int)(calls.Count * 0.2)).ToList();//some of the calls will not be assigned.
         foreach (Call call in callsWithAssignment)
         {
@@ -244,7 +245,7 @@ public static class Initialization
             {
                 endType = (EndType)rand.Next(Enum.GetValues(typeof(EndType)).Length - 1);
             }
-            s_dalAssignment!.Create(new Assignment
+            s_dal!.Assignment.Create(new Assignment
             {
                 CallId = call.Id,
                 VolunteerId = randomVolunteer.Id,
@@ -280,7 +281,7 @@ public static class Initialization
         //create 19 volunteers.
         for (int i = 0; i < 19; i++)
         {
-            s_dalVolunteer!.Create(new Volunteer() with
+            s_dal!.Volunteer.Create(new Volunteer() with
             {
                 Id = rand.Next(100000000, 999999999),
                 FullName = fullNames[i],
@@ -296,7 +297,7 @@ public static class Initialization
             });
         }
         //create 1 manager.
-        s_dalVolunteer!.Create(new Volunteer() with
+        s_dal!.Volunteer.Create(new Volunteer() with
         {
             Id = rand.Next(100000000, 999999999),
             FullName = fullNames[19],
@@ -319,21 +320,23 @@ public static class Initialization
     /// <param name="dalVolunteer">an IVolunteer object which holds all the CRUD functions and is used for initialize the volunteers list.</param>
     /// <param name="dalConfig">an IConfig object which is used for reset all the system's variables</param>
     /// <exception cref="NullReferenceException"></exception>
-    public static void Do(ICall? dalCall, IAssignment? dalAssignment, IVolunteer? dalVolunteer, IConfig? dalConfig) //stage 1
+    public static void Do(IDal dal) //stage 2
     {
-        s_dalCall = dalCall ?? throw new NullReferenceException("DAL can not be null!");
-        s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL can not be null!");
-        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL can not be null!");
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL can not be null!");
+        //s_dalCall = dalCall ?? throw new NullReferenceException("DAL can not be null!");
+        //s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL can not be null!");
+        //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL can not be null!");
+        //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL can not be null!");
+        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
         Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); //stage 1
-        s_dalCall.DeleteAll(); //stage 1
-        Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); //stage 1
-        s_dalAssignment.DeleteAll(); //stage 
-        Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); //stage 1
-        s_dalVolunteer.DeleteAll(); //stage 1
+        //s_dalConfig.Reset(); //stage 1
+        //s_dalCall.DeleteAll(); //stage 1
+        //Console.WriteLine("Reset Configuration values and List values...");
+        //s_dalConfig.Reset(); //stage 1
+        //s_dalAssignment.DeleteAll(); //stage 
+        //Console.WriteLine("Reset Configuration values and List values...");
+        //s_dalConfig.Reset(); //stage 1
+        //s_dalVolunteer.DeleteAll(); //stage 1
+        s_dal.ResetDB();//stage 2
         Console.WriteLine("Initializing Calls list ...");
         CreateCalls();
         Console.WriteLine("Initializing Volunteers list ...");

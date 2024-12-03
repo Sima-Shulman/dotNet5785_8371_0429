@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// <summary>
 /// The implementation class for the Calls. Implementing all the CRUD functions.
 /// </summary>
-public class CallImplementation : ICall
+internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {
@@ -30,14 +30,13 @@ public class CallImplementation : ICall
 
     public Call? Read(int id)
     {
-        Call? newCall = DataSource.Calls.Find(call => call!.Id == id);
-        return newCall;
+        return DataSource.Calls.FirstOrDefault(item => item!.Id == id); //stage 2
     }
 
-    public List<Call> ReadAll()
-    {
-        return new List<Call>(DataSource.Calls!);
-    }
+    public IEnumerable<Call?> ReadAll(Func<Call?, bool>? filter = null) //stage 2
+       => filter == null
+           ? DataSource.Calls // החזר את הרשימה כמות שהיא אם אין פילטר
+           : DataSource.Calls.Where(filter);
 
     public void Update(Call item)
     {
