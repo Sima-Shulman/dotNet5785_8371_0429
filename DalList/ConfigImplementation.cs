@@ -2,7 +2,7 @@
 
 namespace Dal;
 /// <summary>
-/// The config implamentation class.Implementing all the config's interface's functions.
+/// The config implementation class.Implementing all the config's interface's functions.
 /// </summary>
 internal class ConfigImplementation:IConfig
 {

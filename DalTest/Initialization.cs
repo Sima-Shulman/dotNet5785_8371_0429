@@ -200,13 +200,14 @@ public static class Initialization
         DateTime callStartTime;
         DateTime? callEndTime;
         Random rand = new Random();
-        for (int i = 0; i < 49; i++)
+        int i = 0;
+        foreach (CallType c_type in callsTypes)
         {
             int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
             int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callEndTime = (rand.NextDouble() > 0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
-            s_dal!.Call.Create(new Call(callsTypes[i], verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i], callStartTime, callEndTime));
+            s_dal!.Call.Create(new Call(c_type, verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i++], callStartTime, callEndTime));
         }
 
     }
@@ -219,15 +220,15 @@ public static class Initialization
         var calls = s_dal!.Call.ReadAll().ToList();
         var volunteers = s_dal!.Volunteer.ReadAll().ToList();
         var callsWithAssignment = calls.Skip((int)(calls.Count * 0.2)).ToList();//some of the calls will not be assigned.
-        foreach (Call call in callsWithAssignment)
+        foreach (Call? call in callsWithAssignment)
         {
             Volunteer randomVolunteer;
             if (volunteers.Count > 0)
-                randomVolunteer = volunteers[rand.Next(volunteers.Count)];
+                randomVolunteer = volunteers[rand.Next(volunteers.Count)]!;
             else
                 throw new Exception("No volunteers available.");
             TimeSpan duration;
-            if (call.Max_finish_time.HasValue)
+            if (call!.Max_finish_time.HasValue)
                 duration = call.Max_finish_time.Value - call.Opening_time;
             else
                 duration = TimeSpan.Zero;
@@ -279,17 +280,18 @@ public static class Initialization
         double[] longitudes = { 34.7846, 34.9862, 35.2137, 34.8530, 34.7815, 34.7671, 34.8123, 34.8110, 35.2271, 34.7812,
             34.7707, 34.8722, 34.7818, 34.7665, 34.7881, 34.7933, 34.7660, 34.8075, 34.7833, 35.2137 };
         //create 19 volunteers.
-        for (int i = 0; i < 19; i++)
+        int i = 0;
+        foreach(string name in fullNames)
         {
             s_dal!.Volunteer.Create(new Volunteer() with
             {
                 Id = rand.Next(100000000, 999999999),
-                FullName = fullNames[i],
+                FullName = name,
                 CellphoneNumber = $"0{rand.Next(100000000, 999999999)}",
                 Email = $"{fullNames[i]}@gmail.com",
                 FullAddress = addresses[i],
                 Latitude = latitudes[i],
-                Longitude = latitudes[i],
+                Longitude = latitudes[i++],
                 Role = Role.volunteer,
                 IsActive = true,
                 DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
