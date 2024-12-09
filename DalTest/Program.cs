@@ -195,7 +195,7 @@ namespace DalTest
             if (calls != null)
                 foreach (var call in calls)
                 {
-                    Console.WriteLine($"Call ID: {call.Id}, Call Type: {call.Call_type}, " +
+                    Console.WriteLine($"Call ID: {call!.Id}, Call Type: {call.Call_type}, " +
                         $"Description: {call.Verbal_description ?? "N/A"}, Full Address: {call.Full_address}, " +
                         $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
                         $"Opening Time: {call.Opening_time}, Max Finish Time: {call.Max_finish_time}");
@@ -386,7 +386,7 @@ namespace DalTest
                 foreach (var volunteer in volunteers)
                 {
                     Console.WriteLine($"volunteer{i++}");
-                    Console.WriteLine($"Volunteer ID: {volunteer.Id}, Full Name: {volunteer.FullName}, Cellphone: {volunteer.CellphoneNumber}, Email: {volunteer.Email}, " +
+                    Console.WriteLine($"Volunteer ID: {volunteer!.Id}, Full Name: {volunteer.FullName}, Cellphone: {volunteer.CellphoneNumber}, Email: {volunteer.Email}, " +
                    $"Full Address: {volunteer.FullAddress}, Latitude: {volunteer.Latitude}, Longitude: {volunteer.Longitude}, " +
                    $"Role: {volunteer.Role}, Active: {volunteer.IsActive}, Distance Type: {volunteer.DistanceTypes}, " +
                    $"Max Distance: {volunteer.MaxDistance}, Password: {volunteer.Password}");
@@ -553,7 +553,7 @@ namespace DalTest
             {
                 foreach (var assignment in assignments)
                 {
-                    Console.WriteLine($"Assignment ID: {assignment.Id}, Volunteer ID: {assignment.VolunteerId}, " +
+                    Console.WriteLine($"Assignment ID: {assignment!.Id}, Volunteer ID: {assignment.VolunteerId}, " +
                         $"Call Id: {assignment.CallId},  Start Time: {assignment.Start_time}, " +
                         $"End Time: {assignment.End_time}, End Type: {assignment.EndType}, ");
                 }
