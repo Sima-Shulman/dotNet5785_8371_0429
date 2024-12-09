@@ -25,30 +25,21 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
-    /// Important note!!:
-    /// There was a dilemma whether to make an exception or leave it as a deletion and update at the next stage,
-    ///We did not receive a response from the coordinator so we did both options and put one in the comment.
     public void Delete(int id) 
     {
-        //Assignment? newAssignment = Read(id);
-        //if (newAssignment is null)
-        //    throw new DalDoesNotExistException($"Assignment with ID={id} does Not exist");
-        //else
-        //    DataSource.Assignments.Remove(newAssignment);
-        throw new DalDeletionImpossible("Can not delete this item.");
+        Assignment? newAssignment = Read(id);
+        if (newAssignment is null)
+            throw new DalDoesNotExistException($"Assignment with ID={id} does Not exist");
+        else
+            DataSource.Assignments.Remove(newAssignment);
     }
 
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
-    /// /// Important note!!:
-    /// There was a dilemma whether to make an exception or leave it as a deletion and update at the next stage,
-    ///We did not receive a response from the coordinator so we did both options and put one in the comment.
-
     public void DeleteAll()
     {
-        //DataSource.Assignments.Clear();
-        throw new DalDeletionImpossible("Can not delete this item.");
+        DataSource.Assignments.Clear();
     }
 
     /// <summary>
