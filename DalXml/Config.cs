@@ -3,7 +3,7 @@
 internal static class Config
 {
     internal const string s_data_config_xml = "data-config";
-    internal const string calls_file_name = "calls.xml";
+    internal const string s_calls_xml = "calls.xml";
     internal const string assignments_file_name = "assignments.xml";
     internal const string s_volunteers_xml = "volunteers.xml";
 
