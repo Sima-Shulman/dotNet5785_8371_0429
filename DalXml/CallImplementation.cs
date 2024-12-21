@@ -16,11 +16,12 @@ internal class CallImplementation : ICall
     public void Create(Call item)
     {
         List<Call> Calls = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        int newId = Config.NextCallId;
+        int newId = Config.NextCallID;
         Call copy = item with { Id = newId };
         Calls.Add(copy);
         XMLTools.SaveListToXMLSerializer(Calls, Config.s_calls_xml);
     }
+
 
     /// <summary>
     /// A function that deletes a certain item.

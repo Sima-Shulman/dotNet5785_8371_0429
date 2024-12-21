@@ -16,6 +16,7 @@ public class DalDoesNotExistException : Exception
 public class DalAlreadyExistsException : Exception
 {
     public DalAlreadyExistsException(string? message) : base(message) { }
+ 
 }
 
 /// <summary>
