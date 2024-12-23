@@ -8,30 +8,45 @@ using System.Xml.Linq;
 
 internal class AssignmentImplementation : IAssignment
 {
-    
+
+    //static Assignment GetAssignment(XElement a)
+    //{
+    //    return new DO.Assignment()
+    //    {
+    //        Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
+    //        CallId = a.ToIntNullable("CallId") ?? throw new FormatException("can't convert id"),
+    //        VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert VolunteerId"),
+    //        Start_time = DateTime.TryParse((string)a.Element("Start_time"), out var startTime) ? startTime : DateTime.Now,
+    //        End_time = string.IsNullOrEmpty((string)a.Element("End_time")) ? (DateTime?)null : DateTime.Parse((string)a.Element("End_time")),
+    //        EndType = a.ToEnumNullable<EndType>("EndType") ?? throw new FormatException("can't convert EndType"),
+    //    };
+    //}
     static Assignment GetAssignment(XElement a)
     {
         return new DO.Assignment()
         {
             Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
+            CallId = a.ToIntNullable("CallId") ?? throw new FormatException("can't convert id"),
             VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert VolunteerId"),
-            CallId = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-            Start_time = (DateTime?)a.Element("Start_time") ?? DateTime.Now,
-            End_time = (DateTime?)a.Element("End_time"),
-            EndType = a.ToEnumNullable<EndType>("EndType") ?? throw new FormatException("can't convert EndType"),
+            Start_time = DateTime.TryParse((string?)a.Element("Start_time"), out var startTime) ? startTime : DateTime.Now,
+            End_time = DateTime.TryParse((string?)a.Element("End_time"), out var endTime) ? endTime : (DateTime?)null,
+            EndType = a.Element("EndType") != null && Enum.TryParse<EndType>((string?)a.Element("EndType"), true, out var endType)
+                      ? endType
+                      : default(EndType),
         };
     }
 
+
     public void Create(Assignment item)
     {
-        XElement assignmentsRoot = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+        XElement assignmentsRoot = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
 
         if (assignmentsRoot.Elements().Any(v => (int?)v.Element("Id") == item.Id))
         {
             throw new InvalidOperationException($"A assignment with ID {item.Id} already exists.");
         }
         XElement newAssignment = new XElement("Assignment",
-            new XElement("Id", item.Id),
+            new XElement("Id", Config.NextAssignmentId),
             new XElement("VolunteerId", item.VolunteerId),
             new XElement("CallId", item.CallId),
             new XElement("Start_time", item.Start_time),
@@ -74,7 +89,7 @@ internal class AssignmentImplementation : IAssignment
     public IEnumerable<Assignment?> ReadAll(Func<Assignment?, bool>? filter = null)
     {
         IEnumerable<Assignment> Assignments = XMLTools
-             .LoadListFromXMLElement(Config.s_volunteers_xml)
+             .LoadListFromXMLElement(Config.s_assignments_xml)
              .Elements()
              .Select(v => GetAssignment(v));
         return filter == null ? Assignments : Assignments.Where(filter);
