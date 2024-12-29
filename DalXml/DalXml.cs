@@ -1,8 +1,13 @@
 ﻿using DalApi;
 namespace Dal;
 
-sealed public class DalXml : IDal
+sealed internal class DalXml : IDal
 {
+    private static readonly Lazy<IDal> lazyInstance =
+        new Lazy<IDal>(() => new DalXml());
+    public static IDal Instance => lazyInstance.Value;
+    private DalXml() { }
+
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
     public ICall Call { get; } = new CallImplementation();
     public IAssignment Assignment { get; } = new AssignmentImplementation();
@@ -15,5 +20,4 @@ sealed public class DalXml : IDal
         Assignment.DeleteAll();
         Config.Reset();
     }
-
 }

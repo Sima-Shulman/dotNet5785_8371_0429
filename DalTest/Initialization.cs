@@ -322,13 +322,14 @@ public static class Initialization
     /// <param name="dalVolunteer">an IVolunteer object which holds all the CRUD functions and is used for initialize the volunteers list.</param>
     /// <param name="dalConfig">an IConfig object which is used for reset all the system's variables</param>
     /// <exception cref="NullReferenceException"></exception>
-    public static void Do(IDal dal) //stage 2
+    public static void Do() //stage 4
     {
         //s_dalCall = dalCall ?? throw new NullReferenceException("DAL can not be null!");
         //s_dalAssignment = dalAssignment ?? throw new NullReferenceException("DAL can not be null!");
         //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL can not be null!");
         //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL can not be null!");
-        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
+        //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); stage 2
+        s_dal = DalApi.Factory.Get;
         Console.WriteLine("Reset Configuration values and List values...");
         //s_dalConfig.Reset(); //stage 1
         //s_dalCall.DeleteAll(); //stage 1
