@@ -10,6 +10,9 @@ sealed public class DalList : IDal
     public IAssignment Assignment { get; } = new AssignmentImplementation();
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
     public IConfig Config { get; } = new ConfigImplementation();
+    /// <summary>
+    /// Reset the DB lists.
+    /// </summary>
     public void ResetDB()
     {
         Volunteer.DeleteAll();

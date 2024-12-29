@@ -1,5 +1,8 @@
 ﻿namespace Dal;
 
+/// <summary>
+/// The configuration class. Holds the system's variables.
+/// </summary>
 internal static class Config
 {
     internal const string s_data_config_xml = "data-config.xml";
@@ -26,6 +29,9 @@ internal static class Config
         get => XMLTools.GetConfigSpanVal(s_data_config_xml, "RiskRange");
         set => XMLTools.SetConfigSpanVal(s_data_config_xml, "RiskRange", value);
     }
+    /// <summary>
+    /// Reset all the Config fields.
+    /// </summary>
     internal static void Reset()
     {
         NextCallId = 1000;

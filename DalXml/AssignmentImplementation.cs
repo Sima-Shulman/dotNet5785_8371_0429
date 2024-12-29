@@ -6,37 +6,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 
+/// <summary>
+/// The implementation class for the Assignments. Implementing all the CRUD functions.
+/// </summary>
 internal class AssignmentImplementation : IAssignment
 {
-
-    //static Assignment GetAssignment(XElement a)
-    //{
-    //    return new DO.Assignment()
-    //    {
-    //        Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-    //        CallId = a.ToIntNullable("CallId") ?? throw new FormatException("can't convert id"),
-    //        VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert VolunteerId"),
-    //        Start_time = DateTime.TryParse((string)a.Element("Start_time"), out var startTime) ? startTime : DateTime.Now,
-    //        End_time = string.IsNullOrEmpty((string)a.Element("End_time")) ? (DateTime?)null : DateTime.Parse((string)a.Element("End_time")),
-    //        EndType = a.ToEnumNullable<EndType>("EndType") ?? throw new FormatException("can't convert EndType"),
-    //    };
-    //}
+    /// <summary>
+    /// Get a copy of an Assignment from the XML file.
+    /// </summary>
+    /// <param name="a">The assignment you want</param>
+    /// <returns>A copy of the a assignment</returns>
+    /// <exception cref="FormatException"></exception>
     static Assignment GetAssignment(XElement a)
     {
         return new DO.Assignment()
         {
-            Id = a.ToIntNullable("Id") ?? throw new FormatException("can't convert id"),
-            CallId = a.ToIntNullable("CallId") ?? throw new FormatException("can't convert id"),
-            VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("can't convert VolunteerId"),
-            Start_time = DateTime.TryParse((string?)a.Element("Start_time"), out var startTime) ? startTime : DateTime.Now,
-            End_time = DateTime.TryParse((string?)a.Element("End_time"), out var endTime) ? endTime : (DateTime?)null,
-            EndType = a.Element("EndType") != null && Enum.TryParse<EndType>((string?)a.Element("EndType"), true, out var endType)
-                      ? endType
-                      : default(EndType),
+            Id = a.ToIntNullable("Id") ?? throw new FormatException("Can't convert Id"),
+            CallId = a.ToIntNullable("CallId") ?? throw new FormatException("Can't convert CallId"),
+            VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
+            Start_time = a.ToDateTimeNullable("Start_time") ?? throw new FormatException("Can't convert Start_time"),
+            End_time = a.ToDateTimeNullable("End_time") ?? throw new FormatException("Can't convert End_time"),
+            EndType = a.ToEnumNullable<EndType>("EndType") ?? throw new FormatException("Can't convert EndType")
+
         };
     }
 
-
+    /// <summary>
+    /// A function that creates a new object.
+    /// </summary>
+    /// <param name="item">The new item</param>
     public void Create(Assignment item)
     {
         XElement assignmentsRoot = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
@@ -57,6 +55,11 @@ internal class AssignmentImplementation : IAssignment
         XMLTools.SaveListToXMLElement(assignmentsRoot, Config.s_assignments_xml);
     }
 
+    /// <summary>
+    /// A function that deletes a certain item.
+    /// </summary>
+    /// <param name="id">The item's id</param>
+    /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
     public void Delete(int id)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
@@ -68,12 +71,20 @@ internal class AssignmentImplementation : IAssignment
         XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);
     }
 
+    /// <summary>
+    /// Delete all the items of this entity.
+    /// </summary>
     public void DeleteAll()
     {
         XElement emptyRoot = new XElement("ArrayOfAssignment");
         XMLTools.SaveListToXMLElement(emptyRoot, Config.s_assignments_xml);
     }
 
+    /// <summary>
+    /// Find an item according to it's id.
+    /// </summary>
+    /// <param name="id">The item's id</param>
+    /// <returns>The item</returns>
     public Assignment? Read(int id)
     {
         XElement? assignmentElm =
@@ -81,11 +92,21 @@ internal class AssignmentImplementation : IAssignment
         return assignmentElm is null ? null : GetAssignment(assignmentElm);
     }
 
+    /// <summary>
+    /// A function for reading an item with a filter.
+    /// </summary>
+    /// <param name="filter">The filter function</param>
+    /// <returns>The first item of this entity that meets the filter.</returns>
     public Assignment? Read(Func<Assignment, bool> filter)
     {
         return XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().Select(a => GetAssignment(a)).FirstOrDefault(filter);
     }
 
+    /// <summary>
+    /// A function that reads all the items of this entity with or without a filtering function.
+    /// </summary>
+    /// <param name="filter">the filtering function.</param>
+    /// <returns>All the items of this entity that match the filter.</returns>
     public IEnumerable<Assignment?> ReadAll(Func<Assignment?, bool>? filter = null)
     {
         IEnumerable<Assignment> Assignments = XMLTools
@@ -95,7 +116,11 @@ internal class AssignmentImplementation : IAssignment
         return filter == null ? Assignments : Assignments.Where(filter);
     }
 
-
+    /// <summary>
+    /// A function for updating items.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
     public void Update(Assignment item)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);

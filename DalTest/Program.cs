@@ -206,7 +206,7 @@ namespace DalTest
         }
         private static void UpdateCall()
         {
-            Console.Write("Enter Call ID to update (optional): ");
+            Console.Write("Enter Call ID to update : ");
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Call ID is invalid!");
             var call = s_dal?.Call.Read(id);
@@ -398,7 +398,7 @@ namespace DalTest
         }
         private static void UpdateVolunteer()
         {
-            Console.Write("Enter Volunteer ID to update (optional): ");
+            Console.Write("Enter Volunteer ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Volunteer ID is invalid!");
             var volunteer = s_dal?.Volunteer.Read(id);
@@ -564,7 +564,7 @@ namespace DalTest
         }
         private static void UpdateAssignment()
         {
-            Console.Write("Enter Assignment ID to update (optional): ");
+            Console.Write("Enter Assignment ID to update: ");
             if (!int.TryParse(Console.ReadLine(), out int id))
                 throw new FormatException("Call ID is invalid!");
             var assignment = s_dal?.Assignment.Read(id);

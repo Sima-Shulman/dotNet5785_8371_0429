@@ -18,6 +18,9 @@ internal class ConfigImplementation : IConfig
         set => Config.RiskRange = value;
     }
 
+    /// <summary>
+    /// Reset all the Config fields.
+    /// </summary>
     public void Reset()
     {
         Config.Reset();
