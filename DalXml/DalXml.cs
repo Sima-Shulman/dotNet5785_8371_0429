@@ -1,6 +1,11 @@
 ﻿using DalApi;
 namespace Dal;
 
+/// <summary>
+/// An entity for managing the DB lists.
+/// Inherits and implements the IDal interface by initializing the subinterfaces 
+/// in the access classes that we implemented in step 1.
+/// </summary>
 sealed internal class DalXml : IDal
 {
     private static readonly Lazy<IDal> lazyInstance =
