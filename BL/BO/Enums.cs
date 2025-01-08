@@ -56,4 +56,39 @@ public class Enums
         expired,
         opened_at_risk
     }
+
+    public enum VolunteerFields
+    {
+        Id,
+        FullName,
+        IsActive,
+        TotalHandledCalls,
+        TotalCanceledCalls,
+        TotalExpiredCalls,
+        CallId,
+        get,
+    }
+    public enum CallFields
+    {
+        Status,
+        VolunteerId,
+        CallType,
+        Priority,
+        OpenDate,
+        CloseDate,
+        MaxFinishDate,
+        Address,
+        Longitude,
+        Latitude,
+        CallDescription
+    }
+
+    public enum TimeUnit
+    {
+        Minute,
+        Hour,
+        Day,
+        Month,
+        Year
+    }
 }
