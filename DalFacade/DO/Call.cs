@@ -13,7 +13,6 @@ namespace DO;
 /// <param name="opening_time">Time (date and time) when the call was opened by the manager</param>
 /// <param name="max_finish_time">Time (date and time) when the call was opened by the manager</param>
 public record Call
-
 (
     CallType Call_type,
     string? Verbal_description,
@@ -25,8 +24,8 @@ public record Call
  )
 {
     public int Id { get; init; }
-        /// <summary>
+    /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Call() : this(CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now,null) { }
+    public Call() : this(CallType.vehicle_breakdown, null, "", 0, 0, DateTime.Now, null) { }
 }
