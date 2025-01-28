@@ -61,13 +61,24 @@ public class Enums
     {
         Id,
         FullName,
+        CellphoneNumber,
+        Email,
+        Password,
+        FullAddress,
+        Latitude,
+        Longitude,
+        Role,
         IsActive,
+        DistanceTypes,
+        MaxDistance,
         TotalHandledCalls,
         TotalCanceledCalls,
         TotalExpiredCalls,
-        CallId,
-        get,
+        CallInProgress,
     }
+
+
+
     public enum CallFields
     {
         Status,
@@ -83,6 +94,8 @@ public class Enums
         CallDescription
     }
 
+
+
     public enum TimeUnit
     {
         Minute,
@@ -92,3 +105,4 @@ public class Enums
         Year
     }
 }
+

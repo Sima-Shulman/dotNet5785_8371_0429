@@ -1,5 +1,6 @@
 ﻿using BlApi;
-using BO;
+using Helpers;
+using static BO.Enums;
 
 namespace BlImplementation;
 
@@ -9,12 +10,12 @@ internal class AdminImplementation : IAdmin
 
     public DateTime GetClock()
     {
-        throw new NotImplementedException();
+        return ClockManager.Now;
     }
 
     public TimeSpan GetRiskTimeRange()
     {
-        throw new NotImplementedException();
+        return _dal.Config.RiskRange;
     }
 
     public void InitializeDatabase()
@@ -22,18 +23,37 @@ internal class AdminImplementation : IAdmin
         throw new NotImplementedException();
     }
 
-    public void PromoteClock(Enums.TimeUnit timeUnit)
+    public void PromoteClock(BO.Enums.TimeUnit timeUnit)
     {
-        throw new NotImplementedException();
+        switch (timeUnit)
+        {
+            case BO.Enums.TimeUnit.Minute:
+                _dal.Config.Clock
+                break;
+            case BO.Enums.TimeUnit.Hour:
+                break;
+            case BO.Enums.TimeUnit.Day:
+                break;
+            case BO.Enums.TimeUnit.Month:
+                break;
+            case BO.Enums.TimeUnit.Year:
+                break;
+            default:
+                break;
+        }
+
+
+        ClockManager.UpdateClock(newClock);
     }
 
     public void ResetDatabase()
     {
-        throw new NotImplementedException();
+        //
+        _dal.ResetDB();
     }
 
     public void SetRiskTimeRange(TimeSpan riskTimeRange)
     {
-        throw new NotImplementedException();
+        _dal.Config.RiskRange = riskTimeRange;
     }
 }
