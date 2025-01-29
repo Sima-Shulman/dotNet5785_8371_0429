@@ -57,41 +57,29 @@ public class Enums
         opened_at_risk
     }
 
-    public enum VolunteerFields
+    public enum VolunteerInListFields
     {
         Id,
         FullName,
-        CellphoneNumber,
-        Email,
-        Password,
-        FullAddress,
-        Latitude,
-        Longitude,
-        Role,
-        IsActive,
-        DistanceTypes,
-        MaxDistance,
         TotalHandledCalls,
         TotalCanceledCalls,
         TotalExpiredCalls,
-        CallInProgress,
+        CallId,
+        CallType,
     }
 
 
 
     public enum CallFields
     {
-        Status,
-        VolunteerId,
+        CallId,
         CallType,
-        Priority,
-        OpenDate,
-        CloseDate,
-        MaxFinishDate,
-        Address,
-        Longitude,
-        Latitude,
-        CallDescription
+        Opening_time,
+        TimeLeft,
+        LastVolunteerName,
+        TotalTime,
+        CallStatus,
+        TotalAssignments,
     }
 
 

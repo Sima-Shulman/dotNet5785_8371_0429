@@ -41,7 +41,7 @@ internal class AdminImplementation : IAdmin
 
     public void ResetDatabase()
     {
-        //
+        _dal.Config.Reset();
         _dal.ResetDB();
     }
 
