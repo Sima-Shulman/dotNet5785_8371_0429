@@ -3,7 +3,7 @@
     public interface IVolunteer
     {
         BO.Enums.Role EnterSystem(string name, string pass);
-        IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.Enums.VolunteerFields? fieldFilter = null);
+        IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive = null, BO.Enums.VolunteerFields? fieldFilter = null);
         BO.Volunteer GetVolunteerDetails(int id);
         void UpdateVolunteerDetails(int id, BO.Volunteer volunteer);
         void DeleteVolunteer(int id);

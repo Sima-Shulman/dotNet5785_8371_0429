@@ -20,28 +20,21 @@ internal class AdminImplementation : IAdmin
 
     public void InitializeDatabase()
     {
-        throw new NotImplementedException();
+        _dal.ResetDB();
+        DalTest.Initialization.Do();
     }
 
     public void PromoteClock(BO.Enums.TimeUnit timeUnit)
     {
-        switch (timeUnit)
+        DateTime newClock = timeUnit switch
         {
-            case BO.Enums.TimeUnit.Minute:
-                _dal.Config.Clock
-                break;
-            case BO.Enums.TimeUnit.Hour:
-                break;
-            case BO.Enums.TimeUnit.Day:
-                break;
-            case BO.Enums.TimeUnit.Month:
-                break;
-            case BO.Enums.TimeUnit.Year:
-                break;
-            default:
-                break;
-        }
-
+            TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
+            TimeUnit.Hour => ClockManager.Now.AddHours(1),
+            TimeUnit.Day => ClockManager.Now.AddDays(1),
+            TimeUnit.Month => ClockManager.Now.AddMonths(1),
+            TimeUnit.Year => ClockManager.Now.AddYears(1),
+            _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), "Invalid time unit")
+        };
 
         ClockManager.UpdateClock(newClock);
     }

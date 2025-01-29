@@ -51,7 +51,7 @@ internal class CallImplementation : ICall
         throw new NotImplementedException();
     }
 
-    public IEnumerable<BO.CallInList> GetCallsList(Enums.CallFields? fieldFilter = null, object filterValue = null, BO.Enums.CallFields? sortField = null)
+    public IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallFields? fieldFilter = null, object filterValue = null, BO.Enums.CallFields? sortField = null)
     {
         throw new NotImplementedException();
     }

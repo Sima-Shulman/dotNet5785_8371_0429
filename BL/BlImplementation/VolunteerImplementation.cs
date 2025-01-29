@@ -69,7 +69,7 @@ internal class VolunteerImplementation : IVolunteer
         };
     }
 
-    public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.Enums.VolunteerFields? fieldFilter = null)
+    public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive = null, BO.Enums.VolunteerFields? fieldFilter = null)
     {
         var volunteers = _dal.Volunteer.ReadAll();
 
