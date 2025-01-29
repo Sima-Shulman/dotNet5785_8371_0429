@@ -81,20 +81,15 @@ public class Enums
 
     public enum CallFields
     {
-        Status,
-        VolunteerId,
+        CallId,
         CallType,
-        Priority,
-        OpenDate,
-        CloseDate,
-        MaxFinishDate,
-        Address,
-        Longitude,
-        Latitude,
-        CallDescription
+        Opening_time,
+        TimeLeft,
+        LastVolunteerName,
+        TotalTime,
+        CallStatus,
+        TotalAssignments,
     }
-
-
 
     public enum TimeUnit
     {
