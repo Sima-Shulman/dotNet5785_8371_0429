@@ -3,7 +3,7 @@
     public interface ICall
     {
         int[] GetCallQuantitiesByStatus();
-        IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallFields? fieldFilter = null, object filterValue = null, BO.Enums.CallFields? sortField = null);
+        IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallFields? fieldFilter = null, object? filterValue = null, BO.Enums.CallFields? sortField = null);
         BO.Call GetCallDetails(int callId);
         void UpdateCallDetails(BO.Call call);
         void DeleteCall(int callId);

@@ -1,4 +1,5 @@
-﻿using static BO.Enums;
+﻿using Helpers;
+using static BO.Enums;
 namespace BO;
 
 public class Call
@@ -13,5 +14,7 @@ public class Call
     public DateTime Max_finish_time { get; set; }
     public CallStatus CallStatus { get; set; }
     public List<BO.CallAssignInList>? AssignmentsList { get; set; }
+    public override string ToString() => this.ToStringProperty();
+
 
 }

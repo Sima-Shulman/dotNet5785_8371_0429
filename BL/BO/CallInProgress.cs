@@ -1,4 +1,5 @@
-﻿using static BO.Enums;
+﻿using Helpers;
+using static BO.Enums;
 namespace BO;
 
 public class CallInProgress
@@ -13,5 +14,5 @@ public class CallInProgress
     public DateTime  Start_time { get; set; }
     public double CallDistance { get; set; }
     public CallStatus CallStatus { get; set; }
-    //public override string ToString()
+    public override string ToString() => this.ToStringProperty();
 }

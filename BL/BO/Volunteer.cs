@@ -1,4 +1,5 @@
-﻿using static BO.Enums;
+﻿using Helpers;
+using static BO.Enums;
 namespace BO;
 
 public class Volunteer
@@ -13,12 +14,11 @@ public class Volunteer
     public double? Longitude { get; set; }
     public Role Role { get; set; }
     public bool IsActive { get; set; }
-    public DistanceTypes DistanceTypes { get; set; }
+    public DistanceTypes DistanceType { get; set; }
     public double? MaxDistance { get; set; }
     public int TotalHandledCalls { get; set; }
     public int TotalCanceledCalls { get; set; }
     public int TotalExpiredCalls { get; set; }
     public BO.CallInProgress? CallInProgress { get; set; }
-
-    //public override string ToString()
+    public override string ToString() => this.ToStringProperty();
 }

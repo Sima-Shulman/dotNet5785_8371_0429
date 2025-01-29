@@ -1,4 +1,5 @@
-﻿using static BO.Enums;
+﻿using Helpers;
+using static BO.Enums;
 namespace BO;
 
 public class CallInList
@@ -12,5 +13,5 @@ public class CallInList
     public TimeSpan? TotalTime {  get; set; }
     public CallStatus CallStatus { get; set; }
     public int TotalAssignments { get; set; }
-    //public override string ToString()
+    public override string ToString() => this.ToStringProperty();
 }
