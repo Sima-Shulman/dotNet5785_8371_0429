@@ -24,7 +24,7 @@ internal static class VolunteerManager
                 var callDetails = s_dal.Call.Read(currentAssignment.CallId);
                 if (callDetails is not null)
                 {
-                    callInProgress = new CallInProgress
+                    callInProgress = new BO.CallInProgress
                     {
                         Id = currentAssignment.Id,
                         CallId = currentAssignment.CallId,
@@ -32,10 +32,10 @@ internal static class VolunteerManager
                         Verbal_description = callDetails.Verbal_description,
                         FullAddress = callDetails.Full_address,
                         Opening_time = callDetails.Opening_time,
-                        Max_finish_time = callDetails.Max_finish_time,
+                        Max_finish_time = (DateTime)callDetails.Max_finish_time,
                         Start_time = currentAssignment.Start_time,
                         CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
-                        CallStatus = Tools.CalculateStatus(currentAssignment, callDetails, 30)
+                        CallStatus = CallManager.CalculateCallStatus(callDetails)
                     };
                 }
             }

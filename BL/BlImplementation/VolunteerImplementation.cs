@@ -68,7 +68,7 @@ internal class VolunteerImplementation : IVolunteer
             if (requester.Id != boVolunteer.Id || requester.Role != DO.Role.manager)
                 throw new Exception("Requester is not authorized!");
             var existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
-            Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
+            VolunteerManager.ValidateVolunteer(boVolunteer);
             if (requester.Role != DO.Role.manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new Exception("Requester is not authorized to change the Role field!");
             var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);

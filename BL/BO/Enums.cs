@@ -68,9 +68,7 @@ public class Enums
         CallType,
     }
 
-
-
-    public enum CallFields
+    public enum CallInListFields
     {
         CallId,
         CallType,
@@ -80,6 +78,17 @@ public class Enums
         TotalTime,
         CallStatus,
         TotalAssignments,
+    }
+
+    public enum ClosedCallInListFields
+    {
+        Id,
+        CallType,
+        FullAddress,
+        Opening_time,
+        Start_time,
+        End_time,
+        EndType,
     }
 
     public enum TimeUnit

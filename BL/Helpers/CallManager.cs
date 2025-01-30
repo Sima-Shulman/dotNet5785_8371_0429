@@ -1,5 +1,6 @@
 ﻿
 using DalApi;
+using static BO.Enums;
 
 namespace Helpers;
 
@@ -99,8 +100,10 @@ internal static class CallManager
     {
         return calls.Select(call =>
         {
-            var assignments = s_dal.Assignment.ReadAll().Where(a => a.CallId == call.Id).ToList();
-            var lastAssignment = assignments.OrderByDescending(a => a?.CallId).LastOrDefault();   //FirstOrDefault;  //לפי מה הוא אחרון??
+            var lastAssignment = s_dal.Assignment.ReadAll()
+                .Where(a => a.CallId == call.Id)
+                .OrderByDescending(a => a.Start_time)
+                .FirstOrDefault(); ;   //FirstOrDefault;  //לפי מה הוא אחרון??
             var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId).FullName : null;
             TimeSpan? timeLeft = call.Max_finish_time > DateTime.Now ? call.Max_finish_time - DateTime.Now : null;
             BO.Enums.CallStatus callStatus = GetCallStatus(call, lastAssignment);
@@ -119,5 +122,55 @@ internal static class CallManager
             };
         }).ToList();
 
+    }
+
+    public static void ValidateCall(BO.Call call)
+    {
+        if (call == null)
+            throw new ArgumentNullException(nameof(call), "הקריאה אינה יכולה להיות null");
+
+        // בדיקת תקינות הכתובת
+        if (string.IsNullOrWhiteSpace(call.FullAddress))
+            throw new ArgumentException("Invalid address!");
+
+        if (!string.IsNullOrWhiteSpace(call.Verbal_description))
+            throw new ArgumentException("Invalid description!");
+
+        // בדיקת זמני קריאה
+        if (call.Opening_time == default)
+            throw new ArgumentException("Invalid opening time!");
+
+        if (call.Max_finish_time != default && call.Max_finish_time <= call.Opening_time)
+            throw new ArgumentException("Invalid max finish time! Finish time has to be bigger than opening time.");
+
+        // בדיקת מזהה מספרי
+        if (call.Id <= 0)
+            throw new ArgumentException("Invalid id number! Id number has to be positive.");
+
+        // בדיקת ENUM לשדות שאינם מספרים
+        if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
+            throw new ArgumentException("סInvalid status!");
+
+        if (!Enum.IsDefined(typeof(CallType), call.CallType))
+            throw new ArgumentException("Invalid call type!");
+
+        // בדיקת רשימה
+        if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
+            throw new ArgumentException("Invalid assignments list!");
+    }
+
+    public static DO.Call ConvertBoCallToDoCall(BO.Call call)
+    {
+        return new DO.Call
+        {
+            Id = call.Id,
+            Call_type = (DO.CallType)call.CallType,
+            Verbal_description = call.Verbal_description,
+            Full_address = call.FullAddress,
+            Latitude = call.Latitude ?? 0.0,
+            Longitude = call.Longitude ?? 0.0,
+            Opening_time = call.Opening_time,
+            Max_finish_time = call.Max_finish_time,
+        };
     }
 }
