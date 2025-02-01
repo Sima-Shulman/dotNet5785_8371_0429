@@ -1,6 +1,9 @@
 ﻿
-namespace DO;
+namespace BO;
 
+/// <summary>
+/// An exception for when trying to access a not-existing item.
+/// </summary>
 [Serializable]
 public class BlDoesNotExistException : Exception
 {
@@ -9,60 +12,66 @@ public class BlDoesNotExistException : Exception
                 : base(message, innerException) { }
 }
 
+/// <summary>
+/// An exception for when trying to add an existing item.
+/// </summary>
+[Serializable]
+public class BlAlreadyExistException : Exception
+{
+    public BlAlreadyExistException(string? message) : base(message) { }
+    public BlAlreadyExistException(string message, Exception innerException)
+                : base(message, innerException) { }
+}
+
+/// <summary>
+/// An exception fot when trying to delete an item that is not allowed to be deleted.
+/// /// </summary>
+[Serializable]
+public class BlDeletionException : Exception
+{
+    public BlDeletionException(string? message) : base(message) { }
+    public BlDeletionException(string message, Exception innerException) : base(message, innerException) { }
+
+}
+
+/// <summary>
+/// An exception fot when entering invalid input for an instance of one of the BO entities.
+/// /// </summary>
+[Serializable]
+public class BlInvalidFormatException : Exception
+{
+    public BlInvalidFormatException(string? message) : base(message) { }
+    public BlInvalidFormatException(string message, Exception innerException) : base(message, innerException) { }
+
+}
+
+/// <summary>
+/// An exception for when trying to do an action that is forbidden for the one who requested to.
+/// </summary>
+[Serializable]
+public class BlUnauthorizedException : Exception
+{
+    public BlUnauthorizedException(string? message) : base(message) { }
+    public BlUnauthorizedException(string message, Exception innerException) : base(message, innerException) { }
+
+}
+
+
+
+
+/// <summary>
+/// General exception in the Bl.
+/// </summary>
+[Serializable]
+public class BlGeneralException : Exception
+{
+    public BlGeneralException(string message) : base(message) { }
+    public BlGeneralException(string message, Exception innerException) : base(message, innerException) { }
+}
+
 
 [Serializable]
 public class BlNullPropertyException : Exception
 {
     public BlNullPropertyException(string? message) : base(message) { }
 }
-
-
-
-//namespace BL
-//{
-//    using System;
-
-//    /// <summary>
-//    /// חריגות כלליות בשכבה הלוגית.
-//    /// </summary>
-//    public class BLException : Exception
-//    {
-//        public BLException(string message) : base(message) { }
-//        public BLException(string message, Exception innerException) : base(message, innerException) { }
-//    }
-
-//    /// <summary>
-//    /// חריגה במקרה של ניסיון להוספת ישות שכבר קיימת.
-//    /// </summary>
-//    public class EntityAlreadyExistsException : BLException
-//    {
-//        public EntityAlreadyExistsException(string entityName, string identifier)
-//            : base($"הישות '{entityName}' עם מזהה '{identifier}' כבר קיימת במערכת.") { }
-//    }
-
-//    /// <summary>
-//    /// חריגה במקרה של ניסיון למחיקת ישות שאינה קיימת.
-//    /// </summary>
-//    public class EntityNotFoundException : BLException
-//    {
-//        public EntityNotFoundException(string entityName, string identifier)
-//            : base($"הישות '{entityName}' עם מזהה '{identifier}' לא נמצאה במערכת.") { }
-//    }
-
-//    /// <summary>
-//    /// חריגה במקרה של נתונים לא תקינים.
-//    /// </summary>
-//    public class InvalidDataException : BLException
-//    {
-//        public InvalidDataException(string message) : base($"שגיאת נתונים: {message}") { }
-//    }
-
-//    /// <summary>
-//    /// חריגה במקרה של ניסיון פעולה לא חוקי על הישות.
-//    /// </summary>
-//    public class IllegalActionException : BLException
-//    {
-//        public IllegalActionException(string message) : base($"פעולה לא חוקית: {message}") { }
-//    }
-}
-

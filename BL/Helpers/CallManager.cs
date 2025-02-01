@@ -10,72 +10,8 @@ internal static class CallManager
 
     public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
     {
-        var assignments = GetAssignmentsByCallId(call.Id);
-
-        if (assignments == null || !assignments.Any())
-        {
-            var riskTimeWindow = TimeSpan.FromMinutes(s_dal.Config.RiskRange);
-            if (call.Max_finish_time - DateTime.Now <= riskTimeWindow)
-            {
-                return BO.Enums.CallStatus.opened_at_risk;
-            }
-            return BO.Enums.CallStatus.opened;
-        }
-        var assignment = assignments.FirstOrDefault();
-        if (assignment != null && assignment.AssignmentStatus == BO.Enums.AssignmentStatus.InProgress)
-        {
-            return BO.Enums.CallStatus.is_treated;
-        }
-        if (DateTime.Now > call.Max_finish_time)
-        {
-            return BO.Enums.CallStatus.expired;
-        }
-        if (assignment != null && assignment.AssignmentStatus == BO.Enums.AssignmentStatus.Completed)
-        {
-            return BO.Enums.CallStatus.closed;
-        }
-        return BO.Enums.CallStatus.opened;
-    }
-
-    //public static List<Assignment> GetAssignmentsByCallId(int callId)
-    //{
-    //    List<Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == callId).ToList();
-    //    return assignments;
-    //}
-
-
-    //private static BO.Enums.CallStatus GetCallStatus(DO.Call call, DO.Assignment? lastAssignment)
-    //{
-
-
-    //    if (call.Max_finish_time < DateTime.Now)
-    //        return BO.Enums.CallStatus.expired;
-
-    //    if ((DateTime.Now - call.Opening_time).TotalHours > 1)
-    //        return BO.Enums.CallStatus.opened_at_risk;
-
-    //    //double minutesLeft = (call.Max_finish_time - DateTime.Now).TotalMinutes;
-    //    //TimeSpan riskThreshold =  s_dal.Config.RiskRange;
-
-    //    //if (lastAssignment == null)
-    //    //{
-    //    //    return minutesLeft <= riskThreshold
-    //    //        ? BO.Enums.CallStatus.opened_at_risk
-    //    //        : BO.Enums.CallStatus.opened;
-    //    //}
-
-    //    //return minutesLeft <= riskThreshold
-    //    //    ? BO.Enums.CallStatus.treated_at_risk
-    //    //    : BO.Enums.CallStatus.is_treated;
-
-
-    //}
-
-
-
-
-    private static BO.Enums.CallStatus GetCallStatus(DO.Call call, DO.Assignment? lastAssignment)
-    {
+        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
+        var lastAssignment = assignments.LastOrDefault(a => a.CallId == call.Id);
         // אם עבר זמן מקסימלי לסיום הקריאה
         if (call.Max_finish_time < DateTime.Now)
             return BO.Enums.CallStatus.expired;
@@ -94,19 +30,15 @@ internal static class CallManager
             return BO.Enums.CallStatus.closed;
         return BO.Enums.CallStatus.opened;
     }
-
-
     public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
     {
         return calls.Select(call =>
         {
-            var lastAssignment = s_dal.Assignment.ReadAll()
-                .Where(a => a.CallId == call.Id)
-                .OrderByDescending(a => a.Start_time)
-                .FirstOrDefault(); ;   //FirstOrDefault;  //לפי מה הוא אחרון??
+            List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
+            var lastAssignment = assignments.LastOrDefault(a => a.CallId == call.Id);
             var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId).FullName : null;
             TimeSpan? timeLeft = call.Max_finish_time > DateTime.Now ? call.Max_finish_time - DateTime.Now : null;
-            BO.Enums.CallStatus callStatus = GetCallStatus(call, lastAssignment);
+            BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
             TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.closed ? (call.Max_finish_time - call.Opening_time) : null;
             return new BO.CallInList
             {
@@ -126,37 +58,37 @@ internal static class CallManager
 
     public static void ValidateCall(BO.Call call)
     {
-        if (call == null)
-            throw new ArgumentNullException(nameof(call), "הקריאה אינה יכולה להיות null");
+        if (call is null)
+            throw new BO.BlInvalidFormatException("Call cannot be null!");
 
         // בדיקת תקינות הכתובת
         if (string.IsNullOrWhiteSpace(call.FullAddress))
-            throw new ArgumentException("Invalid address!");
+            throw new BO.BlInvalidFormatException("Invalid address!");
 
         if (!string.IsNullOrWhiteSpace(call.Verbal_description))
-            throw new ArgumentException("Invalid description!");
+            throw new BO.BlInvalidFormatException("Invalid description!");
 
         // בדיקת זמני קריאה
         if (call.Opening_time == default)
-            throw new ArgumentException("Invalid opening time!");
+            throw new BO.BlInvalidFormatException("Invalid opening time!");
 
         if (call.Max_finish_time != default && call.Max_finish_time <= call.Opening_time)
-            throw new ArgumentException("Invalid max finish time! Finish time has to be bigger than opening time.");
+            throw new BO.BlInvalidFormatException("Invalid max finish time! Finish time has to be bigger than opening time.");
 
         // בדיקת מזהה מספרי
         if (call.Id <= 0)
-            throw new ArgumentException("Invalid id number! Id number has to be positive.");
+            throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
 
         // בדיקת ENUM לשדות שאינם מספרים
         if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
-            throw new ArgumentException("סInvalid status!");
+            throw new BO.BlInvalidFormatException("סInvalid status!");
 
-        if (!Enum.IsDefined(typeof(CallType), call.CallType))
-            throw new ArgumentException("Invalid call type!");
+        if (!Enum.IsDefined(typeof(DO.CallType), call.CallType))
+            throw new BO.BlInvalidFormatException("Invalid call type!");
 
         // בדיקת רשימה
         if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
-            throw new ArgumentException("Invalid assignments list!");
+            throw new BO.BlInvalidFormatException("Invalid assignments list!");
     }
 
     public static DO.Call ConvertBoCallToDoCall(BO.Call call)
