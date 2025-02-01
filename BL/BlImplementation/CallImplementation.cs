@@ -1,13 +1,11 @@
-﻿using BlApi;
-using DalApi;
-using DO;
+﻿using BO;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace BlImplementation;
 
-internal class CallImplementation : ICall
+internal class CallImplementation : BlApi.ICall
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
@@ -258,10 +256,6 @@ internal class CallImplementation : ICall
         };
         _dal.Assignment.Create(newAssignment);
     }
-
-
-
-
 }
 
 
