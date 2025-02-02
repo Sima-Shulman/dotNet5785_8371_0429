@@ -1,7 +1,8 @@
 ﻿namespace DO;
 
+
 /// <summary>
-/// An exception for when trying to add an existing item.
+/// An exception for when trying to access a not-existing item.
 /// </summary>
 [Serializable]
 public class DalDoesNotExistException : Exception
@@ -10,7 +11,7 @@ public class DalDoesNotExistException : Exception
 }
 
 /// <summary>
-/// An exception for when trying to delete a not-existing item.
+/// An exception for when trying to add an existing item.
 /// </summary>
 [Serializable]
 public class DalAlreadyExistsException : Exception

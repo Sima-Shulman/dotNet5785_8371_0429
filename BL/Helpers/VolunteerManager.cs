@@ -68,20 +68,20 @@ internal static class VolunteerManager
 
     public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
     {
-            return new DO.Volunteer(
-        boVolunteer.Id,
-        boVolunteer.FullName,
-        boVolunteer.CellphoneNumber,
-        boVolunteer.Email,
-        boVolunteer.FullAddress,
-        boVolunteer.Latitude,
-        boVolunteer.Longitude,
-        (DO.Role)boVolunteer.Role,
-        boVolunteer.IsActive,
-        (DO.DistanceTypes)boVolunteer.DistanceType,
-        boVolunteer.MaxDistance,
-        boVolunteer.Password
-        );
+        return new DO.Volunteer(
+    boVolunteer.Id,
+    boVolunteer.FullName,
+    boVolunteer.CellphoneNumber,
+    boVolunteer.Email,
+    boVolunteer.FullAddress,
+    boVolunteer.Latitude,
+    boVolunteer.Longitude,
+    (DO.Role)boVolunteer.Role,
+    boVolunteer.IsActive,
+    (DO.DistanceTypes)boVolunteer.DistanceType,
+    boVolunteer.MaxDistance,
+    boVolunteer.Password
+    );
     }
 
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
@@ -146,59 +146,56 @@ internal static class VolunteerManager
     public static void ValidateVolunteer(BO.Volunteer volunteer)
     {
         if (volunteer.Id <= 0 || !IsValidId(volunteer.Id))
-            throw new InvalidFormatException("Invalid Id number!");
+            throw new BO.BlInvalidFormatException("Invalid Id number!");
 
         if (string.IsNullOrWhiteSpace(volunteer.FullName) || !volunteer.FullName.Contains(" "))
-            throw new InvalidFormatException("Invalid name!");
+            throw new BO.BlInvalidFormatException("Invalid name!");
 
         if (!Regex.IsMatch(volunteer.CellphoneNumber, @"^\d{10}$"))
-            throw new InvalidFormatException("Invalid cellphone number!");
+            throw new BO.BlInvalidFormatException("Invalid cellphone number!");
 
         if (!Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            throw new InvalidFormatException("Invalid email!");
+            throw new BO.BlInvalidFormatException("Invalid email!");
 
-        if (!string.IsNullOrEmpty(volunteer.Password) &&
-            (volunteer.Password.Length < 8 ||
+        if ((volunteer.Password.Length < 8 ||
              !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
              !Regex.IsMatch(volunteer.Password, "[0-9]") ||
              !Regex.IsMatch(volunteer.Password, "[!@#$%^&*]")))
-            throw new InvalidFormatException("Invalid password!");
+            throw new BO.BlInvalidFormatException("Invalid password!");
 
         if (!string.IsNullOrEmpty(volunteer.FullAddress))
-            throw new InvalidFormatException("Invalid address!");
+            throw new BO.BlInvalidFormatException("Invalid address!");
 
         if (volunteer.Role != BO.Enums.Role.volunteer || volunteer.Role != BO.Enums.Role.manager)
-            throw new InvalidFormatException("Invalid role!");
+            throw new BO.BlInvalidFormatException("Invalid role!");
 
         if (volunteer.MaxDistance.HasValue && volunteer.MaxDistance <= 0)
-            throw new InvalidFormatException("Invalid distance!");
+            throw new BO.BlInvalidFormatException("Invalid distance!");
 
         if (!Enum.IsDefined(typeof(BO.Enums.DistanceTypes), volunteer.DistanceType))
-            throw new InvalidFormatException("Invalid distance type!");
+            throw new BO.BlInvalidFormatException("Invalid distance type!");
 
         if (volunteer.TotalHandledCalls < 0)
-            throw new InvalidFormatException("Invalid sum of handled calls!");
+            throw new BO.BlInvalidFormatException("Invalid sum of handled calls!");
 
         if (volunteer.TotalCanceledCalls < 0)
-            throw new InvalidFormatException("Invalid sum of canceled calls!");
+            throw new BO.BlInvalidFormatException("Invalid sum of canceled calls!");
 
         if (volunteer.TotalExpiredCalls < 0)
-            throw new InvalidFormatException("Invalid sum of expired calls!");
+            throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
     }
-    //internal static List<string> GetChangedFields(DO.Volunteer doVolunteer, BO.Volunteer boUpdatedVolunteer)
-    //{
-    //    var diffFields = new List<string>();
-
-    //    if (doVolunteer.FullName != boUpdatedVolunteer.FullName) diffFields.Add("FullName");
-    //    if (doVolunteer.Email != boUpdatedVolunteer.Email) diffFields.Add("Email");
-    //    if (doVolunteer.CellphoneNumber != boUpdatedVolunteer.CellphoneNumber) diffFields.Add("CellphoneNumber");
-    //    if (doVolunteer.Role != (DO.Role)boUpdatedVolunteer.Role) diffFields.Add("Role");
-    //    if (doVolunteer.FullAddress != boUpdatedVolunteer.FullAddress) diffFields.Add("FullAddress");
-    //    if (doVolunteer.IsActive != boUpdatedVolunteer.IsActive) diffFields.Add("IsActive");
-    //    if (doVolunteer.DistanceTypes != (DO.DistanceTypes)boUpdatedVolunteer.DistanceType) diffFields.Add("DistanceType");
-    //    if (doVolunteer.MaxDistance != boUpdatedVolunteer.MaxDistance) diffFields.Add("MaxDistance");
-    //    if (doVolunteer.Password != boUpdatedVolunteer.Password) diffFields.Add("Password");
-
-    //    return diffFields;
-    //}
+    internal static bool IsPasswordStrong(string password)
+    {
+        if (password.Length < 8)
+            return false;
+        if (!password.Any(char.IsUpper))
+            return false;
+        if (!password.Any(char.IsLower))
+            return false;
+        if (!password.Any(char.IsDigit))
+            return false;
+        if (!password.Any(c => "@#$%^&*".Contains(c)))
+            return false;
+        return true;
+    }
 }

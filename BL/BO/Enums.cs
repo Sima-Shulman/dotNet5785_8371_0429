@@ -80,6 +80,17 @@ public class Enums
         TotalAssignments,
     }
 
+    public enum OpenCallInListFields
+    {
+        Id,
+        CallType,
+        Verbal_description,
+        FullAddress,
+        Start_time,
+        Max_finish_time,
+        CallDistance,
+    }
+
     public enum ClosedCallInListFields
     {
         Id,

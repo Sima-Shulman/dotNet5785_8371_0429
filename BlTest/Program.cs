@@ -202,6 +202,28 @@ namespace BlTest
             }
         }
 
+        //v
+        private static void GetCallDetails()
+        {
+            Console.Write("Enter Call ID: ");
+            if (int.TryParse(Console.ReadLine(), out int callId))
+            {
+                try
+                {
+                    BO.Call call = s_bl.Call.GetCallDetails(callId);
+                    Console.WriteLine(call);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
+        //v
         private static void GetCallsList()
         {
             Console.WriteLine("Enter filter field (optional): ");
@@ -229,7 +251,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
+        //v
         private static void SelectCallForTreatment()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -258,16 +280,75 @@ namespace BlTest
                 Console.WriteLine("Invalid Volunteer ID.");
             }
         }
-
-        private static void GetCallDetails()
+        private static void AddCall()
         {
             Console.Write("Enter Call ID: ");
             if (int.TryParse(Console.ReadLine(), out int callId))
             {
+                Console.Write("Enter Call Description: ");
+                string? description = Console.ReadLine();////
+                Console.Write("Enter Call type: ");
+                CallType callType = Enum.TryParse(Console.ReadLine(), out CallType parsedType) ? parsedType : throw new ArgumentException("Invalid call type.");
+                Console.Write("Enter Full Address: ");
+                string address = Console.ReadLine();///////////////
+
+                var newCall = new BO.Call
+                {
+                    Id = callId,
+                    Verbal_description = description,
+                    FullAddress = address,
+                    Opening_time = DateTime.Now,
+                    CallType = callType,
+                    CallStatus = CallStatus.opened
+                };
                 try
                 {
-                    BO.Call call = s_bl.Call.GetCallDetails(callId);
-                    Console.WriteLine(call);
+                    s_bl.Call.AddCall(newCall);
+                    Console.WriteLine("Call added successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid number.");
+            }
+        }
+        private static void UpdateCall()
+        {
+            Console.Write("Enter Call ID: ");
+            if (int.TryParse(Console.ReadLine(), out int callId))
+            {
+                Console.Write("Enter New Description (optional) : ");
+                string description = Console.ReadLine();
+                Console.Write("Enter New Full Address (optional) : ");
+                string address = Console.ReadLine();
+                Console.Write("Enter Call Type (optional) : ");
+                CallType? callType = Enum.TryParse(Console.ReadLine(), out CallType parsedType) ? parsedType : (CallType?)null;
+                Console.Write("Enter Max Finish Time (hh:mm , (optional)): ");
+                TimeSpan? maxFinishTime = TimeSpan.TryParse(Console.ReadLine(), out TimeSpan parsedTime) ? parsedTime : (TimeSpan?)null;
+                try
+                {
+                    var callToUpdate = s_bl.Call.GetCallDetails(callId);
+                    if (callToUpdate == null)
+                    {
+                        Console.WriteLine("Call not found.");
+                        return;
+                    }
+                    var newUpdatedCall = new BO.Call
+                    {
+                        Id = callId,
+                        Verbal_description = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.Verbal_description,
+                        FullAddress = !string.IsNullOrWhiteSpace(address) ? address : callToUpdate.FullAddress,
+                        Opening_time = callToUpdate.Opening_time,
+                        Max_finish_time = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.Max_finish_time),
+                        CallType = callType ?? callToUpdate.CallType
+                    };
+                    s_bl.Call.UpdateCallDetails(newUpdatedCall);
+                    Console.WriteLine("Call updated successfully.");
                 }
                 catch (Exception ex)
                 {
@@ -279,81 +360,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
-        //private static void AddCall()
-        //{
-        //    Console.Write("Enter Call ID: ");
-        //    if (int.TryParse(Console.ReadLine(), out int callId))
-        //    {
-        //        Console.Write("Enter Call Description: ");
-        //        string description = Console.ReadLine();
-        //        Console.Write("Enter Call type: ");
-        //        CallType callType = Console.ReadLine();
-        //        Console.Write("Enter Full Address: ");
-        //        string address = Console.ReadLine();
-
-        //        var newCall = new BO.Call
-        //        {
-        //            Id = callId,
-        //            Verbal_description = description,
-        //            FullAddress = address,
-        //            Opening_time = DateTime.Now,
-        //            CallType = callType,
-        //            CallStatus = CallStatus.opened
-        //        };
-        //        try
-        //        {
-        //            s_bl.Call.AddCall(newCall);
-        //            Console.WriteLine("Call added successfully.");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid input. Please enter a valid number.");
-        //    }
-        //}
-
-
-        //private static void UpdateCall()
-        //{
-        //    Console.Write("Enter Call ID: ");
-        //    if (int.TryParse(Console.ReadLine(), out int callId))
-        //    {
-        //        Console.Write("Enter New Description: ");
-        //        string description = Console.ReadLine();
-        //        Console.Write("Enter New Full Address: ");
-        //        string address = Console.ReadLine();
-
-        //        var updatedCall = new BO.Call
-        //        {
-        //            Id = callId,
-        //            Verbal_description = description,
-        //            FullAddress = address,
-        //            Opening_time = DateTime.Now,
-        //            Max_finish_time = DateTime.Now.AddHours(1)
-        //        };
-
-        //        try
-        //        {
-        //            s_bl.Call.UpdateCallDetails(updatedCall);
-        //            Console.WriteLine("Call updated successfully.");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Invalid input. Please enter a valid number.");
-        //    }
-        //}
-
         private static void DeleteCall()
         {
             Console.Write("Enter Call ID to delete: ");
@@ -374,7 +380,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
         private static void GetClosedCallsHandledByVolunteer()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -398,7 +403,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
         private static void GetOpenCallsForVolunteer()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -422,7 +426,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
         private static void MarkCallCancellation()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -451,7 +454,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
         private static void MarkCallCompletion()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -483,13 +485,14 @@ namespace BlTest
 
 
 
-        // Volunteer
 
+
+        // Volunteer
         private static void HandleVolunteerMenu()
         {
             bool exit = false;
             while (!exit)
-            { 
+            {
                 Console.Clear();
                 Console.WriteLine("Volunteer Menu:");
                 Console.WriteLine("1. Get Volunteer Details");
@@ -505,7 +508,7 @@ namespace BlTest
                 switch (choice)
                 {
                     case "1":
-                       GetVolunteerDetails();
+                        GetVolunteerDetails();
                         break;
                     case "2":
                         GetVolunteersList();
@@ -635,11 +638,11 @@ namespace BlTest
 
         private static void DeleteVolunteer()
         {
-            Console.Write("Enter Volunteer ID to Delete: ");
-            int volunteerId = int.Parse(Console.ReadLine());
             try
             {
-                s_bl.Volunteer.DeleteVolunteer(volunteerId);
+                Console.Write("Enter Volunteer ID to Delete: ");
+                if (int.TryParse(Console.ReadLine(), out int volunteerId))
+                    s_bl.Volunteer.DeleteVolunteer(volunteerId);
                 Console.WriteLine("Volunteer deleted successfully.");
             }
             catch (Exception ex)
@@ -651,15 +654,14 @@ namespace BlTest
         private static void EnterVolunteerSystem()
         {
             Console.Write("Enter Volunteer ID (Tz): ");
-            string volunteerId = Console.ReadLine();
-
+            string volunteerId = Console.ReadLine() ?? throw new BO.BlNullPropertyException("id can't be null");
             try
-            { 
-            //{
-            //    // המערכת תוודא שהמתנדב קיים בעזרת תעודת הזהות
-            //    int volunteerId = s_bl.Volunteer.EnterSystem(tz);
+            {
+                //{
+                //    // המערכת תוודא שהמתנדב קיים בעזרת תעודת הזהות
+                //    int volunteerId = s_bl.Volunteer.EnterSystem(tz);
                 Console.WriteLine($"Volunteer found! ID: {volunteerId}");
-                GetVolunteerDetailsAfterLogin(volunteerId);
+                s_bl.Volunteer.GetVolunteerDetails(volunteerId);
             }
             catch (Exception ex)
             {

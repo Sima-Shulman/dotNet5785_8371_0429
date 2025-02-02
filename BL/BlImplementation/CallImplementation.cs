@@ -1,8 +1,5 @@
 ﻿using BO;
 using Helpers;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace BlImplementation;
 
 internal class CallImplementation : BlApi.ICall
@@ -13,31 +10,53 @@ internal class CallImplementation : BlApi.ICall
 
     public int[] GetCallQuantitiesByStatus()
     {
-        var calls = _dal.Call.ReadAll();
-        int[] callQuantities = new int[Enum.GetValues(typeof(BO.Enums.CallStatus)).Length];
-
-        var groupedCalls = calls
-            .GroupBy(c => c.CalculateCallStatus())
-            .ToDictionary(g => g.Key, g => g.Count());
-        foreach (var entry in groupedCalls)
+        try
         {
-            callQuantities[(int)entry.Key] = entry.Value;
+            var calls = _dal.Call.ReadAll();
+            int[] callQuantities = new int[Enum.GetValues(typeof(BO.Enums.CallStatus)).Length];
+
+            var groupedCalls = calls
+                .GroupBy(c => c.CalculateCallStatus())
+                .ToDictionary(g => g.Key, g => g.Count());
+            foreach (var entry in groupedCalls)
+            {
+                callQuantities[(int)entry.Key] = entry.Value;
+            }
+            return callQuantities;
         }
-        return callQuantities;
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Cannot access calls", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
 
     public IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallInListFields? fieldFilter = null, object? filterValue = null, BO.Enums.CallInListFields? sortField = null)
     {
-        IEnumerable<BO.CallInList?> calls = CallManager.ConvertToCallInList((IEnumerable<DO.Call>)_dal.Call.ReadAll());
-        if (fieldFilter.HasValue && filterValue is not null)
+        try
         {
-            calls = calls.Where(c => c.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
-        }
+            IEnumerable<BO.CallInList?> calls = CallManager.ConvertToCallInList((IEnumerable<DO.Call>)_dal.Call.ReadAll());
+            if (fieldFilter.HasValue && filterValue is not null)
+            {
+                calls = calls.Where(c => c.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
+            }
 
-        calls = sortField.HasValue
-            ? calls.OrderBy(c => c?.GetType().GetProperty(sortField.ToString())?.GetValue(c))
-            : calls.OrderBy(c => c?.CallId);
-        return calls!;
+            calls = sortField.HasValue
+                ? calls.OrderBy(c => c?.GetType().GetProperty(sortField.ToString())?.GetValue(c))
+                : calls.OrderBy(c => c?.CallId);
+            return calls!;
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Can not access calls", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
 
     public BO.Call GetCallDetails(int callId)
@@ -69,10 +88,15 @@ internal class CallImplementation : BlApi.ICall
                 AssignmentsList = callAssignInLists,
             };
         }
-        catch (Exception ex)
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new Exception("dddd");
+            throw new BO.BlDoesNotExistException("Can not access calls", ex);
         }
+           catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
+    }
 
 
     }
@@ -85,13 +109,20 @@ internal class CallImplementation : BlApi.ICall
             CallManager.ValidateCall(boCall);
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
             if (latitude is null || longitude is null)
-                throw new BO.GeolocationNotFoundException($"Invalid address: {boCall.FullAddress}");
+                throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
             boCall.Latitude = latitude;
             boCall.Longitude = longitude;
             DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Update(updatedCall);
         }
-        catch (Exception ex) { throw new Exception("aa"); }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Can not access calls", ex);
+        }
+           catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
 
     public void DeleteCall(int callId)
@@ -100,12 +131,20 @@ internal class CallImplementation : BlApi.ICall
         {
             DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
             if (!_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.opened)
-                throw new BO.BlInvalidOperationException($"Cannot delete volunteer with ID={callId} as they are handling calls.");
+                throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist", ex);
+        }
+        catch (DO.DalDeletionImpossible ex)
+        {
+            throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
 
@@ -120,7 +159,7 @@ internal class CallImplementation : BlApi.ICall
             CallManager.ValidateCall(boCall);
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
             if (latitude is null || longitude is null)
-                throw new BO.GeolocationNotFoundException($"Invalid address: {boCall.FullAddress}");
+                throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
             boCall.Latitude = latitude;
             boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
@@ -128,7 +167,11 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (DO.DalAlreadyExistsException ex)
         {
-            throw new BO.BlAlreadyExistsException($"Call with ID={boCall.Id} already exists", ex);
+            throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exists", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
 
@@ -136,7 +179,7 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.End_time != null)
+            var closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.End_time != null)
                          .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId).Call_type == callTypeFilter)
                      .Select(a =>
                      {
@@ -153,32 +196,50 @@ internal class CallImplementation : BlApi.ICall
                          };
                      });
             return sortField.HasValue
-                ? assignments.OrderBy(a => a.GetType().GetProperty(sortField.ToString())?.GetValue(a))
-                : assignments.OrderBy(a => a.Id);
+                ? closedCalls.OrderBy(a => a.GetType().GetProperty(sortField.ToString())?.GetValue(a))
+                : closedCalls.OrderBy(a => a.Id);
 
         }
-        catch (Exception ex) { throw new Exception("hjg"); }
+        catch (DO.DalAlreadyExistsException ex)
+        {
+            throw new BO.BlAlreadyExistException("Cannot access assignments", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
 
-    public IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.CallFields? sortField = null)
+    public IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null)
     {
-        var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-        var openCalls = _dal.Call.ReadAll()
-            .Where(c =>
-            (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
-            .Select(c => new BO.OpenCallInList
-            {
-                Id = volunteerId,
-                CallType = (BO.Enums.CallType)c.Call_type,
-                Verbal_description = c.Verbal_description,
-                FullAddress = c.Full_address,
-                Start_time = c.Opening_time, 
-                Max_finish_time = c.Max_finish_time, 
-                CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, c.Latitude, c.Longitude)
-            });
-        return sortField.HasValue
-        ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c))
-        : openCalls.OrderBy(c => c.Id);
+        try
+        {
+            var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            var openCalls = _dal.Call.ReadAll()
+                .Where(c =>
+                (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
+                .Select(c => new BO.OpenCallInList
+                {
+                    Id = volunteerId,
+                    CallType = (BO.Enums.CallType)c.Call_type,
+                    Verbal_description = c.Verbal_description,
+                    FullAddress = c.Full_address,
+                    Start_time = c.Opening_time,
+                    Max_finish_time = c.Max_finish_time,
+                    CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, c.Latitude, c.Longitude)
+                });
+            return sortField.HasValue
+            ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c))
+            : openCalls.OrderBy(c => c.Id);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
@@ -191,16 +252,20 @@ internal class CallImplementation : BlApi.ICall
             if (isRequesterManager != DO.Role.manager || assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
             if (assignment.End_time != null)
-                throw new BO.BlInvalidOperationException("Cannot cancel an assignment that has already been completed or expired");
-            Assignment copy = assignment with
+                throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
+            DO.Assignment copy = assignment with
             {
                 End_time = _dal.Config.Clock,
-                EndType = (EndType?)(isRequesterVolunteer ? BO.Enums.EndType.self_cancellation : BO.Enums.EndType.manager_cancellation),
+                EndType = (DO.EndType)(isRequesterVolunteer ? BO.Enums.EndType.self_cancellation : BO.Enums.EndType.manager_cancellation),
             };
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
         }
         catch (Exception ex)
         {
-            throw new BO.BlInvalidOperationException($"Error marking the call cancellation: {ex.Message}", ex);
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
 
@@ -213,48 +278,57 @@ internal class CallImplementation : BlApi.ICall
         {
             var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
             if (assignment.VolunteerId != volunteerId)
-                throw new BO.BlUnauthorizedAccessException($"Volunteer with ID={volunteerId} is not authorized to complete this call.");
+                throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to complete this call.");
             if (assignment.End_time != null)
-                throw new BO.BlInvalidOperationException($"The assignment with ID={assignmentId} has already been completed or canceled.");
-            //var call = _dal.Call.Read(assignment.CallId);
-            //if (call == null || call.Max_finish_time < DateTime.Now)
-            //    throw new BO.BlExpiredCallException($"The call with ID={assignment.CallId} has expired and cannot be completed.");
-            assignment.EndType = (int)BO.Enums.EndType.was_treated;
-            assignment.End_time = _dal.Config.Clock;
-            _dal.Assignment.Update(assignment);
+                throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.");
+            DO.Assignment newAssignment = assignment with { End_time = _dal.Config.Clock, EndType = DO.EndType.was_treated };
+            _dal.Assignment.Update(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist", ex);
         }
-        catch (DO.DalException ex)
+        catch (DO.DalDeletionImpossible ex)
         {
-            throw new BO.BlDataAccessException("An error occurred while accessing the data layer.", ex);
+            throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
 
 
     public void SelectCallForTreatment(int volunteerId, int callId)
     {
-        var call = GetCallDetails(callId);
-        if (call == null)
-            throw new Exception("הקריאה לא נמצאה");
-        if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.opened)
-            throw new Exception("בטיפול או פתוחה");
-        if (call.Max_finish_time < DateTime.Now)
-            throw new Exception("פג תוקפה של הקריאה");
-        var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
-        if (existingAssignments.Any(a => a?.End_time == null))
-            throw new Exception("כבר קיימת הקצאה פתוחה לקריאה זו");
-        var newAssignment = new Assignment
+        try
         {
-            CallId = callId,
-            VolunteerId = volunteerId,
-            Start_time = _dal.Config.Clock,
-            End_time = null,
-            EndType = null
-        };
-        _dal.Assignment.Create(newAssignment);
+            var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
+            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.opened)
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
+            if (call.Max_finish_time < DateTime.Now)
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
+            var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
+            if (existingAssignments.Any(a => a?.End_time == null))
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is in treatment already.You are not authorized to treat it.");
+            var newAssignment = new DO.Assignment
+            {
+                CallId = callId,
+                VolunteerId = volunteerId,
+                Start_time = _dal.Config.Clock,
+                End_time = null,
+                EndType = null
+            };
+            _dal.Assignment.Update(newAssignment);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
     }
 }
 
