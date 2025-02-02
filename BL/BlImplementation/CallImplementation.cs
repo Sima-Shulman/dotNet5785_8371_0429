@@ -1,5 +1,10 @@
-﻿using BO;
+
+
 using Helpers;
+using System.Collections.Generic;
+using System.Linq;
+
+﻿using Helpers;
 namespace BlImplementation;
 
 internal class CallImplementation : BlApi.ICall
@@ -97,10 +102,6 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
-
-    }
-
     public void UpdateCallDetails(BO.Call boCall)
     {
         try
@@ -330,7 +331,11 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+
+
 }
+
+
 
 
 
@@ -352,7 +357,6 @@ internal class CallImplementation : BlApi.ICall
 //        // עדכון המערך עם כמות הקריאות לכל סטטוס
 //        callQuantities[(int)group.Key] = group.Count();
 //    }
-
 
 
 
