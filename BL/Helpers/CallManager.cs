@@ -7,29 +7,69 @@ namespace Helpers;
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get;
-
     public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
     {
-        List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
-        var lastAssignment = assignments.LastOrDefault(a => a.CallId == call.Id);
-        // אם עבר זמן מקסימלי לסיום הקריאה
-        if (call.Max_finish_time < DateTime.Now)
-            return BO.Enums.CallStatus.expired;
-        // אם הקריאה פתוחה ומסיימת בזמן הסיכון
-        if ((DateTime.Now - call.Opening_time).TotalHours > s_dal.Config.RiskRange.TotalHours)
-            return BO.Enums.CallStatus.opened_at_risk;
-        // אם הקריאה בטיפול
-        if (lastAssignment != null)
-            //בטיפול בסיכון
-            if ((DateTime.Now - lastAssignment?.Start_time) > s_dal.Config.RiskRange)
-                return BO.Enums.CallStatus.treated_at_risk;
-            //רק בטיפול      
-            else
-                return BO.Enums.CallStatus.is_treated;
-        if (lastAssignment is not null && lastAssignment.End_time.HasValue)
-            return BO.Enums.CallStatus.closed;
+        var assignments = s_dal.Assignment.ReadAll(a => a.CallId == call.Id)
+                .OrderByDescending(a => a.Start_time)
+                .ToList();
+
+        if (assignments.Any())//there is an assignment to this call
+        {
+            var lastAssignment = assignments.First();
+            if (lastAssignment.End_time is null && lastAssignment.Start_time <= s_dal.Config.Clock)
+            {
+                if (call.Max_finish_time.HasValue && (call.Max_finish_time.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
+                    return BO.Enums.CallStatus.treated_at_risk; // InRiskTreatment
+
+                return BO.Enums.CallStatus.is_treated; // InTreatment
+            }
+            if (lastAssignment.EndType.HasValue)
+            {
+                if (lastAssignment.EndType == DO.EndType.expired)
+                    return BO.Enums.CallStatus.expired; // Expired
+
+                return BO.Enums.CallStatus.closed; // Closed (handled or canceled)
+            }
+        }
+        if (call.Max_finish_time.HasValue)
+        {
+            if (call.Max_finish_time <= s_dal.Config.Clock)
+                return BO.Enums.CallStatus.expired; // Expired
+
+            if ((call.Max_finish_time.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
+                return BO.Enums.CallStatus.opened_at_risk; // OpenInRisk
+        }
         return BO.Enums.CallStatus.opened;
     }
+
+    //        if (lastAssignment.EndType is null)//means that that treatment is not completed.
+    //        {
+    //            if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)//if the dead-line is over.
+    //                return BO.Enums.CallStatus.expired;
+    //            else if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)//if the call is in the risk range.
+    //                return BO.Enums.CallStatus.treated_at_risk;
+    //            else return BO.Enums.CallStatus.is_treated;//not in risk and not expired.
+    //        }
+    //        else if (lastAssignment.EndType == DO.EndType.was_treated)//means the treatment was completed.
+    //            return BO.Enums.CallStatus.closed;
+    //        else//the treatment wasn't completed.
+    //        {
+    //            if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)
+    //                return BO.Enums.CallStatus.expired;//if the dead-line is over.
+    //            else if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)
+    //                return BO.Enums.CallStatus.opened_at_risk;//if it was not completed but the call is in the risk range.
+    //            else return BO.Enums.CallStatus.opened;//it was not completed but still not expired and not in risk.
+    //        }
+    //    }
+    //    else// there is no assignments to this call
+    //    {
+    //        if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)
+    //            return BO.Enums.CallStatus.expired;//if the dead-line is over.
+    //        if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)//if the call is in the risk range.
+    //            return BO.Enums.CallStatus.opened_at_risk;
+    //        else return BO.Enums.CallStatus.opened;//it still not expired and not in risk.
+    //    }
+    //}
     public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
     {
         return calls.Select(call =>
@@ -65,7 +105,7 @@ internal static class CallManager
         if (string.IsNullOrWhiteSpace(call.FullAddress))
             throw new BO.BlInvalidFormatException("Invalid address!");
 
-        if (!string.IsNullOrWhiteSpace(call.Verbal_description))
+        if (string.IsNullOrWhiteSpace(call.Verbal_description))
             throw new BO.BlInvalidFormatException("Invalid description!");
 
         // בדיקת זמני קריאה
@@ -76,14 +116,14 @@ internal static class CallManager
             throw new BO.BlInvalidFormatException("Invalid max finish time! Finish time has to be bigger than opening time.");
 
         // בדיקת מזהה מספרי
-        if (call.Id <= 0)
+        if (call.Id < 0)
             throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
 
         // בדיקת ENUM לשדות שאינם מספרים
         if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
             throw new BO.BlInvalidFormatException("סInvalid status!");
 
-        if (!Enum.IsDefined(typeof(DO.CallType), call.CallType))
+        if (!Enum.IsDefined(typeof(BO.Enums.CallType), call.CallType))
             throw new BO.BlInvalidFormatException("Invalid call type!");
 
         // בדיקת רשימה

@@ -10,60 +10,53 @@ internal static class VolunteerManager
     private static IDal s_dal = Factory.Get;
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
-        try
+        var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
+        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.was_treated);
+        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.manager_cancellation || a.EndType == DO.EndType.self_cancellation);
+        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.expired);
+        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.End_time == null)?.CallId;
+        var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.End_time == null).FirstOrDefault();
+        BO.CallInProgress? callInProgress = null;
+        if (currentAssignment is not null)
         {
-            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
-            var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.was_treated);
-            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.manager_cancellation || a.EndType == DO.EndType.self_cancellation);
-            var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.expired);
-            var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.End_time == null)?.CallId;
-            var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.End_time == null).FirstOrDefault();
-            BO.CallInProgress? callInProgress = null;
-            if (currentAssignment is not null)
+            var callDetails = s_dal.Call.Read(currentAssignment.CallId);
+            if (callDetails is not null)
             {
-                var callDetails = s_dal.Call.Read(currentAssignment.CallId);
-                if (callDetails is not null)
+                callInProgress = new BO.CallInProgress
                 {
-                    callInProgress = new BO.CallInProgress
-                    {
-                        Id = currentAssignment.Id,
-                        CallId = currentAssignment.CallId,
-                        CallType = (BO.Enums.CallType)callDetails.Call_type,
-                        Verbal_description = callDetails.Verbal_description,
-                        FullAddress = callDetails.Full_address,
-                        Opening_time = callDetails.Opening_time,
-                        Max_finish_time = (DateTime)callDetails.Max_finish_time,
-                        Start_time = currentAssignment.Start_time,
-                        CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
-                        CallStatus = CallManager.CalculateCallStatus(callDetails)
-                    };
-                }
+                    Id = currentAssignment.Id,
+                    CallId = currentAssignment.CallId,
+                    CallType = (BO.Enums.CallType)callDetails.Call_type,
+                    Verbal_description = callDetails.Verbal_description,
+                    FullAddress = callDetails.Full_address,
+                    Opening_time = callDetails.Opening_time,
+                    Max_finish_time = (DateTime?)callDetails.Max_finish_time,
+                    Start_time = currentAssignment.Start_time,
+                    CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
+                    CallStatus = callDetails.CalculateCallStatus()
+                };
             }
-            return new BO.Volunteer
-            {
-                Id = doVolunteer.Id,
-                FullName = doVolunteer.FullName,
-                CellphoneNumber = doVolunteer.CellphoneNumber,
-                Email = doVolunteer.Email,
-                Password = doVolunteer.Password,
-                FullAddress = doVolunteer.FullAddress,
-                Latitude = doVolunteer?.Latitude,
-                Longitude = doVolunteer?.Longitude,
-                Role = (BO.Enums.Role)doVolunteer.Role,
-                IsActive = doVolunteer.IsActive,
-                DistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceTypes,
-                MaxDistance = doVolunteer.MaxDistance,
-                TotalHandledCalls = totalHandled,
-                TotalCanceledCalls = totalCanceled,
-                TotalExpiredCalls = totalExpired,
-
-
-            };
         }
-        catch (DO.DalDoesNotExistException ex)
+        return new BO.Volunteer
         {
-            return null;
-        }
+            Id = doVolunteer.Id,
+            FullName = doVolunteer.FullName,
+            CellphoneNumber = doVolunteer.CellphoneNumber,
+            Email = doVolunteer.Email,
+            Password = doVolunteer.Password,
+            FullAddress = doVolunteer.FullAddress,
+            Latitude = doVolunteer?.Latitude,
+            Longitude = doVolunteer?.Longitude,
+            Role = (BO.Enums.Role)doVolunteer.Role,
+            IsActive = doVolunteer.IsActive,
+            DistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceTypes,
+            MaxDistance = doVolunteer.MaxDistance,
+            TotalHandledCalls = totalHandled,
+            TotalCanceledCalls = totalCanceled,
+            TotalExpiredCalls = totalExpired,
+
+
+        };
     }
 
     public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
@@ -87,7 +80,10 @@ internal static class VolunteerManager
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
         var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
-
+        //foreach(var a in currentVolunteerAssignments)
+        //{
+        //    Console.WriteLine(a.EndType);
+        //}
         var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.was_treated);
         var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.manager_cancellation || a.EndType == DO.EndType.self_cancellation);
         var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.expired);
@@ -112,7 +108,7 @@ internal static class VolunteerManager
     internal static bool VerifyPassword(string enteredPassword, string storedPassword)
     {
         var encryptedPassword = EncryptPassword(enteredPassword);
-        return encryptedPassword == storedPassword;
+        return encryptedPassword == storedPassword /*|| enteredPassword==storedPassword*/;
     }
     internal static string EncryptPassword(string password)
     {
@@ -143,45 +139,74 @@ internal static class VolunteerManager
         return sum % 10 == 0;
     }
 
-    public static void ValidateVolunteer(BO.Volunteer volunteer)
+    public static void ValidateVolunteer(BO.Volunteer boVolunteer)
     {
-        if (volunteer.Id <= 0 || !IsValidId(volunteer.Id))
+        if (boVolunteer.Id <= 0 || !IsValidId(boVolunteer.Id))
             throw new BO.BlInvalidFormatException("Invalid Id number!");
 
-        if (string.IsNullOrWhiteSpace(volunteer.FullName) || !volunteer.FullName.Contains(" "))
+        if (string.IsNullOrWhiteSpace(boVolunteer.FullName) || !boVolunteer.FullName.Contains(" "))
             throw new BO.BlInvalidFormatException("Invalid name!");
 
-        if (!Regex.IsMatch(volunteer.CellphoneNumber, @"^\d{10}$"))
+        if (!Regex.IsMatch(boVolunteer.CellphoneNumber, @"^\d{10}$"))
             throw new BO.BlInvalidFormatException("Invalid cellphone number!");
 
-        if (!Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        if (!Regex.IsMatch(boVolunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new BO.BlInvalidFormatException("Invalid email!");
+        //var doVolunteer = s_dal.Volunteer.Read(boVolunteer.Id);
 
-        if ((volunteer.Password.Length < 8 ||
-             !Regex.IsMatch(volunteer.Password, "[A-Z]") ||
-             !Regex.IsMatch(volunteer.Password, "[0-9]") ||
-             !Regex.IsMatch(volunteer.Password, "[!@#$%^&*]")))
-            throw new BO.BlInvalidFormatException("Invalid password!");
+        //if (!string.IsNullOrEmpty(boVolunteer.Password))
+        //Console.WriteLine(boVolunteer.Password.Length < 8);
+        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[A-Z]"));
+        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[0-9]"));
+        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]"));
+        //Console.WriteLine(!VerifyPassword(boVolunteer.Password, doVolunteer.Password!));
+        if (!string.IsNullOrEmpty( boVolunteer.Password) )
+        {
+            if (/*!VerifyPassword(boVolunteer.Password, doVolunteer.Password!) ||*/
+                (boVolunteer.Password.Length < 8 &&
+                 !Regex.IsMatch(boVolunteer.Password, "[A-Z]") &&
+                 !Regex.IsMatch(boVolunteer.Password, "[0-9]") &&
+                 !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]")))
+                throw new BO.BlInvalidFormatException("Invalid password!");
+        }
+        //    else
+        //    {
+        //        if (boVolunteer.Password.Length < 8 ||
+        //                       !Regex.IsMatch(boVolunteer.Password, "[A-Z]") ||
+        //                       !Regex.IsMatch(boVolunteer.Password, "[0-9]") ||
+        //                       !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]"))
+        //            throw new BO.BlInvalidFormatException("Invalid password!");
 
-        if (!string.IsNullOrEmpty(volunteer.FullAddress))
+        //    }
+        //}328178371
+
+        //var doVolunteer = s_dal.Volunteer.Read(boVolunteer.Id);
+        //if ((boVolunteer.Password.Length < 8 ||
+        //     !Regex.IsMatch(boVolunteer.Password, "[A-Z]") ||
+        //     !Regex.IsMatch(boVolunteer.Password, "[0-9]") ||
+        //     !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]")) && !VerifyPassword(boVolunteer.Password, doVolunteer.Password!))
+        //    throw new BO.BlInvalidFormatException("Invalid password!");
+
+
+        if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
             throw new BO.BlInvalidFormatException("Invalid address!");
 
-        if (volunteer.Role != BO.Enums.Role.volunteer || volunteer.Role != BO.Enums.Role.manager)
+        if (boVolunteer.Role != BO.Enums.Role.volunteer && boVolunteer.Role != BO.Enums.Role.manager)
             throw new BO.BlInvalidFormatException("Invalid role!");
 
-        if (volunteer.MaxDistance.HasValue && volunteer.MaxDistance <= 0)
+        if (boVolunteer.MaxDistance.HasValue && boVolunteer.MaxDistance < 0)
             throw new BO.BlInvalidFormatException("Invalid distance!");
 
-        if (!Enum.IsDefined(typeof(BO.Enums.DistanceTypes), volunteer.DistanceType))
+        if (!Enum.IsDefined(typeof(BO.Enums.DistanceTypes), boVolunteer.DistanceType))
             throw new BO.BlInvalidFormatException("Invalid distance type!");
 
-        if (volunteer.TotalHandledCalls < 0)
+        if (boVolunteer.TotalHandledCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of handled calls!");
 
-        if (volunteer.TotalCanceledCalls < 0)
+        if (boVolunteer.TotalCanceledCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of canceled calls!");
 
-        if (volunteer.TotalExpiredCalls < 0)
+        if (boVolunteer.TotalExpiredCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
     }
     internal static bool IsPasswordStrong(string password)

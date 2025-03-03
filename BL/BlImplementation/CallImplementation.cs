@@ -4,7 +4,7 @@ using Helpers;
 using System.Collections.Generic;
 using System.Linq;
 
-﻿using Helpers;
+
 namespace BlImplementation;
 
 internal class CallImplementation : BlApi.ICall
@@ -46,6 +46,16 @@ internal class CallImplementation : BlApi.ICall
             IEnumerable<BO.CallInList?> calls = CallManager.ConvertToCallInList((IEnumerable<DO.Call>)_dal.Call.ReadAll());
             if (fieldFilter.HasValue && filterValue is not null)
             {
+                //foreach (var call in calls)
+                //{
+                //    Console.WriteLine(call);
+                //    Console.WriteLine(call.GetType());
+                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString()));
+                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString())?.GetValue(call));
+                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString())?.GetValue(call)?.Equals((BO.Enums.CallStatus)filterValue) == true);
+
+                //}
+
                 calls = calls.Where(c => c.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
             }
 
@@ -68,7 +78,9 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Student with ID={callId} does Not exist");
+            DO.Call call = _dal.Call.Read(callId);
+            //if (call is null)
+            //    throw new BO.BlDoesNotExistException($"Call with ID={callId}does not exist!");
             var callAssignInLists = _dal.Assignment.ReadAll(a => a.CallId == callId)
                                                .Select(a => new BO.CallAssignInList
                                                {
@@ -89,7 +101,7 @@ internal class CallImplementation : BlApi.ICall
                 Longitude = call.Longitude,
                 Opening_time = call.Opening_time,
                 Max_finish_time = (DateTime)call.Max_finish_time,
-                CallStatus = CallManager.CalculateCallStatus(call),
+                CallStatus = call.CalculateCallStatus(),
                 AssignmentsList = callAssignInLists,
             };
         }
@@ -97,7 +109,11 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlDoesNotExistException("Can not access calls", ex);
         }
-           catch (Exception ex)
+        catch (BO.BlDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException(ex.Message, ex);
+        }
+        catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
@@ -106,13 +122,26 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
+            /////////////צריך לבדוק את זה? כי בעיקרון זה העבודה של  הפונקציה אופדייט אבל אם לא התוכנית תקרוס כשננסה לגשת לאחד הערכים שלו
+            ////וגם פה מה עדיף לבדוק כל פעם אם הכתובת שונתה אבל לשלוף שוב מהדאל או בכל מקרה לחשב קורדיננטות מחדש?
+            /////פה
             var existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
+            //only if the user wants to update th address of the call
+            if (boCall.FullAddress != "No Address")//להשוות עם הקיים
+            {
+                var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
+                if (latitude is null || longitude is null)
+                    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
+                boCall.Latitude = latitude;
+                boCall.Longitude = longitude;
+            }
+            else
+            {
+                boCall.FullAddress = existingCall.Full_address;
+                boCall.Latitude = existingCall.Latitude;
+                boCall.Longitude = existingCall.Longitude;
+            }
             CallManager.ValidateCall(boCall);
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
-            boCall.Latitude = latitude;
-            boCall.Longitude = longitude;
             DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Update(updatedCall);
         }
@@ -120,7 +149,7 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlDoesNotExistException("Can not access calls", ex);
         }
-           catch (Exception ex)
+        catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
@@ -132,7 +161,7 @@ internal class CallImplementation : BlApi.ICall
         {
             DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
             if (!_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.opened)
-                throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.");
+                throw new BO.BlDeletionException($"Cannot delete call with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -142,6 +171,10 @@ internal class CallImplementation : BlApi.ICall
         catch (DO.DalDeletionImpossible ex)
         {
             throw new BO.BlDeletionException($"Cannot delete volunteer with ID={callId} as they are handling calls.", ex);
+        }
+        catch (BO.BlDeletionException ex)
+        {
+            throw new BO.BlDeletionException(ex.Message, ex);
         }
         catch (Exception ex)
         {
@@ -170,6 +203,10 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exists", ex);
         }
+        catch (BO.BlInvalidFormatException ex)
+        {
+            throw new BO.BlInvalidFormatException(ex.Message, ex);
+        }
         catch (Exception ex)
         {
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
@@ -178,6 +215,9 @@ internal class CallImplementation : BlApi.ICall
 
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null)
     {
+        //אני צריכה לבדוק שיש כזה וונולטיר ואם לא לזרוק שגיאה??
+        //כן , מפה
+
         try
         {
             var closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.End_time != null)
@@ -221,7 +261,7 @@ internal class CallImplementation : BlApi.ICall
                 (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
                 .Select(c => new BO.OpenCallInList
                 {
-                    Id = volunteerId,
+                    Id = c.Id,
                     CallType = (BO.Enums.CallType)c.Call_type,
                     Verbal_description = c.Verbal_description,
                     FullAddress = c.Full_address,
@@ -305,13 +345,15 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
-            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.opened)
+            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.treated_at_risk)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
-            if (call.Max_finish_time < DateTime.Now)
+            if(call.CallStatus == BO.Enums.CallStatus.closed)
+                throw new BO.BlUnauthorizedException($"Call with ID={callId} is closed already.You are not authorized to treat it.");
+                        if (call.CallStatus == BO.Enums.CallStatus.expired)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
-            var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
-            if (existingAssignments.Any(a => a?.End_time == null))
-                throw new BO.BlUnauthorizedException($"Call with ID={callId} is in treatment already.You are not authorized to treat it.");
+            //var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
+            //if (existingAssignments.Any(a => a?.End_time == null))
+            //    throw new BO.BlUnauthorizedException($"Call with ID={callId} is in treatment already.You are not authorized to treat it.");
             var newAssignment = new DO.Assignment
             {
                 CallId = callId,
@@ -320,11 +362,15 @@ internal class CallImplementation : BlApi.ICall
                 End_time = null,
                 EndType = null
             };
-            _dal.Assignment.Update(newAssignment);
+            _dal.Assignment.Create(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist", ex);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException(ex.Message, ex);
         }
         catch (Exception ex)
         {

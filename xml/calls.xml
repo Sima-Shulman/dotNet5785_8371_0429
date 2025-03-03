@@ -1,2 +1,493 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+<ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A child is lost in a park and needs immediate rescue.</Verbal_description>
+    <Full_address>1 Jaffa Street, Jerusalem</Full_address>
+    <Latitude>31.7683</Latitude>
+    <Longitude>35.2137</Longitude>
+    <Opening_time>2025-03-03T06:26:09</Opening_time>
+    <Max_finish_time>2025-03-03T10:23:09</Max_finish_time>
+    <Id>1000</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>An elderly person needs to be driven to a hospital for an urgent check-up.</Verbal_description>
+    <Full_address>5 Herzl Boulevard, Tel Aviv</Full_address>
+    <Latitude>32.0853</Latitude>
+    <Longitude>34.7818</Longitude>
+    <Opening_time>2025-03-03T10:13:09</Opening_time>
+    <Max_finish_time>2025-03-03T13:48:09</Max_finish_time>
+    <Id>1001</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>Two cars collided on a highway, blocking the road.</Verbal_description>
+    <Full_address>12 HaMeginim Street, Haifa</Full_address>
+    <Latitude>32.817</Latitude>
+    <Longitude>35.0365</Longitude>
+    <Opening_time>2025-03-03T07:53:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1002</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car broke down on the highway due to a flat tire.</Verbal_description>
+    <Full_address>22 Beit David Street, Petah Tikva</Full_address>
+    <Latitude>32.073</Latitude>
+    <Longitude>34.8707</Longitude>
+    <Opening_time>2025-03-03T12:14:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1003</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A vehicle's door is locked, and the driver is stranded on the highway.</Verbal_description>
+    <Full_address>13 Ben-Gurion Boulevard, Ashdod</Full_address>
+    <Latitude>33.1303</Latitude>
+    <Longitude>34.7671</Longitude>
+    <Opening_time>2025-03-03T18:29:09</Opening_time>
+    <Max_finish_time>2025-03-04T05:46:09</Max_finish_time>
+    <Id>1004</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A hiker got lost in the forest and requires search and rescue.</Verbal_description>
+    <Full_address>34 King George Street, Jerusalem</Full_address>
+    <Latitude>31.7683</Latitude>
+    <Longitude>35.2137</Longitude>
+    <Opening_time>2025-03-03T08:31:09</Opening_time>
+    <Max_finish_time>2025-03-03T16:44:09</Max_finish_time>
+    <Id>1005</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A patient needs to be transported to the hospital for surgery.</Verbal_description>
+    <Full_address>10 Herzl Street, Rishon Lezion</Full_address>
+    <Latitude>31.9632</Latitude>
+    <Longitude>34.8022</Longitude>
+    <Opening_time>2025-03-03T14:47:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1006</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>Two cars are involved in a crash on a busy intersection.</Verbal_description>
+    <Full_address>4 Moshe Dayan Boulevard, Rehovot</Full_address>
+    <Latitude>31.897</Latitude>
+    <Longitude>34.811</Longitude>
+    <Opening_time>2025-03-03T11:04:09</Opening_time>
+    <Max_finish_time>2025-03-03T11:19:09</Max_finish_time>
+    <Id>1007</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car has overheated and stopped on the side of the highway.</Verbal_description>
+    <Full_address>27 Bethlehem Road, Jerusalem</Full_address>
+    <Latitude>31.7612</Latitude>
+    <Longitude>35.2271</Longitude>
+    <Opening_time>2025-03-03T16:52:09</Opening_time>
+    <Max_finish_time>2025-03-04T05:54:09</Max_finish_time>
+    <Id>1008</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A vehicle has a mechanical issue, leaving the driver stuck on the road.</Verbal_description>
+    <Full_address>45 David Remez Street, Kfar Saba</Full_address>
+    <Latitude>32.0924</Latitude>
+    <Longitude>34.7957</Longitude>
+    <Opening_time>2025-03-03T16:54:09</Opening_time>
+    <Max_finish_time>2025-03-03T22:06:09</Max_finish_time>
+    <Id>1009</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A climber fell and requires immediate medical evacuation.</Verbal_description>
+    <Full_address>33 Jaffa Street, Nazareth</Full_address>
+    <Latitude>32.7116</Latitude>
+    <Longitude>35.2793</Longitude>
+    <Opening_time>2025-03-03T15:13:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1010</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A van is transporting an injured person to the hospital.</Verbal_description>
+    <Full_address>2 Mea Shearim Street, Jerusalem</Full_address>
+    <Latitude>31.7656</Latitude>
+    <Longitude>35.2132</Longitude>
+    <Opening_time>2025-03-03T11:37:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1011</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A collision between two trucks caused traffic chaos on the freeway.</Verbal_description>
+    <Full_address>16 Shmuel Hanavi Street, Haifa</Full_address>
+    <Latitude>32.7992</Latitude>
+    <Longitude>34.9837</Longitude>
+    <Opening_time>2025-03-03T12:48:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1012</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car broke down because of engine failure on the highway.</Verbal_description>
+    <Full_address>29 Arlozorov Street, Tel Aviv</Full_address>
+    <Latitude>32.0782</Latitude>
+    <Longitude>34.7684</Longitude>
+    <Opening_time>2025-03-03T09:53:09</Opening_time>
+    <Max_finish_time>2025-03-03T10:27:09</Max_finish_time>
+    <Id>1013</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car’s battery is dead, and it’s blocking traffic on a busy road.</Verbal_description>
+    <Full_address>8 Chaim Weizmann Boulevard, Beersheba</Full_address>
+    <Latitude>31.2583</Latitude>
+    <Longitude>34.8114</Longitude>
+    <Opening_time>2025-03-03T08:14:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1014</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A rescue team is needed to help a stranded motorist on a remote road.</Verbal_description>
+    <Full_address>20 Yosef Maimon Street, Acre</Full_address>
+    <Latitude>32.9257</Latitude>
+    <Longitude>35.072</Longitude>
+    <Opening_time>2025-03-03T16:42:09</Opening_time>
+    <Max_finish_time>2025-03-03T17:38:09</Max_finish_time>
+    <Id>1015</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>An urgent transfer of a patient from a clinic to the hospital is required.</Verbal_description>
+    <Full_address>56 Allenby Street, Tel Aviv</Full_address>
+    <Latitude>32.0648</Latitude>
+    <Longitude>34.7883</Longitude>
+    <Opening_time>2025-03-03T08:01:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1016</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A serious accident involving three vehicles on a main road needs attention.</Verbal_description>
+    <Full_address>18 King George Street, Haifa</Full_address>
+    <Latitude>32.1093</Latitude>
+    <Longitude>34.7821</Longitude>
+    <Opening_time>2025-03-03T10:03:09</Opening_time>
+    <Max_finish_time>2025-03-03T21:48:09</Max_finish_time>
+    <Id>1017</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A vehicle is stranded on the highway after a tire exploded.</Verbal_description>
+    <Full_address>9 Golomb Street, Eilat</Full_address>
+    <Latitude>29.5623</Latitude>
+    <Longitude>34.9519</Longitude>
+    <Opening_time>2025-03-03T07:55:09</Opening_time>
+    <Max_finish_time>2025-03-03T18:04:09</Max_finish_time>
+    <Id>1018</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car's electrical system failed, leaving it stuck in the middle of the road.</Verbal_description>
+    <Full_address>13 Jerusalem Boulevard, Ashkelon</Full_address>
+    <Latitude>31.8479</Latitude>
+    <Longitude>34.6574</Longitude>
+    <Opening_time>2025-03-03T18:49:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1019</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A family’s car broke down while traveling and needs roadside assistance.</Verbal_description>
+    <Full_address>31 Herzog Street, Netanya</Full_address>
+    <Latitude>32.3217</Latitude>
+    <Longitude>34.7432</Longitude>
+    <Opening_time>2025-03-03T09:15:09</Opening_time>
+    <Max_finish_time>2025-03-04T00:36:09</Max_finish_time>
+    <Id>1020</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A person is trapped in a wrecked car and needs rescue services.</Verbal_description>
+    <Full_address>17 Gaza Street, Ashdod</Full_address>
+    <Latitude>31.763</Latitude>
+    <Longitude>34.7755</Longitude>
+    <Opening_time>2025-03-03T18:09:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1021</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A car was involved in a pile-up on the freeway and needs to be towed.</Verbal_description>
+    <Full_address>11 Revolution Boulevard, Petah Tikva</Full_address>
+    <Latitude>32.062</Latitude>
+    <Longitude>34.815</Longitude>
+    <Opening_time>2025-03-03T14:31:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1022</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car's engine broke down on a remote highway and is causing a traffic jam.</Verbal_description>
+    <Full_address>50 Keren Hayesod Street, Tiberias</Full_address>
+    <Latitude>32.1125</Latitude>
+    <Longitude>34.8052</Longitude>
+    <Opening_time>2025-03-03T19:16:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1023</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A truck's cargo shifted, blocking multiple lanes on the highway.</Verbal_description>
+    <Full_address>5 Ha'arba'a Street, Tel Aviv</Full_address>
+    <Latitude>32.0541</Latitude>
+    <Longitude>34.8872</Longitude>
+    <Opening_time>2025-03-03T08:05:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1024</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A mother and child need to be driven to a hospital due to an emergency.</Verbal_description>
+    <Full_address>34 Chaim Ozer Street, Herzliya</Full_address>
+    <Latitude>32.087</Latitude>
+    <Longitude>34.8883</Longitude>
+    <Opening_time>2025-03-03T17:51:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1025</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A bicycle rider was hit by a car and needs urgent transportation to the ER.</Verbal_description>
+    <Full_address>23 Achuza Street, Herzliya</Full_address>
+    <Latitude>32.2244</Latitude>
+    <Longitude>34.8725</Longitude>
+    <Opening_time>2025-03-03T09:23:09</Opening_time>
+    <Max_finish_time>2025-03-03T23:54:09</Max_finish_time>
+    <Id>1026</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A car broke down in the middle of a busy intersection.</Verbal_description>
+    <Full_address>15 Duani Boulevard, Ramat Gan</Full_address>
+    <Latitude>32.1097</Latitude>
+    <Longitude>34.7934</Longitude>
+    <Opening_time>2025-03-03T13:51:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1027</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A vehicle is stuck in a ditch after a heavy rainstorm.</Verbal_description>
+    <Full_address>41 Nordau Street, Bnei Brak</Full_address>
+    <Latitude>31.7944</Latitude>
+    <Longitude>34.7522</Longitude>
+    <Opening_time>2025-03-03T15:22:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1028</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>An elderly person is lost in a public building and needs assistance.</Verbal_description>
+    <Full_address>55 Herzl Boulevard, Holon</Full_address>
+    <Latitude>32.1092</Latitude>
+    <Longitude>34.809</Longitude>
+    <Opening_time>2025-03-03T17:56:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1029</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A car’s engine overheated while traveling through the mountains.</Verbal_description>
+    <Full_address>30 Salah A-Din Street, Nazareth</Full_address>
+    <Latitude>32.0594</Latitude>
+    <Longitude>34.8017</Longitude>
+    <Opening_time>2025-03-03T16:22:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1030</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>An accident occurred at a railway crossing, blocking the intersection.</Verbal_description>
+    <Full_address>14 Hebron Road, Jerusalem</Full_address>
+    <Latitude>32.0605</Latitude>
+    <Longitude>34.7875</Longitude>
+    <Opening_time>2025-03-03T15:44:09</Opening_time>
+    <Max_finish_time>2025-03-03T16:29:09</Max_finish_time>
+    <Id>1031</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A person fell and injured themselves, requiring immediate medical help.</Verbal_description>
+    <Full_address>7 Ben-Zvi Boulevard, Bat Yam</Full_address>
+    <Latitude>32.0975</Latitude>
+    <Longitude>34.7784</Longitude>
+    <Opening_time>2025-03-03T03:23:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1032</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A vehicle with mechanical problems is blocking the entrance to a tunnel.</Verbal_description>
+    <Full_address>6 Aba Hushi Street, Netanya</Full_address>
+    <Latitude>32.2537</Latitude>
+    <Longitude>34.7854</Longitude>
+    <Opening_time>2025-03-03T06:38:09</Opening_time>
+    <Max_finish_time>2025-03-03T14:02:09</Max_finish_time>
+    <Id>1033</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car broke down during a long road trip, leaving the driver stranded.</Verbal_description>
+    <Full_address>19 HaSolalim Street, Kiryat Shmona</Full_address>
+    <Latitude>31.7712</Latitude>
+    <Longitude>34.7989</Longitude>
+    <Opening_time>2025-03-03T19:12:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1034</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A group of tourists got lost in the wilderness and needs a rescue operation.</Verbal_description>
+    <Full_address>21 Sheinkin Street, Tel Aviv</Full_address>
+    <Latitude>32.1098</Latitude>
+    <Longitude>34.8371</Longitude>
+    <Opening_time>2025-03-03T12:49:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1035</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A truck carrying hazardous materials crashed on the highway.</Verbal_description>
+    <Full_address>8 Shivtei Israel Street, Haifa</Full_address>
+    <Latitude>31.768</Latitude>
+    <Longitude>34.8915</Longitude>
+    <Opening_time>2025-03-03T06:17:09</Opening_time>
+    <Max_finish_time>2025-03-03T10:14:09</Max_finish_time>
+    <Id>1036</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A broken-down car is causing a major traffic jam on a busy street.</Verbal_description>
+    <Full_address>10 Knesset Street, Jerusalem</Full_address>
+    <Latitude>31.9535</Latitude>
+    <Longitude>34.7785</Longitude>
+    <Opening_time>2025-03-03T05:16:09</Opening_time>
+    <Max_finish_time>2025-03-03T08:13:09</Max_finish_time>
+    <Id>1037</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>An ambulance needs to transport a patient with critical injuries.</Verbal_description>
+    <Full_address>12 Yehuda Halevi Street, Ramat Gan</Full_address>
+    <Latitude>31.7741</Latitude>
+    <Longitude>34.8124</Longitude>
+    <Opening_time>2025-03-03T15:48:09</Opening_time>
+    <Max_finish_time>2025-03-04T04:05:09</Max_finish_time>
+    <Id>1038</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A car was involved in a hit-and-run accident and needs to be towed.</Verbal_description>
+    <Full_address>4 Eshkol Boulevard, Ashdod</Full_address>
+    <Latitude>32.0767</Latitude>
+    <Longitude>34.7972</Longitude>
+    <Opening_time>2025-03-03T16:38:09</Opening_time>
+    <Max_finish_time>2025-03-04T05:16:09</Max_finish_time>
+    <Id>1039</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A stranded truck requires roadside assistance on a remote mountain road.</Verbal_description>
+    <Full_address>8 Shmuel Hanavi Street, Tel Aviv</Full_address>
+    <Latitude>31.9533</Latitude>
+    <Longitude>34.9076</Longitude>
+    <Opening_time>2025-03-03T18:49:09</Opening_time>
+    <Max_finish_time>2025-03-04T03:52:09</Max_finish_time>
+    <Id>1040</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A vehicle is stuck on the side of a cliff and needs emergency help.</Verbal_description>
+    <Full_address>23 Melche Israel Street, Petah Tikva</Full_address>
+    <Latitude>32.2207</Latitude>
+    <Longitude>34.7915</Longitude>
+    <Opening_time>2025-03-03T06:25:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1041</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A police car was involved in a collision and requires immediate assistance.</Verbal_description>
+    <Full_address>33 Aben-Gurion Street, Rehovot</Full_address>
+    <Latitude>32.0609</Latitude>
+    <Longitude>34.7761</Longitude>
+    <Opening_time>2025-03-03T04:29:09</Opening_time>
+    <Max_finish_time>2025-03-03T16:27:09</Max_finish_time>
+    <Id>1042</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A driver needs to be rescued from a flooded area during a storm.</Verbal_description>
+    <Full_address>4 French Hill Street, Jerusalem</Full_address>
+    <Latitude>31.9106</Latitude>
+    <Longitude>34.8527</Longitude>
+    <Opening_time>2025-03-03T12:18:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1043</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A person requires immediate transport to a specialized hospital for treatment.</Verbal_description>
+    <Full_address>10 IDF Street, Ashkelon</Full_address>
+    <Latitude>31.7364</Latitude>
+    <Longitude>34.8183</Longitude>
+    <Opening_time>2025-03-03T11:37:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1044</Id>
+  </Call>
+  <Call>
+    <Call_type>search_and_rescue</Call_type>
+    <Verbal_description>A vehicle’s brakes failed, leading to an accident on a downhill road.</Verbal_description>
+    <Full_address>2 Yitzhak Navon Street, Rishon Lezion</Full_address>
+    <Latitude>31.9156</Latitude>
+    <Longitude>34.7928</Longitude>
+    <Opening_time>2025-03-03T09:20:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1045</Id>
+  </Call>
+  <Call>
+    <Call_type>transportation</Call_type>
+    <Verbal_description>A passenger’s health deteriorated during a trip and needs urgent medical attention.</Verbal_description>
+    <Full_address>19 King David Street, Jerusalem</Full_address>
+    <Latitude>32.0052</Latitude>
+    <Longitude>34.8034</Longitude>
+    <Opening_time>2025-03-03T09:46:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1046</Id>
+  </Call>
+  <Call>
+    <Call_type>car_accident</Call_type>
+    <Verbal_description>A vehicle is stuck in deep snow and needs a rescue operation.</Verbal_description>
+    <Full_address>8 Tel-High Street, Netanya</Full_address>
+    <Latitude>31.8521</Latitude>
+    <Longitude>34.7569</Longitude>
+    <Opening_time>2025-03-03T13:19:09</Opening_time>
+    <Max_finish_time>2025-03-03T15:28:09</Max_finish_time>
+    <Id>1047</Id>
+  </Call>
+  <Call>
+    <Call_type>vehicle_breakdown</Call_type>
+    <Verbal_description>A motorcyclist is injured and requires immediate medical transport.</Verbal_description>
+    <Full_address>27 Golomb Street, Haifa</Full_address>
+    <Latitude>31.7945</Latitude>
+    <Longitude>34.9075</Longitude>
+    <Opening_time>2025-03-03T07:06:09</Opening_time>
+    <Max_finish_time xsi:nil="true" />
+    <Id>1048</Id>
+  </Call>
+</ArrayOfCall>

@@ -409,29 +409,39 @@ namespace DalTest
             {
                 Console.WriteLine("Enter Volunteer Full name to update (optional): ");
                 string fullName = Console.ReadLine()!;
+
                 Console.WriteLine("Enter Distance Type(aerial_distance,walking_distance,driving_distance) to update (optional): ");
                 string distanceTypeInput = Console.ReadLine()!;
                 DO.DistanceTypes distanceTypes = string.IsNullOrEmpty(distanceTypeInput) || !Enum.TryParse(distanceTypeInput, out DO.DistanceTypes dType) ? volunteer.DistanceTypes : dType;
+
                 Console.WriteLine("Enter Volunteer Role(manager/Volunteer) to update (optional): ");
                 string roleInput = Console.ReadLine()!;
                 DO.Role role = string.IsNullOrEmpty(roleInput) || !Enum.TryParse(roleInput, out DO.Role rType) ? volunteer.Role : rType;
+
                 Console.WriteLine("Enter Cellphone number to update (optional): ");
                 string cellphoneNumber = Console.ReadLine()!;
+
                 Console.WriteLine("Enter Volunteer Email to update (optional): ");
                 string email = Console.ReadLine()!;
+
                 Console.WriteLine("Enter Volunteer FullAddress to update (optional): ");
                 string fullAddress = Console.ReadLine()!;
+
                 Console.WriteLine("Enter Volunteer Password to update (optional): ");
                 string password = Console.ReadLine()!;
+
                 Console.WriteLine("Enter Latitude to update (optional): ");
                 string LatitudeInput = Console.ReadLine()!;
                 double? latitude = string.IsNullOrEmpty(LatitudeInput) || !double.TryParse(LatitudeInput, out double lat) ? volunteer.Latitude : lat;
+
                 Console.WriteLine("Enter Longitude to update (optional): ");
                 string longitudeInput = Console.ReadLine()!;
-                double? longitude = string.IsNullOrEmpty(longitudeInput) || !double.TryParse(longitudeInput, out double longit) ? volunteer.Longitude : longit; ;
+                double? longitude = string.IsNullOrEmpty(longitudeInput) || !double.TryParse(longitudeInput, out double longit) ? volunteer.Longitude : longit; 
+
                 Console.WriteLine("Enter Max distance to update (optional): ");
                 string maxDistanceInput = Console.ReadLine()!;
                 double? maxDistance = string.IsNullOrEmpty(maxDistanceInput) || !double.TryParse(maxDistanceInput, out double maxDis) ? volunteer.MaxDistance : maxDis;
+
                 Console.WriteLine("Enter Active to update (optional): ");
                 string isActiveInput = Console.ReadLine()!;
                 bool isActive = string.IsNullOrEmpty(isActiveInput) || !bool.TryParse(isActiveInput, out bool isA) ? volunteer.IsActive : isA;

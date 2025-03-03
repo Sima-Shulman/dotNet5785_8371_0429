@@ -68,7 +68,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
-    public IEnumerable<Volunteer?> ReadAll(Func<Volunteer?, bool>? filter = null)
+    public IEnumerable<Volunteer?> ReadAll(Func<Volunteer, bool> filter = null)
      => filter == null
          ? XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml) // החזר את הרשימה כמות שהיא אם אין פילטר
          : XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml).Where(filter);

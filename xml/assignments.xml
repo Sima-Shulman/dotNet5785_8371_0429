@@ -1,2 +1,331 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfAssignment />
+<ArrayOfAssignment>
+  <Assignment>
+    <Id>1</Id>
+    <VolunteerId>533957015</VolunteerId>
+    <CallId>1009</CallId>
+    <Start_time>2025-03-03T17:17:23.5651839</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>2</Id>
+    <VolunteerId>717069579</VolunteerId>
+    <CallId>1010</CallId>
+    <Start_time>2025-03-03T15:13:09</Start_time>
+    <End_time>2025-03-03T15:13:27.9701351</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>3</Id>
+    <VolunteerId>524950829</VolunteerId>
+    <CallId>1011</CallId>
+    <Start_time>2025-03-03T11:37:09</Start_time>
+    <End_time>2025-03-03T11:37:53.1676653</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>4</Id>
+    <VolunteerId>814810806</VolunteerId>
+    <CallId>1012</CallId>
+    <Start_time>2025-03-03T12:48:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>5</Id>
+    <VolunteerId>161842262</VolunteerId>
+    <CallId>1013</CallId>
+    <Start_time>2025-03-03T10:08:46.1684822</Start_time>
+    <End_time>2025-03-03T10:09:37.8894175</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>6</Id>
+    <VolunteerId>717069579</VolunteerId>
+    <CallId>1014</CallId>
+    <Start_time>2025-03-03T08:14:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>7</Id>
+    <VolunteerId>598847147</VolunteerId>
+    <CallId>1015</CallId>
+    <Start_time>2025-03-03T17:34:10.3177922</Start_time>
+    <End_time>2025-03-03T17:34:22.9359946</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>8</Id>
+    <VolunteerId>491304205</VolunteerId>
+    <CallId>1016</CallId>
+    <Start_time>2025-03-03T08:01:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>9</Id>
+    <VolunteerId>937696510</VolunteerId>
+    <CallId>1017</CallId>
+    <Start_time>2025-03-03T15:29:32.272423</Start_time>
+    <End_time>2025-03-03T15:30:01.0959995</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>10</Id>
+    <VolunteerId>289708719</VolunteerId>
+    <CallId>1018</CallId>
+    <Start_time>2025-03-03T08:05:01.799605</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>11</Id>
+    <VolunteerId>161842262</VolunteerId>
+    <CallId>1019</CallId>
+    <Start_time>2025-03-03T18:49:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>12</Id>
+    <VolunteerId>405506161</VolunteerId>
+    <CallId>1020</CallId>
+    <Start_time>2025-03-03T16:03:31.5402491</Start_time>
+    <End_time>2025-03-03T16:03:51.9599008</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>13</Id>
+    <VolunteerId>363350839</VolunteerId>
+    <CallId>1021</CallId>
+    <Start_time>2025-03-03T18:09:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>14</Id>
+    <VolunteerId>405506161</VolunteerId>
+    <CallId>1022</CallId>
+    <Start_time>2025-03-03T14:31:09</Start_time>
+    <End_time>2025-03-03T14:31:57.8678058</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>15</Id>
+    <VolunteerId>161842262</VolunteerId>
+    <CallId>1023</CallId>
+    <Start_time>2025-03-03T19:16:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>16</Id>
+    <VolunteerId>533957015</VolunteerId>
+    <CallId>1024</CallId>
+    <Start_time>2025-03-03T08:05:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>17</Id>
+    <VolunteerId>330980869</VolunteerId>
+    <CallId>1025</CallId>
+    <Start_time>2025-03-03T17:51:09</Start_time>
+    <End_time>2025-03-03T17:52:06.7816985</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>18</Id>
+    <VolunteerId>868486546</VolunteerId>
+    <CallId>1026</CallId>
+    <Start_time>2025-03-03T10:22:47.1234991</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>19</Id>
+    <VolunteerId>880604507</VolunteerId>
+    <CallId>1027</CallId>
+    <Start_time>2025-03-03T13:51:09</Start_time>
+    <End_time>2025-03-03T13:51:19.2520104</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>20</Id>
+    <VolunteerId>814810806</VolunteerId>
+    <CallId>1028</CallId>
+    <Start_time>2025-03-03T15:22:09</Start_time>
+    <End_time>2025-03-03T15:22:18.5991116</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>21</Id>
+    <VolunteerId>549147086</VolunteerId>
+    <CallId>1029</CallId>
+    <Start_time>2025-03-03T17:56:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>22</Id>
+    <VolunteerId>405506161</VolunteerId>
+    <CallId>1030</CallId>
+    <Start_time>2025-03-03T16:22:09</Start_time>
+    <End_time>2025-03-03T16:22:45.4563477</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>23</Id>
+    <VolunteerId>363350839</VolunteerId>
+    <CallId>1031</CallId>
+    <Start_time>2025-03-03T15:45:01.8096887</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>24</Id>
+    <VolunteerId>549147086</VolunteerId>
+    <CallId>1032</CallId>
+    <Start_time>2025-03-03T03:23:09</Start_time>
+    <End_time>2025-03-03T03:23:35.9039152</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>25</Id>
+    <VolunteerId>598847147</VolunteerId>
+    <CallId>1033</CallId>
+    <Start_time>2025-03-03T13:59:57.7845628</Start_time>
+    <End_time>2025-03-03T14:00:08.7108735</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>26</Id>
+    <VolunteerId>491304205</VolunteerId>
+    <CallId>1034</CallId>
+    <Start_time>2025-03-03T19:12:09</Start_time>
+    <End_time>2025-03-03T19:12:26.1929097</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>27</Id>
+    <VolunteerId>994417982</VolunteerId>
+    <CallId>1035</CallId>
+    <Start_time>2025-03-03T12:49:09</Start_time>
+    <End_time>2025-03-03T12:49:42.2055208</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>28</Id>
+    <VolunteerId>868486546</VolunteerId>
+    <CallId>1036</CallId>
+    <Start_time>2025-03-03T08:23:29.5034352</Start_time>
+    <End_time>2025-03-03T08:24:03.9006282</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>29</Id>
+    <VolunteerId>994417982</VolunteerId>
+    <CallId>1037</CallId>
+    <Start_time>2025-03-03T07:36:59.4240526</Start_time>
+    <End_time>2025-03-03T07:37:13.5698136</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>30</Id>
+    <VolunteerId>330980869</VolunteerId>
+    <CallId>1038</CallId>
+    <Start_time>2025-03-04T00:43:44.5763224</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>31</Id>
+    <VolunteerId>330980869</VolunteerId>
+    <CallId>1039</CallId>
+    <Start_time>2025-03-03T17:16:18.5511899</Start_time>
+    <End_time>2025-03-03T17:16:45.4399358</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>32</Id>
+    <VolunteerId>405506161</VolunteerId>
+    <CallId>1040</CallId>
+    <Start_time>2025-03-04T02:27:34.4546444</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>33</Id>
+    <VolunteerId>405506161</VolunteerId>
+    <CallId>1041</CallId>
+    <Start_time>2025-03-03T06:25:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>34</Id>
+    <VolunteerId>502971538</VolunteerId>
+    <CallId>1042</CallId>
+    <Start_time>2025-03-03T13:23:04.1248017</Start_time>
+    <End_time>2025-03-03T13:23:51.4705564</End_time>
+    <EndType>self_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>35</Id>
+    <VolunteerId>880604507</VolunteerId>
+    <CallId>1043</CallId>
+    <Start_time>2025-03-03T12:18:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>36</Id>
+    <VolunteerId>994417982</VolunteerId>
+    <CallId>1044</CallId>
+    <Start_time>2025-03-03T11:37:09</Start_time>
+    <End_time>2025-03-03T11:37:17.4053017</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>37</Id>
+    <VolunteerId>549147086</VolunteerId>
+    <CallId>1045</CallId>
+    <Start_time>2025-03-03T09:20:09</Start_time>
+    <End_time>2025-03-03T09:20:21.0528102</End_time>
+    <EndType>was_treated</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>38</Id>
+    <VolunteerId>937696510</VolunteerId>
+    <CallId>1046</CallId>
+    <Start_time>2025-03-03T09:46:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>39</Id>
+    <VolunteerId>598847147</VolunteerId>
+    <CallId>1047</CallId>
+    <Start_time>2025-03-03T14:28:00.9514816</Start_time>
+    <End_time>2025-03-03T14:28:27.1546734</End_time>
+    <EndType>manager_cancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>40</Id>
+    <VolunteerId>880604507</VolunteerId>
+    <CallId>1048</CallId>
+    <Start_time>2025-03-03T07:06:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+  <Assignment>
+    <Id>41</Id>
+    <VolunteerId>328178371</VolunteerId>
+    <CallId>1040</CallId>
+    <Start_time>2025-03-03T19:19:09</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
+</ArrayOfAssignment>

@@ -281,7 +281,7 @@ public static class Initialization
             34.7707, 34.8722, 34.7818, 34.7665, 34.7881, 34.7933, 34.7660, 34.8075, 34.7833, 35.2137 };
         //create 19 volunteers.
         int i = 0;
-        foreach(string name in fullNames)
+        foreach (string name in fullNames)
         {
             s_dal!.Volunteer.Create(new Volunteer() with
             {
@@ -329,7 +329,7 @@ public static class Initialization
         //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL can not be null!");
         //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL can not be null!");
         //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); stage 2
-        s_dal = DalApi.Factory.Get;
+        s_dal = Factory.Get;
         Console.WriteLine("Reset Configuration values and List values...");
         //s_dalConfig.Reset(); //stage 1
         //s_dalCall.DeleteAll(); //stage 1

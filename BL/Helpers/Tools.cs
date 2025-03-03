@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 
 
+
 namespace Helpers;
 
 internal static class Tools
@@ -20,19 +21,22 @@ internal static class Tools
 
         foreach (var property in properties)
         {
-            var value = property.GetValue(t);
-            if (value is IEnumerable enumerable && value is not string)
+            if (property.Name != "Password")
             {
-                result.Append($"{property.Name}: [");
-                foreach (var item in enumerable)
+                var value = property.GetValue(t);
+                if (value is IEnumerable enumerable && value is not string)
                 {
-                    result.Append($"{item}, ");
+                    result.Append($"{property.Name}: [");
+                    foreach (var item in enumerable)
+                    {
+                        result.Append($"{item}, ");
+                    }
+                    result.Append("], ");
                 }
-                result.Append("], ");
-            }
-            else
-            {
-                result.Append($"{property.Name}: {value}, ");
+                else
+                {
+                    result.Append($"{property.Name}: {value}, ");
+                }
             }
         }
         return result.ToString().TrimEnd(',', ' ');

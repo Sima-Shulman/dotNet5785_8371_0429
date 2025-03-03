@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using System.Security.Cryptography;
+
 
 namespace DO;
 /// <summary>
@@ -49,9 +51,16 @@ public record Volunteer
 
         return password.ToString();
     }
+
+    internal static string EncryptPassword(string password)
+    {
+        using var sha256 = SHA256.Create();
+        var hashedBytes = sha256?.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return Convert.ToBase64String(hashedBytes!);
+    }
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Volunteer() : this(0, "", "", "", null, null, null, Role.volunteer, false, DistanceTypes.aerial_distance, null, GenerateRandomPassword(10)) { }
+    public Volunteer() : this(0, "", "", "", null, null, null, Role.volunteer, false, DistanceTypes.aerial_distance, null, EncryptPassword(GenerateRandomPassword(10))) { }
 }
 

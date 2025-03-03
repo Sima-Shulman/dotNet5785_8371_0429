@@ -1,9 +1,10 @@
 ﻿using BlApi;
+using DalApi;
 using Helpers;
 
 namespace BlImplementation;
 
-internal class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : BlApi.IVolunteer
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
@@ -17,6 +18,10 @@ internal class VolunteerImplementation : IVolunteer
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException(ex.Message, ex);
         }
         catch (Exception ex)
         {
@@ -58,8 +63,11 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
-            return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            var doVolunteer = _dal.Volunteer.Read(id);
+            if (doVolunteer is not null)
+                return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            else
+                return null;
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -75,20 +83,34 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            DO.Volunteer? requester = _dal.Volunteer.Read(requesterId) ?? throw new BO.BlDoesNotExistException("Requester does not exist!");
-            if (requester.Id != boVolunteer.Id || requester.Role != DO.Role.manager)
+            DO.Volunteer requester = _dal.Volunteer.Read(requesterId);
+            if (requester is null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID {requesterId} does  not exist! ");
+            if (requester.Id != boVolunteer.Id && requester.Role != DO.Role.manager)
                 throw new BO.BlUnauthorizedException("Requester is not authorized!");
-            var existingVolunteer = _dal.Volunteer.Read(boVolunteer.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist");
+            var doVolunteer = _dal.Volunteer.Read(boVolunteer.Id);
+            if (doVolunteer is null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID {boVolunteer.Id} does  not exist! ");
             VolunteerManager.ValidateVolunteer(boVolunteer);
-            if (!VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
+            if (!string.IsNullOrEmpty(boVolunteer.Password) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
                 throw new BO.BlInvalidFormatException("Password is not strong!");
             if (requester.Role != DO.Role.manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
-            var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
+            if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
+            {
+                var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+                if (latitude is null || longitude is null)
+                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+            else
+            {
+                boVolunteer.Latitude = null;
+                boVolunteer.Longitude = null;
+            }
+            if (!VolunteerManager.VerifyPassword(boVolunteer.Password, doVolunteer.Password!))//if the user wants to update the pass field and he entered a leagal password
+                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
@@ -96,6 +118,14 @@ internal class VolunteerImplementation : IVolunteer
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} does not exist", ex);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException(ex.Message, ex);
+        }
+        catch (BO.BlInvalidFormatException ex)
+        {
+            throw new BO.BlInvalidFormatException(ex.Message, ex);
         }
         catch (Exception ex)
         {
@@ -107,7 +137,7 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            var volunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
+            var volunteer = _dal.Volunteer.Read(id);
             if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id).Any())
                 throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls.");
             _dal.Volunteer.Delete(id);
@@ -126,16 +156,24 @@ internal class VolunteerImplementation : IVolunteer
     {
         try
         {
-            if (_dal.Volunteer.Read(boVolunteer.Id) is not null)
-                throw new BO.BlDoesNotExistException($"Volunteer with ID={boVolunteer.Id} already exist");
             Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
-            if (!string.IsNullOrEmpty(boVolunteer.Password))
+            if (string.IsNullOrEmpty(boVolunteer.Password))
                 boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
-            boVolunteer.Latitude = latitude;
-            boVolunteer.Longitude = longitude;
+            else
+                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
+            if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
+            {
+                var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
+                if (latitude is null || longitude is null)
+                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+                boVolunteer.Latitude = latitude;
+                boVolunteer.Longitude = longitude;
+            }
+            else
+            {
+                boVolunteer.Latitude = null;
+                boVolunteer.Longitude = null;
+            }
 
 
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
@@ -145,6 +183,10 @@ internal class VolunteerImplementation : IVolunteer
         catch (DO.DalAlreadyExistsException ex)
         {
             throw new BO.BlAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
+        }
+        catch (BO.BlInvalidFormatException ex)
+        {
+            throw new BO.BlInvalidFormatException(ex.Message, ex);
         }
         catch (Exception ex)
         {
