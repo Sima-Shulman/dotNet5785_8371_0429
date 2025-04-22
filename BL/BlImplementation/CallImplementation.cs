@@ -1,5 +1,6 @@
 
 
+using DalApi;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ internal class CallImplementation : BlApi.ICall
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    private bool isRequesterVolunteer;
 
     public int[] GetCallQuantitiesByStatus()
     {
@@ -46,16 +46,6 @@ internal class CallImplementation : BlApi.ICall
             IEnumerable<BO.CallInList?> calls = CallManager.ConvertToCallInList((IEnumerable<DO.Call>)_dal.Call.ReadAll());
             if (fieldFilter.HasValue && filterValue is not null)
             {
-                //foreach (var call in calls)
-                //{
-                //    Console.WriteLine(call);
-                //    Console.WriteLine(call.GetType());
-                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString()));
-                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString())?.GetValue(call));
-                //    Console.WriteLine(call.GetType().GetProperty(fieldFilter.ToString())?.GetValue(call)?.Equals((BO.Enums.CallStatus)filterValue) == true);
-
-                //}
-
                 calls = calls.Where(c => c.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
             }
 
@@ -79,28 +69,29 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Call call = _dal.Call.Read(callId);
-            //if (call is null)
-            //    throw new BO.BlDoesNotExistException($"Call with ID={callId}does not exist!");
-            var callAssignInLists = _dal.Assignment.ReadAll(a => a.CallId == callId)
-                                               .Select(a => new BO.CallAssignInList
-                                               {
-                                                   VolunteerId = a.VolunteerId,
-                                                   VolunteerFullName = _dal.Volunteer.Read(a.VolunteerId)?.FullName,
-                                                   Start_time = a.Start_time,
-                                                   End_time = a.End_time,
-                                                   EndType = (BO.Enums.EndType?)a.EndType
-                                               })
-                                               .ToList();
+            if (call is null)
+                throw new BO.BlDoesNotExistException($"Call with ID={callId}does not exist!");
+            var callAssignInLists =
+              (from a in _dal.Assignment.ReadAll(a => a.CallId == callId)
+               select new BO.CallAssignInList
+               {
+                   VolunteerId = a.VolunteerId,
+                   VolunteerFullName = _dal.Volunteer.Read(a.VolunteerId)?.FullName,
+                   StartTime = a.StartTime,
+                   EndTime = a.EndTime,
+                   EndType = (BO.Enums.EndType?)a.EndType
+               }).ToList();
+
             return new BO.Call
             {
                 Id = call.Id,
-                CallType = (BO.Enums.CallType)call.Call_type,
-                Verbal_description = call.Verbal_description,
-                FullAddress = call.Full_address,
+                CallType = (BO.Enums.CallType)call.CallType,
+                Description = call.Description,
+                FullAddress = call.FullAddress,
                 Latitude = call.Latitude,
                 Longitude = call.Longitude,
-                Opening_time = call.Opening_time,
-                Max_finish_time = (DateTime)call.Max_finish_time,
+                OpeningTime = call.OpeningTime,
+                MaxFinishTime = call.MaxFinishTime,
                 CallStatus = call.CalculateCallStatus(),
                 AssignmentsList = callAssignInLists,
             };
@@ -127,17 +118,17 @@ internal class CallImplementation : BlApi.ICall
             /////פה
             var existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
             //only if the user wants to update th address of the call
-            if (boCall.FullAddress != "No Address")//להשוות עם הקיים
+            if (boCall.FullAddress != existingCall.FullAddress)
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-                if (latitude is null || longitude is null)
-                    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
+                //if (latitude is null || longitude is null)
+                //    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
                 boCall.Latitude = latitude;
                 boCall.Longitude = longitude;
             }
             else
             {
-                boCall.FullAddress = existingCall.Full_address;
+                boCall.FullAddress = existingCall.FullAddress;
                 boCall.Latitude = existingCall.Latitude;
                 boCall.Longitude = existingCall.Longitude;
             }
@@ -160,7 +151,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
-            if (!_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.opened)
+            if (!_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.Opened)
                 throw new BO.BlDeletionException($"Cannot delete call with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
         }
@@ -191,9 +182,9 @@ internal class CallImplementation : BlApi.ICall
             if (existingCall != null)
                 throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exist");
             CallManager.ValidateCall(boCall);
-            var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-            if (latitude is null || longitude is null)
-                throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
+            var (latitude, longitude) = Tools.GetCoordinatesFromAddress((string)boCall.FullAddress);
+            //if (latitude is null || longitude is null)
+            //    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
             boCall.Latitude = latitude;
             boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
@@ -220,19 +211,22 @@ internal class CallImplementation : BlApi.ICall
 
         try
         {
-            var closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.End_time != null)
-                         .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId).Call_type == callTypeFilter)
+            //var v = _dal.Volunteer.Read(volunteerId);
+            //if (v is null)
+            //    throw new BO.BlDoesNotExistException($"Volunteer with ID = {volunteerId} does not exist!");
+            var closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTime != null)
+                         .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId).CallType == callTypeFilter)
                      .Select(a =>
                      {
                          var call = _dal.Call.Read(a.CallId);
                          return new BO.ClosedCallInList
                          {
                              Id = call.Id,
-                             CallType = (BO.Enums.CallType)call.Call_type,
-                             FullAddress = call.Full_address,
-                             Opening_time = call.Opening_time,
-                             Start_time = a.Start_time,
-                             End_time = a.End_time,
+                             CallType = (BO.Enums.CallType)call.CallType,
+                             FullAddress = call.FullAddress,
+                             OpeningTime = call.OpeningTime,
+                             StartTime = a.StartTime,
+                             EndTime = a.EndTime,
                              EndType = (BO.Enums.EndType)a.EndType
                          };
                      });
@@ -256,24 +250,49 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-            var openCalls = _dal.Call.ReadAll()
-                .Where(c =>
-                (CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened || CallManager.CalculateCallStatus(c) == BO.Enums.CallStatus.opened_at_risk))
-                .Select(c => new BO.OpenCallInList
-                {
-                    Id = c.Id,
-                    CallType = (BO.Enums.CallType)c.Call_type,
-                    Verbal_description = c.Verbal_description,
-                    FullAddress = c.Full_address,
-                    Start_time = c.Opening_time,
-                    Max_finish_time = c.Max_finish_time,
-                    CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, c.Latitude, c.Longitude)
-                });
+            IEnumerable<BO.OpenCallInList> openCalls;
+            if (volunteer.MaxDistance is null)
+                openCalls = from c in _dal.Call.ReadAll(c => c.CalculateCallStatus() == BO.Enums.CallStatus.Opened ||
+                                              c.CalculateCallStatus() == BO.Enums.CallStatus.OpenedAtRisk)
+                            select new BO.OpenCallInList
+                            {
+                                Id = c.Id,
+                                CallType = (BO.Enums.CallType)c.CallType,
+                                Description = c.Description,
+                                FullAddress = c.FullAddress,
+                                StartTime = c.OpeningTime,
+                                MaxFinishTime = c.MaxFinishTime,
+                                CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude,
+                                                       c.Latitude, c.Longitude, volunteer.DistanceTypes)
+                            };
+
+            else
+                openCalls = from c in _dal.Call.ReadAll()
+                            where (c.CalculateCallStatus() == BO.Enums.CallStatus.Opened ||
+                                   c.CalculateCallStatus() == BO.Enums.CallStatus.OpenedAtRisk)
+                                  && (volunteer.MaxDistance >= Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude,
+                                                                                        c.Latitude, c.Longitude, volunteer.DistanceTypes))
+                            select new BO.OpenCallInList
+                            {
+                                Id = c.Id,
+                                CallType = (BO.Enums.CallType)c.CallType,
+                                Description = c.Description,
+                                FullAddress = c.FullAddress,
+                                StartTime = c.OpeningTime,
+                                MaxFinishTime = c.MaxFinishTime,
+                                CallDistance = Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude,
+                                                                       c.Latitude, c.Longitude, volunteer.DistanceTypes)
+                            };
+
             return sortField.HasValue
             ? openCalls.OrderBy(c => c.GetType().GetProperty(sortField.ToString())?.GetValue(c))
             : openCalls.OrderBy(c => c.Id);
         }
         catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
+        }
+        catch (BO.BlDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.", ex);
         }
@@ -289,16 +308,17 @@ internal class CallImplementation : BlApi.ICall
             var assignment = _dal.Assignment.Read(assignmentId);
             if (assignment == null)
                 throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
-            var isRequesterManager = _dal.Volunteer?.Read(volunteerId).Role;
-            if (isRequesterManager != DO.Role.manager || assignment.VolunteerId != volunteerId)
+            bool isRequesterNotManager = _dal.Volunteer?.Read(volunteerId).Role != DO.Role.Manager;
+            if (isRequesterNotManager && assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
-            if (assignment.End_time != null)
+            if (assignment.EndTime != null)
                 throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
-            DO.Assignment copy = assignment with
+            DO.Assignment newAssignment = assignment with
             {
-                End_time = _dal.Config.Clock,
-                EndType = (DO.EndType)(isRequesterVolunteer ? BO.Enums.EndType.self_cancellation : BO.Enums.EndType.manager_cancellation),
+                EndTime = _dal.Config.Clock,
+                EndType = (DO.EndType)(isRequesterNotManager ? BO.Enums.EndType.SelfCancellation : BO.Enums.EndType.ManagerCancellation),
             };
+            _dal.Assignment.Update(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -320,9 +340,9 @@ internal class CallImplementation : BlApi.ICall
             var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
             if (assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to complete this call.");
-            if (assignment.End_time != null)
-                throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.");
-            DO.Assignment newAssignment = assignment with { End_time = _dal.Config.Clock, EndType = DO.EndType.was_treated };
+            if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
+                throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or expired.");
+            DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
             _dal.Assignment.Update(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -344,12 +364,15 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
+            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTime is null);
+            if (assignments.Any())
+                throw new BO.BlUnauthorizedException($"volunteer with ID {volunteerId} cannot select a new call for treatment since he is treating another call now.");
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
-            if (call.CallStatus == BO.Enums.CallStatus.is_treated || call.CallStatus == BO.Enums.CallStatus.treated_at_risk)
+            if (call.CallStatus == BO.Enums.CallStatus.InTreatment || call.CallStatus == BO.Enums.CallStatus.InTreatmentAtRisk)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is open already.You are not authorized to treat it.");
-            if(call.CallStatus == BO.Enums.CallStatus.closed)
+            if (call.CallStatus == BO.Enums.CallStatus.Closed)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is closed already.You are not authorized to treat it.");
-                        if (call.CallStatus == BO.Enums.CallStatus.expired)
+            if (call.CallStatus == BO.Enums.CallStatus.Expired)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
             //var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
             //if (existingAssignments.Any(a => a?.End_time == null))
@@ -358,10 +381,16 @@ internal class CallImplementation : BlApi.ICall
             {
                 CallId = callId,
                 VolunteerId = volunteerId,
-                Start_time = _dal.Config.Clock,
-                End_time = null,
+                StartTime = _dal.Config.Clock,
+                EndTime = null,
                 EndType = null
             };
+            var volunteer = _dal.Volunteer.Read(volunteerId);
+            if (volunteer is null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            ///צריך לבדוק שהקריאה לא מידי רחוקה??
+            if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
+                throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
             _dal.Assignment.Create(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
@@ -380,83 +409,3 @@ internal class CallImplementation : BlApi.ICall
 
 
 }
-
-
-
-
-
-
-//public int[] GetCallQuantitiesByStatus()
-//{
-//    var calls = _dal.Call.ReadAll();
-
-//    // יצירת מערך בגודל של מספר הסטטוסים (מומלץ שיהיה גודל של Enum)
-//    int[] callQuantities = new int[Enum.GetValues(typeof(CallStatus)).Length];
-
-//    // סינון הקריאות על פי סטטוס וחישוב הכמויות
-//    var groupedCalls = calls
-//        .GroupBy(c => c.CalculateCallStatus())  // קיבוץ לפי סטטוס
-//        .ToArray();  // ממיר את הקבוצות למערך
-
-//    foreach (var group in groupedCalls)
-//    {
-//        // עדכון המערך עם כמות הקריאות לכל סטטוס
-//        callQuantities[(int)group.Key] = group.Count();
-//    }
-
-
-
-
-
-//if (fieldFilter is not null)
-//    calls = calls.Where(call =>
-//        fieldFilter.Value switch
-//        {
-//            BO.Enums.CallInListFields.CallId => call.CallId.Equals(filterValue),
-//            BO.Enums.CallInListFields.CallType => call.CallType.Equals(filterValue),
-//            BO.Enums.CallInListFields.Opening_time => call.Opening_time.Equals(filterValue),
-//            BO.Enums.CallInListFields.TimeLeft => call.TimeLeft.Equals(filterValue),
-//            BO.Enums.CallInListFields.LastVolunteerName => call.LastVolunteerName.Contains((string)filterValue),
-//            BO.Enums.CallInListFields.TotalTime => call.TotalTime.Equals(filterValue),
-//            BO.Enums.CallInListFields.CallStatus => call.CallStatus.Equals(filterValue),
-//            BO.Enums.CallInListFields.TotalAssignments => call.TotalAssignments.Equals(filterValue),
-//            _ => true
-//        });
-//if (sortField.HasValue)
-//{
-//    calls = calls.OrderBy(call =>
-//        sortField.Value switch
-//        {
-//            BO.Enums.CallInListFields.CallId => call.CallId,
-//            BO.Enums.CallInListFields.CallType => call.CallType,
-//            BO.Enums.CallInListFields.Opening_time => call.Opening_time,
-//            BO.Enums.CallInListFields.TimeLeft => call.TimeLeft,
-//            BO.Enums.CallInListFields.LastVolunteerName => call.LastVolunteerName,
-//            BO.Enums.CallInListFields.TotalTime => call.TotalTime,
-//            BO.Enums.CallInListFields.CallStatus => call.CallStatus,
-//            BO.Enums.CallInListFields.TotalAssignments => call.TotalAssignments,
-//            _ => call.CallId
-//        });
-//}
-//else
-//{
-//    calls = calls.OrderBy(call => call.CallId);
-//}
-
-
-//if (fieldFilter.HasValue && filterValue != null)
-//{
-//    calls = calls.Where(call =>
-//        fieldFilter.Value switch
-//        {
-//            BO.Enums.CallFields.CallId => call.CallId.Equals(filterValue),
-//            BO.Enums.CallFields.CallType => call.CallType.Equals(filterValue),
-//            BO.Enums.CallFields.Opening_time => call.Opening_time.Equals(filterValue),
-//            BO.Enums.CallFields.TimeLeft => call.TimeLeft.Equals(filterValue),
-//            BO.Enums.CallFields.LastVolunteerName => call.LastVolunteerName.Contains((string)filterValue),
-//            BO.Enums.CallFields.TotalTime => call.TotalTime.Equals(filterValue),
-//            BO.Enums.CallFields.CallStatus => call.CallStatus.Equals(filterValue),
-//            BO.Enums.CallFields.TotalAssignments => call.TotalAssignments.Equals(filterValue),
-//            _ => true
-//        });
-//}

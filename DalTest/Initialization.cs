@@ -21,55 +21,55 @@ public static class Initialization
     private static void CreateCalls()
     {
         CallType[] callsTypes = {
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown,
-            CallType.vehicle_breakdown,
-            CallType.search_and_rescue,
-            CallType.transportation,
-            CallType.car_accident,
-            CallType.vehicle_breakdown
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown,
+            CallType.VehicleBreakdown,
+            CallType.SearchAndRescue,
+            CallType.Transportation,
+            CallType.CarAccident,
+            CallType.VehicleBreakdown
         };
         string[] verbalDescriptions = {
             "A child is lost in a park and needs immediate rescue.",
@@ -228,19 +228,19 @@ public static class Initialization
             else
                 throw new Exception("No volunteers available.");
             TimeSpan duration;
-            if (call!.Max_finish_time.HasValue)
-                duration = call.Max_finish_time.Value - call.Opening_time;
+            if (call!.MaxFinishTime.HasValue)
+                duration = call.MaxFinishTime.Value - call.OpeningTime;
             else
                 duration = TimeSpan.Zero;
             double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
-            DateTime randomStartTime = call.Opening_time.AddMinutes(randomMinutes);
+            DateTime randomStartTime = call.OpeningTime.AddMinutes(randomMinutes);
             DateTime? randomEndTime = (rand.NextDouble() > 0.5) ? randomStartTime.AddMinutes(rand.NextDouble()) : null;
             EndType? endType;
             if (randomEndTime == null)
                 endType = null;
-            else if (call.Max_finish_time != null && randomEndTime > call.Max_finish_time)
+            else if (call.MaxFinishTime != null && randomEndTime > call.MaxFinishTime)
             {
-                endType = EndType.expired;
+                endType = EndType.Expired;
             }
             else
             {
@@ -250,8 +250,8 @@ public static class Initialization
             {
                 CallId = call.Id,
                 VolunteerId = randomVolunteer.Id,
-                Start_time = randomStartTime,
-                End_time = randomEndTime,
+                StartTime = randomStartTime,
+                EndTime = randomEndTime,
                 EndType = endType
             });
         }
@@ -292,7 +292,7 @@ public static class Initialization
                 FullAddress = addresses[i],
                 Latitude = latitudes[i],
                 Longitude = latitudes[i++],
-                Role = Role.volunteer,
+                Role = Role.Volunteer,
                 IsActive = true,
                 DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
                 MaxDistance = rand.Next(0, 100000)
@@ -308,7 +308,7 @@ public static class Initialization
             FullAddress = addresses[19],
             Latitude = latitudes[19],
             Longitude = latitudes[19],
-            Role = Role.manager,
+            Role = Role.Manager,
             IsActive = true,
             DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
             MaxDistance = rand.Next(0, 100000)

@@ -11,11 +11,11 @@ internal static class VolunteerManager
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
         var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
-        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.was_treated);
-        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.manager_cancellation || a.EndType == DO.EndType.self_cancellation);
-        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.expired);
-        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.End_time == null)?.CallId;
-        var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.End_time == null).FirstOrDefault();
+        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
+        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
+        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
+        var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.EndTime == null).LastOrDefault();
         BO.CallInProgress? callInProgress = null;
         if (currentAssignment is not null)
         {
@@ -26,13 +26,13 @@ internal static class VolunteerManager
                 {
                     Id = currentAssignment.Id,
                     CallId = currentAssignment.CallId,
-                    CallType = (BO.Enums.CallType)callDetails.Call_type,
-                    Verbal_description = callDetails.Verbal_description,
-                    FullAddress = callDetails.Full_address,
-                    Opening_time = callDetails.Opening_time,
-                    Max_finish_time = (DateTime?)callDetails.Max_finish_time,
-                    Start_time = currentAssignment.Start_time,
-                    CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude),
+                    CallType = (BO.Enums.CallType)callDetails.CallType,
+                    Description = callDetails.Description,
+                    FullAddress = callDetails.FullAddress,
+                    OpeningTime = callDetails.OpeningTime,
+                    MaxFinishTime = (DateTime?)callDetails.MaxFinishTime,
+                    StartTime = currentAssignment.StartTime,
+                    CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude, doVolunteer.DistanceTypes),
                     CallStatus = callDetails.CalculateCallStatus()
                 };
             }
@@ -49,12 +49,12 @@ internal static class VolunteerManager
             Longitude = doVolunteer?.Longitude,
             Role = (BO.Enums.Role)doVolunteer.Role,
             IsActive = doVolunteer.IsActive,
-            DistanceType = (BO.Enums.DistanceTypes)doVolunteer.DistanceTypes,
+            DistanceType = (BO.Enums.DistanceType)doVolunteer.DistanceTypes,
             MaxDistance = doVolunteer.MaxDistance,
             TotalHandledCalls = totalHandled,
             TotalCanceledCalls = totalCanceled,
             TotalExpiredCalls = totalExpired,
-
+            CallInProgress = callInProgress
 
         };
     }
@@ -84,10 +84,10 @@ internal static class VolunteerManager
         //{
         //    Console.WriteLine(a.EndType);
         //}
-        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.was_treated);
-        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.manager_cancellation || a.EndType == DO.EndType.self_cancellation);
-        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.expired);
-        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.End_time == null)?.CallId;
+        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
+        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
+        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
 
         return new BO.VolunteerInList
         {
@@ -99,8 +99,8 @@ internal static class VolunteerManager
             TotalExpiredCalls = totalExpired,
             CallId = assignedCallId,
             CallType = assignedCallId is not null
-                ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.Call_type ?? DO.CallType.transportation)
-                : BO.Enums.CallType.transportation
+                ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.CallType ?? DO.CallType.Transportation)
+                : BO.Enums.CallType.Transportation
         };
     }
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
@@ -160,7 +160,7 @@ internal static class VolunteerManager
         //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[0-9]"));
         //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]"));
         //Console.WriteLine(!VerifyPassword(boVolunteer.Password, doVolunteer.Password!));
-        if (!string.IsNullOrEmpty( boVolunteer.Password) )
+        if (!string.IsNullOrEmpty(boVolunteer.Password))
         {
             if (/*!VerifyPassword(boVolunteer.Password, doVolunteer.Password!) ||*/
                 (boVolunteer.Password.Length < 8 &&
@@ -188,16 +188,16 @@ internal static class VolunteerManager
         //    throw new BO.BlInvalidFormatException("Invalid password!");
 
 
-        if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
-            throw new BO.BlInvalidFormatException("Invalid address!");
+        //if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
+        //    throw new BO.BlInvalidFormatException("Invalid address!");
 
-        if (boVolunteer.Role != BO.Enums.Role.volunteer && boVolunteer.Role != BO.Enums.Role.manager)
+        if (boVolunteer.Role != BO.Enums.Role.Volunteer && boVolunteer.Role != BO.Enums.Role.Manager)
             throw new BO.BlInvalidFormatException("Invalid role!");
 
         if (boVolunteer.MaxDistance.HasValue && boVolunteer.MaxDistance < 0)
             throw new BO.BlInvalidFormatException("Invalid distance!");
 
-        if (!Enum.IsDefined(typeof(BO.Enums.DistanceTypes), boVolunteer.DistanceType))
+        if (!Enum.IsDefined(typeof(BO.Enums.DistanceType), boVolunteer.DistanceType))
             throw new BO.BlInvalidFormatException("Invalid distance type!");
 
         if (boVolunteer.TotalHandledCalls < 0)
@@ -219,7 +219,7 @@ internal static class VolunteerManager
             return false;
         if (!password.Any(char.IsDigit))
             return false;
-        if (!password.Any(c => "@#$%^&*".Contains(c)))
+        if (!password.Any(c => "@#$%^&*!?".Contains(c)))
             return false;
         return true;
     }

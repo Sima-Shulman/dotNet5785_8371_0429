@@ -4,37 +4,37 @@
 /// </summary>
 public enum Role
 {
-    manager,
-    volunteer
+    Manager,
+    Volunteer
 }
 /// <summary>
 /// Enum for the distance type for the max distance for the volunteer to receive a call.
 /// </summary>
 public enum DistanceTypes
 {
-    aerial_distance,
-    walking_distance,
-    driving_distance
+    AerialDistance,
+    WalkingDistance,
+    DrivingDistance
 }
 /// <summary>
 /// Enum for the call type.
 /// </summary>
 public enum CallType
 {
-    transportation,
-    car_accident,
-    vehicle_breakdown,
-    search_and_rescue,
+    Transportation,
+    CarAccident,
+    VehicleBreakdown,
+    SearchAndRescue,
 }
 /// <summary>
 /// Enum for the type of ending of the call.
 /// </summary>
 public enum EndType
 {
-    was_treated,
-    self_cancellation,
-    manager_cancellation,
-    expired
+    WasTreated,
+    SelfCancellation,
+    ManagerCancellation,
+    Expired
 }
 
 

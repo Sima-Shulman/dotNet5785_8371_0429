@@ -22,6 +22,7 @@ internal class AdminImplementation : IAdmin
     {
         _dal.ResetDB();
         DalTest.Initialization.Do();
+        ClockManager.UpdateClock(ClockManager.Now);
     }
 
     public void PromoteClock(BO.Enums.TimeUnit timeUnit)
@@ -33,7 +34,7 @@ internal class AdminImplementation : IAdmin
             TimeUnit.Day => ClockManager.Now.AddDays(1),
             TimeUnit.Month => ClockManager.Now.AddMonths(1),
             TimeUnit.Year => ClockManager.Now.AddYears(1),
-            _ => throw new ArgumentOutOfRangeException(nameof(timeUnit), "Invalid time unit")
+            _ => throw new BO.BlInvalidFormatException(nameof(timeUnit) + "Invalid time unit")
         };
 
         ClockManager.UpdateClock(newClock);
@@ -43,6 +44,7 @@ internal class AdminImplementation : IAdmin
     {
         _dal.Config.Reset();
         _dal.ResetDB();
+        ClockManager.UpdateClock(ClockManager.Now);
     }
 
     public void SetRiskTimeRange(TimeSpan riskTimeRange)

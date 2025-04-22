@@ -37,12 +37,12 @@ internal static class ClockManager //stage 4
         //for example, Periodic students' updates:
         //Go through all students to update properties that are affected by the clock update
         //(students becomes not active after 5 years etc.)
-        
-        //VolunteerManager.PeriodicVolunteersUpdates(oldClock, newClock); //stage 4
+
+        CallManager.PeriodicCallUpdates(oldClock, newClock); //stage 4??????????????????????????????????????????????
         //etc ...
 
         //Calling all the observers of clock update
-        ClockUpdatedObservers?.Invoke(); //prepared for stage 5
+        //ClockUpdatedObservers?.Invoke(); //prepared for stage 5
     }
     #endregion Stage 4
 

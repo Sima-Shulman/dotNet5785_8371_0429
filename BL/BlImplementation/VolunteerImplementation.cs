@@ -86,7 +86,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             DO.Volunteer requester = _dal.Volunteer.Read(requesterId);
             if (requester is null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {requesterId} does  not exist! ");
-            if (requester.Id != boVolunteer.Id && requester.Role != DO.Role.manager)
+            if (requester.Id != boVolunteer.Id && requester.Role != DO.Role.Manager)
                 throw new BO.BlUnauthorizedException("Requester is not authorized!");
             var doVolunteer = _dal.Volunteer.Read(boVolunteer.Id);
             if (doVolunteer is null)
@@ -94,13 +94,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             VolunteerManager.ValidateVolunteer(boVolunteer);
             if (!string.IsNullOrEmpty(boVolunteer.Password) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
                 throw new BO.BlInvalidFormatException("Password is not strong!");
-            if (requester.Role != DO.Role.manager && requester.Role != (DO.Role)boVolunteer.Role)
+            if (requester.Role != DO.Role.Manager && requester.Role != (DO.Role)boVolunteer.Role)
                 throw new BO.BlUnauthorizedException("Requester is not authorized to change the Role field!");
             if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
             {
                 var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-                if (latitude is null || longitude is null)
-                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+                //if (latitude is null || longitude is null)
+                //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
                 boVolunteer.Latitude = latitude;
                 boVolunteer.Longitude = longitude;
             }
@@ -109,8 +109,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 boVolunteer.Latitude = null;
                 boVolunteer.Longitude = null;
             }
-            if (!VolunteerManager.VerifyPassword(boVolunteer.Password, doVolunteer.Password!))//if the user wants to update the pass field and he entered a leagal password
-                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
+            if (!string.IsNullOrEmpty(boVolunteer.Password))
+            {
+                if (!VolunteerManager.VerifyPassword(boVolunteer.Password, doVolunteer.Password!))//if the user wants to update the pass field and he entered a leagal password
+                    boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
+            }
+            else
+                boVolunteer.Password =doVolunteer.Password;//if th password is not meant to be updated.
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
@@ -159,13 +164,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
             if (string.IsNullOrEmpty(boVolunteer.Password))
                 boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
-            else
-                boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
+            //else
+            boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
             if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-                if (latitude is null || longitude is null)
-                    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
+                //if (latitude is null || longitude is null)
+                //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
                 boVolunteer.Latitude = latitude;
                 boVolunteer.Longitude = longitude;
             }

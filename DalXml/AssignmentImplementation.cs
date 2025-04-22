@@ -24,8 +24,8 @@ internal class AssignmentImplementation : IAssignment
             Id = a.ToIntNullable("Id") ?? throw new FormatException("Can't convert Id"),
             CallId = a.ToIntNullable("CallId") ?? throw new FormatException("Can't convert CallId"),
             VolunteerId = a.ToIntNullable("VolunteerId") ?? throw new FormatException("Can't convert VolunteerId"),
-            Start_time = a.ToDateTimeNullable("Start_time") ?? throw new FormatException("Can't convert Start_time"),
-            End_time = a.ToDateTimeNullable("End_time") /*?? throw new FormatException("Can't convert End_time")*/,
+            StartTime = a.ToDateTimeNullable("Start_time") ?? throw new FormatException("Can't convert Start_time"),
+            EndTime = a.ToDateTimeNullable("End_time") /*?? throw new FormatException("Can't convert End_time")*/,
             EndType = a.ToEnumNullable<EndType>("EndType")/* ?? throw new FormatException("Can't convert EndType")*/
 
         };
@@ -47,8 +47,8 @@ internal class AssignmentImplementation : IAssignment
             new XElement("Id", Config.NextAssignmentId),
             new XElement("VolunteerId", item.VolunteerId),
             new XElement("CallId", item.CallId),
-            new XElement("Start_time", item.Start_time),
-            new XElement("End_time", item.End_time),
+            new XElement("Start_time", item.StartTime),
+            new XElement("End_time", item.EndTime),
             new XElement("EndType", item.EndType)
         );
         assignmentsRoot.Add(newAssignment);
@@ -130,8 +130,8 @@ internal class AssignmentImplementation : IAssignment
             new XElement("Id", item.Id),
             new XElement("CallId", item.CallId),
             new XElement("VolunteerId", item.VolunteerId),
-            new XElement("Start_time", item.Start_time),
-            new XElement("End_time", item.End_time),
+            new XElement("Start_time", item.StartTime),
+            new XElement("End_time", item.EndTime),
             new XElement("EndType", item.EndType)
         ));
         XMLTools.SaveListToXMLElement(assignmentsRootElem, Config.s_assignments_xml);

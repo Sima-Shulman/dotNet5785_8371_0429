@@ -7,18 +7,18 @@ public class Enums
     /// </summary>
     public enum Role
     {
-        manager,
-        volunteer
+        Manager,
+        Volunteer
     }
 
     /// <summary>
     /// Enum for the distance type for the max distance for the volunteer to receive a call.
     /// </summary>
-    public enum DistanceTypes
+    public enum DistanceType
     {
-        aerial_distance,
-        walking_distance,
-        driving_distance
+        AerialDistance,
+        WalkingDistance,
+        DrivingDistance
     }
 
     /// <summary>
@@ -26,11 +26,11 @@ public class Enums
     /// </summary>
     public enum CallType
     {
-        transportation,
-        car_accident,
-        vehicle_breakdown,
-        search_and_rescue,
-        none
+        Transportation,
+        CarAccident,
+        VehicleBreakdown,
+        SearchAndRescue,
+        None
     }
 
     /// <summary>
@@ -38,10 +38,10 @@ public class Enums
     /// </summary>
     public enum EndType
     {
-        was_treated,
-        self_cancellation,
-        manager_cancellation,
-        expired
+        WasTreated,
+        SelfCancellation,
+        ManagerCancellation,
+        Expired
     }
 
     /// <summary>
@@ -49,12 +49,12 @@ public class Enums
     /// </summary>
     public enum CallStatus
     {
-        is_treated,
-        treated_at_risk,
-        opened,
-        closed,
-        expired,
-        opened_at_risk
+        InTreatment,
+        InTreatmentAtRisk,
+        Opened,
+        Closed,
+        Expired,
+        OpenedAtRisk
     }
 
     public enum VolunteerInListFields
@@ -72,7 +72,7 @@ public class Enums
     {
         CallId,
         CallType,
-        Opening_time,
+        OpeningTime,
         TimeLeft,
         LastVolunteerName,
         TotalTime,
@@ -84,10 +84,10 @@ public class Enums
     {
         Id,
         CallType,
-        Verbal_description,
+        Description,
         FullAddress,
-        Start_time,
-        Max_finish_time,
+        StartTime,
+        MaxFinishTime,
         CallDistance,
     }
 
@@ -96,9 +96,9 @@ public class Enums
         Id,
         CallType,
         FullAddress,
-        Opening_time,
-        Start_time,
-        End_time,
+        OpeningTime,
+        StartTime,
+        EndTime,
         EndType,
     }
 
@@ -109,7 +109,7 @@ public class Enums
         Day,
         Month,
         Year,
-        none
+        None
     }
 }
 

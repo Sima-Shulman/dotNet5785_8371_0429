@@ -61,6 +61,6 @@ public record Volunteer
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Volunteer() : this(0, "", "", "", null, null, null, Role.volunteer, false, DistanceTypes.aerial_distance, null, EncryptPassword(GenerateRandomPassword(10))) { }
+    public Volunteer() : this(0, "", "", "", null, null, null, Role.Volunteer, false, DistanceTypes.AerialDistance, null, EncryptPassword(GenerateRandomPassword(10))) { }
 }
 

@@ -10,6 +10,9 @@ sealed internal class DalList : IDal
         new Lazy<IDal>(() => new DalList());
 
     public static IDal Instance => lazyInstance.Value;
+    /// <summary>
+    /// Empty private ctor,
+    /// </summary>
     private DalList() { }
 
     public ICall Call { get; } = new CallImplementation();

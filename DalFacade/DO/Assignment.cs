@@ -11,14 +11,14 @@
 /// <param name="endType">The way in which the treatment of the current call ended by the current volunteer:
 /// handled, self cancel, manager cancel, manager cancel.</param>
 public record Assignment
-
 (
 
      int VolunteerId,
      int CallId,
-     DateTime Start_time,
-     DateTime? End_time,
+     DateTime StartTime,
+     DateTime? EndTime,
      EndType? EndType
+
  )
 {
     public int Id { get; init; }

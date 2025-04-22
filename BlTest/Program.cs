@@ -3,10 +3,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Channels;
 using BlApi;
-using BO;
-using DalApi;
-using DO;
-using static BO.Enums;
 
 namespace BlTest
 {
@@ -114,9 +110,9 @@ namespace BlTest
                 "3" => BO.Enums.TimeUnit.Day,
                 "4" => BO.Enums.TimeUnit.Month,
                 "5" => BO.Enums.TimeUnit.Year,
-                _ => BO.Enums.TimeUnit.none
+                _ => BO.Enums.TimeUnit.None
             };
-            if (timeUnit == BO.Enums.TimeUnit.none)
+            if (timeUnit == BO.Enums.TimeUnit.None)
                 Console.WriteLine("invalid input, try again.");
             else
                 s_bl.Admin.PromoteClock(timeUnit);
@@ -206,7 +202,6 @@ namespace BlTest
             }
         }
 
-        //v
         private static void GetCallDetails()
         {
             Console.Write("Enter Call ID: ");
@@ -227,7 +222,6 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-        //v
         private static void GetCallsList()
         {
             Console.WriteLine("Enter filter field (optional): ");
@@ -262,8 +256,6 @@ namespace BlTest
         //v
         private static void SelectCallForTreatment()
         {
-            ///אני צריכה לבדוק שהמתנדב לא מטפל כרגע בשום קריאה אחרת כי אסור שמתנדב יטפל בשתי קריאות בו זמנית???
-            ///כן
             Console.Write("Enter Volunteer ID: ");
             if (int.TryParse(Console.ReadLine(), out int volunteerId))
             {
@@ -295,18 +287,19 @@ namespace BlTest
 
             Console.Write("Enter Call Description: ");
             string? description = Console.ReadLine();////
-            Console.Write("Enter Call type(transportation, car_accident, vehicle_breakdown, search_and_rescue): ");
+            Console.Write("Enter Call type(Transportation, CarAccident, VehicleBreakdown, SearchAndRescue): ");
             BO.Enums.CallType callType = Enum.TryParse(Console.ReadLine(), out BO.Enums.CallType parsedType) ? parsedType : throw new ArgumentException("Invalid call type.");
             Console.Write("Enter Full Address: ");
             string address = Console.ReadLine();///////////////
 
             var newCall = new BO.Call
             {
-                Verbal_description = description,
+
+                Description = description,
                 FullAddress = address,
-                Opening_time = DateTime.Now,
+                OpeningTime = DateTime.Now,
                 CallType = callType,
-                CallStatus = CallStatus.opened
+                CallStatus = BO.Enums.CallStatus.Opened
             };
             try
             {
@@ -342,10 +335,10 @@ namespace BlTest
                 var newUpdatedCall = new BO.Call
                 {
                     Id = callId,
-                    Verbal_description = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.Verbal_description,
-                    FullAddress = !string.IsNullOrWhiteSpace(address) ? address : /*callToUpdate.FullAddress*/"No Address",
-                    Opening_time = callToUpdate.Opening_time,
-                    Max_finish_time = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.Max_finish_time),
+                    Description = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.Description,
+                    FullAddress = !string.IsNullOrWhiteSpace(address) ? address : callToUpdate.FullAddress/*"No Address"*/,
+                    OpeningTime = callToUpdate.OpeningTime,
+                    MaxFinishTime = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.MaxFinishTime),
                     CallType = callType ?? callToUpdate.CallType
                 };
                 s_bl.Call.UpdateCallDetails(newUpdatedCall);
@@ -397,24 +390,21 @@ namespace BlTest
         private static void GetOpenCallsForVolunteer()
         {
             Console.Write("Enter Volunteer ID: ");
-            if (int.TryParse(Console.ReadLine(), out int volunteerId))
+            int.TryParse(Console.ReadLine(), out int volunteerId);
+            try
             {
-                try
-                {
-                    var openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
+                var openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
+                if (!openCalls.Any())
+                    Console.WriteLine("No open calls for this volunteer.");
+                else
                     foreach (var call in openCalls)
                     {
                         Console.WriteLine(call);
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
+                Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
         static void GetCallQuantitiesByStatus()
@@ -428,63 +418,43 @@ namespace BlTest
         private static void MarkCallCancellation()
         {
             Console.Write("Enter Volunteer ID: ");
-            if (int.TryParse(Console.ReadLine(), out int volunteerId))
+            int.TryParse(Console.ReadLine(), out int volunteerId);
+            ///חשבתי שאין סיבה שלמשתמש יהיה את המזהה של ההשמה אלא רק של הקריאה שבטיפולו 
+            ///ולכן המשתמש מכניס את המזהה שלו ושל הקריאה והתוכנית מזהה לפי זה את ההשמה. 
+            ///אבל מהBL אין לי דרך לקבל השמות????????????
+            Console.Write("Enter Assignment ID: ");
+            int.TryParse(Console.ReadLine(), out int assignmentId);
+
+            try
             {
-                Console.Write("Enter Assignment ID: ");
-                if (int.TryParse(Console.ReadLine(), out int assignmentId))
-                {
-                    try
-                    {
-                        s_bl.Call.MarkCallCancellation(volunteerId, assignmentId);
-                        Console.WriteLine("Call marked as canceled.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number.");
-                }
+
+                s_bl.Call.MarkCallCancellation(volunteerId, assignmentId);
+                Console.WriteLine("Call marked as canceled.");
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
+                Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
         private static void MarkCallCompletion()
-        {
+        { ///חשבתי שאין סיבה שלמשתמש יהיה את המזהה של ההשמה אלא רק של הקריאה שבטיפולו 
+          ///ולכן המשתמש מכניס את המזהה שלו ושל הקריאה והתוכנית מזהה לפי זה את ההשמה. 
+          ///אבל מהBL אין לי דרך לקבל השמות????????????
             Console.Write("Enter Volunteer ID: ");
-            if (int.TryParse(Console.ReadLine(), out int volunteerId))
+            int.TryParse(Console.ReadLine(), out int volunteerId);
+            Console.Write("Enter Assignment ID: ");
+            int.TryParse(Console.ReadLine(), out int assignmentId);
+
+            try
             {
-                Console.Write("Enter Assignment ID: ");
-                if (int.TryParse(Console.ReadLine(), out int assignmentId))
-                {
-                    try
-                    {
-                        s_bl.Call.MarkCallCompletion(volunteerId, assignmentId);
-                        Console.WriteLine("Call marked as completed.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter a valid number.");
-                }
+                s_bl.Call.MarkCallCompletion(volunteerId, assignmentId);
+                Console.WriteLine("Call marked as completed.");
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Invalid input. Please enter a valid number.");
+                Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
-
-
-
 
         // Volunteer
         private static void HandleVolunteerMenu()
@@ -542,7 +512,7 @@ namespace BlTest
                 {
                     BO.Volunteer volunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
                     if (volunteer is null)
-                        throw new BlDoesNotExistException($"Volunteer with Id {volunteerId} does not exist!");
+                        throw new BO.BlDoesNotExistException($"Volunteer with Id {volunteerId} does not exist!");
                     Console.WriteLine(volunteer);
                 }
                 catch (Exception ex)
@@ -595,12 +565,12 @@ namespace BlTest
             string pass = Console.ReadLine();
             Console.Write("Address (optional): ");
             string address = Console.ReadLine();
-            Console.WriteLine("Role (volunteer/manager):");
+            Console.WriteLine("Role (Volunteer/Manager):");
             BO.Enums.Role.TryParse(Console.ReadLine(), out BO.Enums.Role role);
             Console.WriteLine("IsActive (true/false):");
             bool.TryParse(Console.ReadLine(), out bool isActive);
-            Console.WriteLine("Distance Type (  aerial_distance, walking_distance, driving_distance):");
-            BO.Enums.DistanceTypes.TryParse(Console.ReadLine(), out BO.Enums.DistanceTypes distanceType);
+            Console.WriteLine("Distance Type (  AerialDistance, WalkingDistance, DrivingDistance):");
+            BO.Enums.DistanceType.TryParse(Console.ReadLine(), out BO.Enums.DistanceType distanceType);
             Console.WriteLine("Max Distance (optional):");
             double.TryParse(Console.ReadLine(), out double maxDistance);
             BO.Volunteer newVolunteer = new BO.Volunteer()
@@ -638,7 +608,7 @@ namespace BlTest
 
             var doVolunteer = s_bl.Volunteer.GetVolunteerDetails(volunteerId);
             if (doVolunteer is null)
-                throw new BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist!");
+                throw new BO.BlDoesNotExistException($"Volunteer with ID {volunteerId} does not exist!");
             Console.Write("Full Name(optional): ");
             string name = Console.ReadLine();
 
@@ -654,7 +624,7 @@ namespace BlTest
             Console.Write("Address (optional): ");
             string address = Console.ReadLine();
 
-            Console.WriteLine("Role (volunteer/manager)(optional):");
+            Console.WriteLine("Role (Volunteer/Manager)(optional):");
             string roleInput = Console.ReadLine()!;
             BO.Enums.Role role = string.IsNullOrEmpty(roleInput) || !Enum.TryParse(roleInput, out BO.Enums.Role rType) ? doVolunteer.Role : rType;
 
@@ -662,9 +632,9 @@ namespace BlTest
             string isActiveInput = Console.ReadLine()!;
             bool isActive = string.IsNullOrEmpty(isActiveInput) || !bool.TryParse(isActiveInput, out bool isA) ? doVolunteer.IsActive : isA;
 
-            Console.WriteLine("Distance Type (  aerial_distance, walking_distance, driving_distance)(optional):");
+            Console.WriteLine("Distance Type (  AerialDistance, WalkingDistance, DrivingDistance)(optional):");
             string distanceTypeInput = Console.ReadLine()!;
-            BO.Enums.DistanceTypes distanceType = string.IsNullOrEmpty(distanceTypeInput) || !Enum.TryParse(distanceTypeInput, out BO.Enums.DistanceTypes dType) ? (BO.Enums.DistanceTypes)doVolunteer.DistanceType : dType;
+            BO.Enums.DistanceType distanceType = string.IsNullOrEmpty(distanceTypeInput) || !Enum.TryParse(distanceTypeInput, out BO.Enums.DistanceType dType) ? (BO.Enums.DistanceType)doVolunteer.DistanceType : dType;
 
             Console.WriteLine("Max Distance (optional):");
             string maxDistanceInput = Console.ReadLine()!;
@@ -678,9 +648,9 @@ namespace BlTest
                 Email = string.IsNullOrEmpty(email) ? doVolunteer.Email : email,
                 Password = /*string.IsNullOrEmpty(pass) ? doVolunteer.Password : */pass,
                 FullAddress = string.IsNullOrEmpty(address) ? doVolunteer.FullAddress : address,
-                Role = (role != BO.Enums.Role.manager) && (role != BO.Enums.Role.volunteer) ? doVolunteer.Role : role,
+                Role = (role != BO.Enums.Role.Manager) && (role != BO.Enums.Role.Volunteer) ? doVolunteer.Role : role,
                 IsActive = isActive ? doVolunteer.IsActive : isActive,
-                DistanceType = (distanceType != BO.Enums.DistanceTypes.driving_distance) && (distanceType != BO.Enums.DistanceTypes.driving_distance) && (distanceType != BO.Enums.DistanceTypes.aerial_distance) ? doVolunteer.DistanceType : distanceType,
+                DistanceType = (distanceType != BO.Enums.DistanceType.DrivingDistance) && (distanceType != BO.Enums.DistanceType.DrivingDistance) && (distanceType != BO.Enums.DistanceType.AerialDistance) ? doVolunteer.DistanceType : distanceType,
                 MaxDistance = maxDistance
             };
 
@@ -719,8 +689,8 @@ namespace BlTest
                 string volunteerName = Console.ReadLine() ?? throw new BO.BlNullPropertyException("id can't be null");
                 Console.Write("Enter Volunteer Password: ");
                 string volunteerPass = Console.ReadLine() ?? throw new BO.BlNullPropertyException("password can't be null");
-                s_bl.Volunteer.EnterSystem(volunteerName, volunteerPass);
-                Console.WriteLine("You've logged in successfully!");
+                var role = s_bl.Volunteer.EnterSystem(volunteerName, volunteerPass);
+                Console.WriteLine($"You've logged in successfully! Your role:{role}");
             }
             catch (Exception ex)
             {

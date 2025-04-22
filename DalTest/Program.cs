@@ -167,12 +167,12 @@ namespace DalTest
                 throw new FormatException("End time is invalid!");
             Call newCall = new()
             {
-                Call_type = call_type,                      // המרה תקינה של Enum
-                Verbal_description = verbal_description,    // שמירת תיאור
-                Full_address = full_address,                // שמירת כתובת
+                CallType = call_type,                      // המרה תקינה של Enum
+                Description = verbal_description,    // שמירת תיאור
+                FullAddress = full_address,                // שמירת כתובת
                 Latitude = latitude,                        // שמירת Latitude
                 Longitude = longitude,                      // שמירת Longitude
-                Max_finish_time = endTime
+                MaxFinishTime = endTime
             };
             s_dal?.Call.Create(newCall);
             Console.WriteLine("Call created successfully.");
@@ -184,10 +184,10 @@ namespace DalTest
             var call = s_dal?.Call.Read(id);
             if (call != null)
             {
-                Console.WriteLine($"Call ID: {call.Id}, Call Type: {call.Call_type}, " +
-                    $"Description: {call.Verbal_description ?? "N/A"}, Full Address: {call.Full_address}, " +
+                Console.WriteLine($"Call ID: {call.Id}, Call Type: {call.CallType}, " +
+                    $"Description: {call.Description ?? "N/A"}, Full Address: {call.FullAddress}, " +
                     $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
-                    $"Opening Time: {call.Opening_time}, Max Finish Time: {call.Max_finish_time}");
+                    $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxFinishTime}");
             }
             else
                 Console.WriteLine("Call not found.");
@@ -198,10 +198,10 @@ namespace DalTest
             if (calls != null)
                 foreach (var call in calls)
                 {
-                    Console.WriteLine($"Call ID: {call!.Id}, Call Type: {call.Call_type}, " +
-                        $"Description: {call.Verbal_description ?? "N/A"}, Full Address: {call.Full_address}, " +
+                    Console.WriteLine($"Call ID: {call!.Id}, Call Type: {call.CallType}, " +
+                        $"Description: {call.Description ?? "N/A"}, Full Address: {call.FullAddress}, " +
                         $"Latitude: {call.Latitude}, Longitude: {call.Longitude}, " +
-                        $"Opening Time: {call.Opening_time}, Max Finish Time: {call.Max_finish_time}");
+                        $"Opening Time: {call.OpeningTime}, Max Finish Time: {call.MaxFinishTime}");
                 }
             else
                 Console.WriteLine("No calls found.");
@@ -217,7 +217,7 @@ namespace DalTest
             {
                 Console.Write("Enter Call Type to Update (transportation, car_accident, vehicle_breakdown, search_and_rescue) (optional): ");
                 string callTypeInput = Console.ReadLine()!;
-                DO.CallType call_type = string.IsNullOrEmpty(callTypeInput) || !Enum.TryParse(callTypeInput, out DO.CallType cType) ? call.Call_type : cType;
+                DO.CallType call_type = string.IsNullOrEmpty(callTypeInput) || !Enum.TryParse(callTypeInput, out DO.CallType cType) ? call.CallType : cType;
                 Console.Write("Enter Call Description to Update (optional): ");
                 string verbal_description = Console.ReadLine()!;
                 Console.Write("Enter Full Address To update (optional): ");
@@ -231,9 +231,9 @@ namespace DalTest
                 Call newCall = new()
                 {
                     Id = call.Id,
-                    Call_type = call_type,
-                    Verbal_description = string.IsNullOrEmpty(verbal_description) ? call.Verbal_description : verbal_description,
-                    Full_address = string.IsNullOrEmpty(full_address) ? call.Full_address : full_address,
+                    CallType = call_type,
+                    Description = string.IsNullOrEmpty(verbal_description) ? call.Description : verbal_description,
+                    FullAddress = string.IsNullOrEmpty(full_address) ? call.FullAddress : full_address,
                     Latitude = latitude,
                     Longitude = longitude,
                 };
@@ -454,9 +454,9 @@ namespace DalTest
                     FullAddress = string.IsNullOrEmpty(fullAddress) ? volunteer.FullAddress : fullAddress,
                     Latitude = latitude,
                     Longitude = longitude,
-                    Role = (role != DO.Role.manager) && (role != DO.Role.volunteer) ? volunteer.Role : role,
+                    Role = (role != DO.Role.Manager) && (role != DO.Role.Volunteer) ? volunteer.Role : role,
                     IsActive = isActive ? volunteer.IsActive : isActive,
-                    DistanceTypes = (distanceTypes != DO.DistanceTypes.driving_distance) && (distanceTypes != DO.DistanceTypes.driving_distance) && (distanceTypes != DO.DistanceTypes.aerial_distance) ? volunteer.DistanceTypes : distanceTypes,
+                    DistanceTypes = (distanceTypes != DO.DistanceTypes.DrivingDistance) && (distanceTypes != DO.DistanceTypes.DrivingDistance) && (distanceTypes != DO.DistanceTypes.AerialDistance) ? volunteer.DistanceTypes : distanceTypes,
                     MaxDistance = maxDistance,
                     Password = string.IsNullOrEmpty(password) ? volunteer.Password : password,
                 };
@@ -553,8 +553,8 @@ namespace DalTest
             if (assignment != null)
             {
                 Console.WriteLine($"Assignment ID: {assignment.Id}, Volunteer ID: {assignment.VolunteerId}, " +
-                    $"Call Id: {assignment.CallId},  Start Time: {assignment.Start_time}, " +
-                    $"End Time: {assignment.End_time}, End Type: {assignment.EndType}, ");
+                    $"Call Id: {assignment.CallId},  Start Time: {assignment.StartTime}, " +
+                    $"End Time: {assignment.EndTime}, End Type: {assignment.EndType}, ");
             }
             else
                 Console.WriteLine("Assignment not found.");
@@ -567,8 +567,8 @@ namespace DalTest
                 foreach (var assignment in assignments)
                 {
                     Console.WriteLine($"Assignment ID: {assignment!.Id}, Volunteer ID: {assignment.VolunteerId}, " +
-                        $"Call Id: {assignment.CallId},  Start Time: {assignment.Start_time}, " +
-                        $"End Time: {assignment.End_time}, End Type: {assignment.EndType}, ");
+                        $"Call Id: {assignment.CallId},  Start Time: {assignment.StartTime}, " +
+                        $"End Time: {assignment.EndTime}, End Type: {assignment.EndType}, ");
                 }
             }
             else
@@ -591,10 +591,10 @@ namespace DalTest
                 int callId = string.IsNullOrEmpty(callIdInput) || !int.TryParse(callIdInput, out int cId) ? assignment.CallId : cId;
                 Console.Write("Enter Start time:(dd/mm/yy hh:mm:ss) (optional)");
                 string startTimeInput = Console.ReadLine()!;
-                DateTime? startTime = string.IsNullOrEmpty(startTimeInput) || !DateTime.TryParse(startTimeInput, out DateTime ent) ? assignment.Start_time : ent;
+                DateTime? startTime = string.IsNullOrEmpty(startTimeInput) || !DateTime.TryParse(startTimeInput, out DateTime ent) ? assignment.StartTime : ent;
                 Console.Write("Enter end time (dd/mm/yy hh:mm:ss) (optional): ");
                 string endTimeInput = Console.ReadLine()!;
-                DateTime? endTime = string.IsNullOrEmpty(endTimeInput) || !DateTime.TryParse(endTimeInput, out DateTime end) ? assignment.End_time : end;
+                DateTime? endTime = string.IsNullOrEmpty(endTimeInput) || !DateTime.TryParse(endTimeInput, out DateTime end) ? assignment.EndTime : end;
                 Console.Write("Enter end type(was_treated, self_cancellation, manager_cancellation, expired) (optional): ");
                 string endTypeInput = Console.ReadLine()!;
                 DO.EndType? endType = string.IsNullOrEmpty(endTypeInput) || !Enum.TryParse(endTypeInput, out DO.EndType eType) ? assignment.EndType : eType;
@@ -603,9 +603,9 @@ namespace DalTest
                     Id = assignment.Id,
                     VolunteerId = volunteerId,
                     CallId = callId,
-                    Start_time = startTime ?? assignment.Start_time,
-                    End_time = endTime ?? assignment.End_time,
-                    EndType = (endType != DO.EndType.expired) && (endType != DO.EndType.manager_cancellation) && (endType != DO.EndType.self_cancellation) && (endType != DO.EndType.was_treated) ? assignment.EndType : endType
+                    StartTime = startTime ?? assignment.StartTime,
+                    EndTime = endTime ?? assignment.EndTime,
+                    EndType = (endType != DO.EndType.Expired) && (endType != DO.EndType.ManagerCancellation) && (endType != DO.EndType.SelfCancellation) && (endType != DO.EndType.WasTreated) ? assignment.EndType : endType
                 };
                 s_dal?.Assignment.Update(newAssignment);
                 Console.WriteLine("Assignment updated successfully.");

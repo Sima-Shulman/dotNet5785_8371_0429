@@ -11,6 +11,9 @@ sealed internal class DalXml : IDal
     private static readonly Lazy<IDal> lazyInstance =
         new Lazy<IDal>(() => new DalXml());
     public static IDal Instance => lazyInstance.Value;
+    /// <summary>
+    /// Empty private ctor.
+    /// </summary>
     private DalXml() { }
 
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
