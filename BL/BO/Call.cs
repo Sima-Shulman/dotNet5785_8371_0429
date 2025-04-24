@@ -1,7 +1,10 @@
 ﻿using Helpers;
 using static BO.Enums;
 namespace BO;
-
+// <summary>
+// This class represents a call with its details such as type, description, 
+// address, status, and related assignments, including the opening and max finish times.
+// </summary>
 public class Call
 {
     public int Id { get; set; }

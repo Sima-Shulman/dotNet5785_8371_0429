@@ -1,7 +1,10 @@
 ﻿using Helpers;
 using static BO.Enums;
 namespace BO;
-
+/// <summary>
+/// This class represents a call that is in progress in the system, including its basic details such as ID, type, status, 
+/// description, address, time-related information, and the distance of the call.
+/// </summary>
 public class CallInProgress
 {
     public int Id { get; set; }

@@ -68,7 +68,9 @@ public class BlGeneralException : Exception
     public BlGeneralException(string message) : base(message) { }
     public BlGeneralException(string message, Exception innerException) : base(message, innerException) { }
 }
-
+/// <summary>
+/// Exception thrown when a required property is null in the Bl.
+/// </summary>
 
 [Serializable]
 public class BlNullPropertyException : Exception

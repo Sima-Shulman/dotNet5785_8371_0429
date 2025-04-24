@@ -3,11 +3,23 @@ using DalApi;
 using Helpers;
 
 namespace BlImplementation;
+// <summary>
+// Implements IVolunteer interface for managing volunteers.
+// Includes login, retrieval, updating, and deletion of volunteer data.
+// Handles interactions with DAL and throws custom exceptions for errors.
+// </summary>
 
 internal class VolunteerImplementation : BlApi.IVolunteer
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+    /// <summary>
+    /// Allows a volunteer to enter the system by verifying their username and password.
+    /// </summary>
+    /// <param name="name">The volunteer's full name (username).</param>
+    /// <param name="pass">The volunteer's password.</param>
+    /// <returns>The role of the volunteer.</returns>
+    /// <exception cref="BO.BlUnauthorizedException">Thrown if the username or password is incorrect.</exception>
     public BO.Enums.Role EnterSystem(string name, string pass)
     {
         try
@@ -28,7 +40,12 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves a list of volunteers with optional filters for activity status and sorting.
+    /// </summary>
+    /// <param name="isActiveFilter">Optional filter for the volunteer's active status.</param>
+    /// <param name="fieldSort">Optional field to sort the volunteers by.</param>
+    /// <returns>A sorted list of volunteers matching the filter criteria.</returns>
     public IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActiveFilter = null, BO.Enums.VolunteerInListFields? fieldSort = null)
     {
         try
@@ -58,7 +75,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves the details of a specific volunteer by their ID.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to retrieve.</param>
+    /// <returns>A BO.Volunteer object containing the volunteer's details.</returns>
     public BO.Volunteer GetVolunteerDetails(int id)
     {
         try
@@ -78,7 +99,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Updates the details of a specific volunteer.
+    /// </summary>
+    /// <param name="requesterId">The ID of the volunteer requesting the update.</param>
+    /// <param name="boVolunteer">The volunteer object with updated details.</param>
+    /// <exception cref="BO.BlUnauthorizedException">Thrown if the requester is not authorized to update the volunteer's details.</exception>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the volunteer does not exist.</exception>
+    /// <exception cref="BO.BlInvalidFormatException">Thrown if the updated details are not in the correct format.</exception>
     public void UpdateVolunteerDetails(int requesterId, BO.Volunteer boVolunteer)
     {
         try
@@ -138,6 +166,12 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 
+    /// <summary>
+    /// Deletes a volunteer from the system.
+    /// </summary>
+    /// <param name="id">The ID of the volunteer to delete.</param>
+    /// <exception cref="BO.BlDoesNotExistException">Thrown if the volunteer does not exist.</exception>
+    /// <exception cref="BO.BlDeletionException">Thrown if the volunteer is currently handling calls and cannot be deleted.</exception>
     public void DeleteVolunteer(int id)
     {
         try
@@ -156,7 +190,12 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Adds a new volunteer to the system.
+    /// </summary>
+    /// <param name="boVolunteer">The volunteer object to be added.</param>
+    /// <exception cref="BO.BlAlreadyExistException">Thrown if the volunteer already exists.</exception>
+    /// <exception cref="BO.BlInvalidFormatException">Thrown if the volunteer's details are not in the correct format.</exception>
     public void AddVolunteer(BO.Volunteer boVolunteer)
     {
         try

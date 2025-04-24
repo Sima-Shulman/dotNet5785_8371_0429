@@ -4,10 +4,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Helpers;
+/// <summary>
+/// Responsible for converting and managing Volunteer objects between BO and DO layers,
+/// validating input, password handling, and generating summaries.
+/// </summary>
 
 internal static class VolunteerManager
 {
     private static IDal s_dal = Factory.Get;
+    /// <summary>
+    /// Converts DO.Volunteer to BO.Volunteer with additional calculated fields.
+    /// </summary>
+    /// <param name="doVolunteer">The volunteer from the data layer.</param>
+    /// <returns>Mapped and enriched business object volunteer.</returns>
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
         var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
@@ -58,7 +67,11 @@ internal static class VolunteerManager
 
         };
     }
-
+    /// <summary>
+    /// Converts BO.Volunteer to DO.Volunteer for database use.
+    /// </summary>
+    /// <param name="boVolunteer">Business object volunteer.</param>
+    /// <returns>Data object volunteer.</returns>
     public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
     {
         return new DO.Volunteer(
@@ -77,6 +90,11 @@ internal static class VolunteerManager
     );
     }
 
+    /// <summary>
+    /// Converts DO.Volunteer to a BO.VolunteerInList for list/summarized display.
+    /// </summary>
+    /// <param name="doVolunteer">The volunteer from the data layer.</param>
+    /// <returns>Summarized volunteer with basic info and current call status.</returns>
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
         var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
@@ -103,27 +121,51 @@ internal static class VolunteerManager
                 : BO.Enums.CallType.Transportation
         };
     }
+
+    /// <summary>
+    /// Converts a list of DO.Volunteer to a list of BO.VolunteerInList.
+    /// </summary>
+    /// <param name="volunteers">Raw volunteer list from data layer.</param>
+    /// <returns>List of summarized business object volunteers.</returns>
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
         => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
+    /// <summary>
+    /// Verifies a raw password against a stored (hashed) password.
+    /// </summary>
+    /// <param name="enteredPassword">User input password.</param>
+    /// <param name="storedPassword">Hashed password stored in DB.</param>
+    /// <returns>True if passwords match.</returns>
     internal static bool VerifyPassword(string enteredPassword, string storedPassword)
     {
         var encryptedPassword = EncryptPassword(enteredPassword);
         return encryptedPassword == storedPassword /*|| enteredPassword==storedPassword*/;
     }
+    /// <summary>
+    /// Hashes a password using SHA-256.
+    /// </summary>
+    /// <param name="password">Raw password.</param>
+    /// <returns>Encrypted base64-encoded password.</returns>
     internal static string EncryptPassword(string password)
     {
         using var sha256 = SHA256.Create();
         var hashedBytes = sha256?.ComputeHash(Encoding.UTF8.GetBytes(password));
         return Convert.ToBase64String(hashedBytes!);
     }
-
+    /// <summary>
+    /// Generates a strong, random 12-character password.
+    /// </summary>
+    /// <returns>Random secure password string.</returns>
     internal static string GenerateStrongPassword()
     {
         var random = new Random();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
         return new string(Enumerable.Repeat(chars, 12).Select(s => s[random.Next(s.Length)]).ToArray());
     }
-
+    /// <summary>
+    /// Validates a 9-digit Israeli ID using checksum algorithm.
+    /// </summary>
+    /// <param name="id">ID number to check.</param>
+    /// <returns>True if valid.</returns>
     public static bool IsValidId(int id)
     {
         string idStr = id.ToString().PadLeft(9, '0');
@@ -138,7 +180,11 @@ internal static class VolunteerManager
         }
         return sum % 10 == 0;
     }
-
+    /// <summary>
+    /// Validates all critical fields of a volunteer object.
+    /// Throws BO.BlInvalidFormatException if invalid.
+    /// </summary>
+    /// <param name="boVolunteer">Volunteer to validate.</param>
     public static void ValidateVolunteer(BO.Volunteer boVolunteer)
     {
         if (boVolunteer.Id <= 0 || !IsValidId(boVolunteer.Id))
@@ -209,6 +255,11 @@ internal static class VolunteerManager
         if (boVolunteer.TotalExpiredCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
     }
+    /// <summary>
+    /// Checks if a password meets minimum strength criteria.
+    /// </summary>
+    /// <param name="password">Password to check.</param>
+    /// <returns>True if strong.</returns>
     internal static bool IsPasswordStrong(string password)
     {
         if (password.Length < 8)

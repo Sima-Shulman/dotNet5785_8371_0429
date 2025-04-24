@@ -6,9 +6,23 @@ using BlApi;
 
 namespace BlTest
 {
+    /// <summary>
+    /// Main user interface entry point for the system.
+    /// Provides an interactive console-based navigation through Admin, Call, and Volunteer menus.
+    /// Each menu offers operations like view, add, update, and delete for the relevant domain entity.
+    /// The main program loop runs until the user explicitly chooses to exit.
+    /// All business logic operations are delegated to the IBl instance, ensuring separation of concerns
+    /// between the user interface and core functionality.
+    /// </summary>
+    /// <param name="s_bl">Shared instance of the business logic layer used to access system functionalities.</param>
+
     internal class Program
     {
         static readonly IBl s_bl = BlApi.Factory.Get();
+        /// <summary>
+        /// Entry point of the program. Displays the main menu and routes user choices to relevant domain menus.
+        /// </summary>
+        /// <returns>Runs in a loop until the user chooses to exit the system.</returns>
         static void Main(string[] args)
         {
             bool exit = false;
@@ -43,10 +57,10 @@ namespace BlTest
             }
         }
 
-
-
-
         //ADMIN
+        /// <summary>
+        /// Displays a menu for administrator actions and handles user input to perform system-level operations.
+        /// </summary>
         private static void HandleAdminMenu()
         {
             bool exit = false;
@@ -91,7 +105,9 @@ namespace BlTest
                 }
             }
         }
-
+        /// <summary>
+        /// Promotes the internal system clock by a time unit selected by the user.
+        /// </summary>
         private static void PromoteClock()
         {
             Console.WriteLine("Select time unit for promotion:");
@@ -117,7 +133,9 @@ namespace BlTest
             else
                 s_bl.Admin.PromoteClock(timeUnit);
         }
-
+        /// <summary>
+        /// Sets the risk time range in the system by taking user input in minutes and converting it to a TimeSpan.
+        /// </summary>
         private static void SetRiskTimeRange()
         {
             Console.Write("Enter the risk time range in minutes: ");
@@ -135,7 +153,10 @@ namespace BlTest
 
 
         //CALL
-
+        /// <summary>
+        /// Displays a menu for managing calls and handles user interaction for various call-related operations,
+        /// including viewing details, adding, updating, deleting, assigning, and filtering calls.
+        /// </summary>
         private static void HandleCallMenu()
         {
             bool exit = false;
@@ -201,7 +222,11 @@ namespace BlTest
                 }
             }
         }
-
+        /// <summary>
+        /// Retrieves and displays the details of a specific call based on a user-provided Call ID.
+        /// </summary>
+        /// <param name="callId">The ID of the call to retrieve, entered by the user via console input.</param>
+        /// <returns>Displays the call details if found; otherwise, displays an error message.</returns>
         private static void GetCallDetails()
         {
             Console.Write("Enter Call ID: ");
@@ -222,6 +247,13 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+        /// <summary>
+        /// Retrieves a list of calls from the system, optionally filtered and sorted based on user input.
+        /// </summary>
+        /// <param name="fieldInput">An optional filter field name provided by the user (e.g., VolunteerName, Status).</param>
+        /// <param name="filterValueInput">An optional value for filtering by status (e.g., Opened, Closed), entered by the user.</param>
+        /// <param name="sortFieldInput">An optional field name to sort the results (e.g., Opening_time), entered by the user.</param>
+        /// <returns>Displays the list of filtered and/or sorted calls; shows an error message in case of failure.</returns>
         private static void GetCallsList()
         {
             Console.WriteLine("Enter filter field (optional): ");
@@ -254,6 +286,14 @@ namespace BlTest
             }
         }
         //v
+
+
+        /// <summary>
+        /// Assigns a volunteer to a specific call for treatment based on their IDs, as entered by the user.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer to assign to the call.</param>
+        /// <param name="callId">The ID of the call to assign to the volunteer.</param>
+        /// <returns>Displays a success message if the assignment is successful; otherwise, displays an error message.</returns>
         private static void SelectCallForTreatment()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -282,6 +322,13 @@ namespace BlTest
                 Console.WriteLine("Invalid Volunteer ID.");
             }
         }
+        /// <summary>
+        /// Creates a new call and adds it to the system based on user-provided description, address, and type.
+        /// </summary>
+        /// <param name="description">The description of the call entered by the user.</param>
+        /// <param name="callType">The type of the call (e.g., Transportation, CarAccident).</param>
+        /// <param name="address">The full address where the call is located.</param>
+        /// <returns>Displays a success message if the call is added; otherwise, displays an error message.</returns>
         private static void AddCall()
         {
 
@@ -312,6 +359,16 @@ namespace BlTest
             }
 
         }
+
+        /// <summary>
+        /// Updates an existing call's information such as description, address, type, and max finish time based on user input.
+        /// </summary>
+        /// <param name="callId">The ID of the call to update.</param>
+        /// <param name="description">The new description (optional).</param>
+        /// <param name="address">The new full address (optional).</param>
+        /// <param name="callType">The new type of the call (optional).</param>
+        /// <param name="maxFinishTime">The new maximum finish time in hh:mm format (optional).</param>
+        /// <returns>Displays a success message if the call is updated; otherwise, displays an error message.</returns>
 
         private static void UpdateCall()
         {
@@ -349,6 +406,11 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Deletes a call from the system based on a user-provided Call ID.
+        /// </summary>
+        /// <param name="callId">The ID of the call to delete.</param>
+        /// <returns>Displays a success message if the call is deleted; otherwise, displays an error message.</returns>
         private static void DeleteCall()
         {
             Console.Write("Enter Call ID to delete: ");
@@ -369,6 +431,11 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+        /// <summary>
+        /// Retrieves and displays a list of all closed calls that were handled by a specific volunteer.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer whose closed calls are being retrieved.</param>
+        /// <returns>Displays the list of closed calls; shows an error message if retrieval fails.</returns>
         private static void GetClosedCallsHandledByVolunteer()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -387,6 +454,11 @@ namespace BlTest
             }
 
         }
+        /// <summary>
+        /// Retrieves and displays a list of open calls available for a specific volunteer.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer for whom open calls should be listed.</param>
+        /// <returns>Displays the list of open calls; shows a message if none are found or if an error occurs.</returns>
         private static void GetOpenCallsForVolunteer()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -407,6 +479,10 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Retrieves and displays the quantity of calls grouped by their current status.
+        /// </summary>
+        /// <returns>Displays the quantity of calls per status.</returns>
         static void GetCallQuantitiesByStatus()
         {
             var amounts = s_bl.Call.GetCallQuantitiesByStatus();
@@ -415,6 +491,12 @@ namespace BlTest
                 Console.WriteLine(amount);
             }
         }
+        /// <summary>
+        /// Marks a call as canceled by identifying the relevant assignment using the volunteer and assignment IDs.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer requesting the cancellation.</param>
+        /// <param name="assignmentId">The ID of the assignment to cancel.</param>
+        /// <returns>Displays a success message if the call is canceled; otherwise, displays an error message.</returns>
         private static void MarkCallCancellation()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -436,6 +518,12 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+        /// <summary>
+        /// Marks a call as completed by identifying the relevant assignment using the volunteer and assignment IDs.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer completing the assignment.</param>
+        /// <param name="assignmentId">The ID of the assignment to complete.</param>
+        /// <returns>Displays a success message if the call is marked as completed; otherwise, displays an error message.</returns>
         private static void MarkCallCompletion()
         { ///חשבתי שאין סיבה שלמשתמש יהיה את המזהה של ההשמה אלא רק של הקריאה שבטיפולו 
           ///ולכן המשתמש מכניס את המזהה שלו ושל הקריאה והתוכנית מזהה לפי זה את ההשמה. 
@@ -457,6 +545,10 @@ namespace BlTest
         }
 
         // Volunteer
+        /// <summary>
+        /// Displays the menu for managing volunteers and handles user selection.
+        /// </summary>
+        /// <returns>Executes the selected volunteer-related operation or exits to the main menu.</returns>
         private static void HandleVolunteerMenu()
         {
             bool exit = false;
@@ -503,6 +595,11 @@ namespace BlTest
             }
         }
 
+        /// <summary>
+        /// Retrieves and displays the details of a specific volunteer based on their ID.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer to retrieve.</param>
+        /// <returns>Displays the volunteer details or an error message if not found.</returns>
         private static void GetVolunteerDetails()
         {
             Console.Write("Enter Volunteer ID: ");
@@ -525,7 +622,12 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
-
+        /// <summary>
+        /// Retrieves and displays a list of volunteers with optional filtering by active status and sorting.
+        /// </summary>
+        /// <param name="isActiveFilter">Optional filter by volunteer active status.</param>
+        /// <param name="sortField">Optional sort field for the volunteer list.</param>
+        /// <returns>Displays the list of volunteers or an error message if retrieval fails.</returns>
         private static void GetVolunteersList()
         {
             Console.WriteLine("Enter filter for active volunteers (optional, true/false): ");
@@ -549,7 +651,11 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Adds a new volunteer to the system based on user-provided input.
+        /// </summary>
+        /// <param name="newVolunteer">Volunteer details entered by the user.</param>
+        /// <returns>Displays a success message if added; otherwise, displays an error message.</returns>
         private static void AddVolunteer()
         {
             Console.WriteLine("Enter Volunteer details:");
@@ -597,7 +703,12 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Updates the details of an existing volunteer based on user input.
+        /// </summary>
+        /// <param name="requesterId">The ID of the user requesting the update.</param>
+        /// <param name="volunteerId">The ID of the volunteer to update.</param>
+        /// <returns>Displays a success message if updated; otherwise, displays an error message.</returns>
         private static void UpdateVolunteerDetails()
         {
             Console.Write("Enter Requester ID: ");
@@ -665,7 +776,11 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Deletes a volunteer from the system based on their ID.
+        /// </summary>
+        /// <param name="volunteerId">The ID of the volunteer to delete.</param>
+        /// <returns>Displays a success message if deleted; otherwise, displays an error message.</returns>
         private static void DeleteVolunteer()
         {
             try
@@ -680,7 +795,12 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
-
+        /// <summary>
+        /// Logs a volunteer into the system using their name and password.
+        /// </summary>
+        /// <param name="volunteerName">The volunteer's username.</param>
+        /// <param name="volunteerPass">The volunteer's password.</param>
+        /// <returns>Displays the volunteer's role upon successful login; otherwise, displays an error message.</returns>
         private static void EnterVolunteerSystem()
         {
             try

@@ -2,6 +2,9 @@
 {
     public interface ICall
     {
+        /// <summary>
+        /// Interface for Call-related functionalities, including retrieving call information, handling call statuses, and updates.
+        /// </summary>
         int[] GetCallQuantitiesByStatus();
         IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallInListFields? fieldFilter = null, object? filterValue = null, BO.Enums.CallInListFields? sortField = null);
         BO.Call GetCallDetails(int callId);

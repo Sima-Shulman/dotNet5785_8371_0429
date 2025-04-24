@@ -2,6 +2,9 @@
 using static BO.Enums;
 namespace BO;
 
+/// <summary>
+/// Represents a simplified view of a volunteer for list display, including status and basic call information.
+/// </summary>
 public class VolunteerInList
 {
     public int Id { get; set; }

@@ -1,7 +1,10 @@
 ﻿using Helpers;
 using static BO.Enums;
 namespace BO;
-
+/// <summary>
+/// This class represents a call in the system, including its basic details such as ID, type, status, 
+/// time-related information, the last volunteer assigned, and the total number of assignments.
+/// </summary>
 public class CallInList
 {
     public int? Id {  get; set; }

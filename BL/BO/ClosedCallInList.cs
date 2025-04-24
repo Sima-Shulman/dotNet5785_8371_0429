@@ -1,7 +1,10 @@
 ﻿using Helpers;
 using static BO.Enums;
 namespace BO;
-
+/// <summary>
+/// This class represents a closed call in the system, including details such as the call's ID, type, address, time-related
+/// information, and the type of end event, if applicable.
+/// </summary>
 public class ClosedCallInList
 {
     public int Id   { get; set; }

@@ -4,9 +4,18 @@ using static BO.Enums;
 
 namespace Helpers;
 
+/// <summary>
+/// A static helper class that provides various operations related to Calls,
+/// such as calculating their status, converting data objects, validation, and periodic updates.
+/// </summary>
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get;
+    /// <summary>
+    /// Calculates the status of a given call based on its assignments and timing.
+    /// </summary>
+    /// <param name="call">The call to evaluate.</param>
+    /// <returns>The calculated status of the call.</returns>
     public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
     {
         var assignments = s_dal.Assignment.ReadAll(a => a.CallId == call.Id)
@@ -70,6 +79,13 @@ internal static class CallManager
     //        else return BO.Enums.CallStatus.opened;//it still not expired and not in risk.
     //    }
     //}
+
+
+    /// <summary>
+    /// Converts a list of DO.Call objects to a list of BO.CallInList objects.
+    /// </summary>
+    /// <param name="calls">The collection of DO.Call objects.</param>
+    /// <returns>A list of BO.CallInList with enriched information.</returns>
     public static IEnumerable<BO.CallInList> ConvertToCallInList(IEnumerable<DO.Call> calls)
     {
         return calls.Select(call =>
@@ -95,7 +111,11 @@ internal static class CallManager
         }).ToList();
 
     }
-
+    /// <summary>
+    /// Validates the format and content of a BO.Call object.
+    /// </summary>
+    /// <param name="call">The BO.Call to validate.</param>
+    /// <exception cref="BO.BlInvalidFormatException">Thrown when any validation check fails.</exception>
     public static void ValidateCall(BO.Call call)
     {
         if (call is null)
@@ -130,7 +150,11 @@ internal static class CallManager
         if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
             throw new BO.BlInvalidFormatException("Invalid assignments list!");
     }
-
+    /// <summary>
+    /// Converts a BO.Call object into a DO.Call object.
+    /// </summary>
+    /// <param name="call">The BO.Call object to convert.</param>
+    /// <returns>A DO.Call representation of the call.</returns>
     public static DO.Call ConvertBoCallToDoCall(BO.Call call)
     {
         return new DO.Call
@@ -145,6 +169,11 @@ internal static class CallManager
             MaxFinishTime = call.MaxFinishTime,
         };
     }
+    /// <summary>
+    /// Periodically updates calls that should be marked as expired based on a time window.
+    /// </summary>
+    /// <param name="oldClock">The previous timestamp before update.</param>
+    /// <param name="newClock">The current timestamp after update.</param>
     internal static void PeriodicCallUpdates(DateTime oldClock, DateTime newClock)
     {
         List<DO.Call> expiredCalls = s_dal.Call.ReadAll(c => c.MaxFinishTime > newClock).ToList();

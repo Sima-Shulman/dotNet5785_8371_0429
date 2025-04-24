@@ -2,6 +2,9 @@
 {
     public interface IVolunteer
     {
+        /// <summary>
+        /// Interface for Volunteer-related functionalities, such as managing volunteers and accessing their details.
+        /// </summary>
         BO.Enums.Role EnterSystem(string name, string pass);
         IEnumerable<BO.VolunteerInList> GetVolunteersList(bool? isActive = null, BO.Enums.VolunteerInListFields? fieldFilter = null);
         BO.Volunteer GetVolunteerDetails(int id);

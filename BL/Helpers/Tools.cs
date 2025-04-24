@@ -13,6 +13,13 @@ namespace Helpers;
 
 internal static class Tools
 {
+    /// <summary>
+    /// Converts an object of type T to a string containing all its property names and values.
+    /// Skips the "Password" property and handles enumerable values.
+    /// </summary>
+    /// <typeparam name="T">The type of the object.</typeparam>
+    /// <param name="t">The object instance.</param>
+    /// <returns>A string representation of the object properties.</returns>
     public static string ToStringProperty<T>(this T t)
     {
         if (t == null)
@@ -61,7 +68,15 @@ internal static class Tools
     private static readonly string apiKey = "pk.f24f6da7cdb2f8ae9a502c6d81376251";
     private static readonly string distanceApiKey = "GfUGNG16Gk0olnqAUkAZRizSgkclwyPt";
 
-
+    /// <summary>
+    /// Calculates the distance between two geographic coordinates using the specified type.
+    /// </summary>
+    /// <param name="latitudeV">Latitude of the first location (nullable).</param>
+    /// <param name="longitudeV">Longitude of the first location (nullable).</param>
+    /// <param name="latitudeC">Latitude of the second location.</param>
+    /// <param name="longitudeC">Longitude of the second location.</param>
+    /// <param name="type">Type of distance to calculate (Aerial, Walking, Driving).</param>
+    /// <returns>The distance in kilometers.</returns>
     public static double CalculateDistance(double? latitudeV, double? longitudeV, double latitudeC, double longitudeC, DO.DistanceTypes type)
     {
         if (latitudeV == null || longitudeV == null) return 0;
@@ -75,7 +90,15 @@ internal static class Tools
             _ => throw new ArgumentException("Invalid distance type", nameof(type))
         };
     }
-
+    /// <summary>
+    /// Calls TomTom API to calculate route distance using a given travel mode.
+    /// </summary>
+    /// <param name="latitudeV">Starting latitude.</param>
+    /// <param name="longitudeV">Starting longitude.</param>
+    /// <param name="latitudeC">Destination latitude.</param>
+    /// <param name="longitudeC">Destination longitude.</param>
+    /// <param name="travelMode">Mode of travel (e.g., car, pedestrian).</param>
+    /// <returns>Distance in kilometers. Returns double.MaxValue on failure.</returns>
     private static double GetRouteDistance(double latitudeV, double longitudeV, double latitudeC, double longitudeC, string travelMode)
     {
         using HttpClient client = new HttpClient();
@@ -104,7 +127,14 @@ internal static class Tools
             return double.MaxValue;
         }
     }
-
+    /// <summary>
+    /// Calculates aerial distance (Haversine formula) between two points.
+    /// </summary>
+    /// <param name="lat1">Latitude of point 1.</param>
+    /// <param name="lon1">Longitude of point 1.</param>
+    /// <param name="lat2">Latitude of point 2.</param>
+    /// <param name="lon2">Longitude of point 2.</param>
+    /// <returns>Distance in kilometers.</returns>
     private static double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371;
@@ -116,7 +146,14 @@ internal static class Tools
         double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
-
+    /// <summary>
+    /// Calculates aerial distance (Haversine formula) between two points.
+    /// </summary>
+    /// <param name="lat1">Latitude of point 1.</param>
+    /// <param name="lon1">Longitude of point 1.</param>
+    /// <param name="lat2">Latitude of point 2.</param>
+    /// <param name="lon2">Longitude of point 2.</param>
+    /// <returns>Distance in kilometers.</returns>
     private static double DegreesToRadians(double degrees) => degrees * Math.PI / 180;
 
 
@@ -257,6 +294,28 @@ internal static class Tools
     ///  private static string apiKey = "PK.83B935C225DF7E2F9B1ee90A6B46AD86";
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /// <summary>
+    /// Retrieves coordinates (latitude and longitude) for a given address using LocationIQ API.
+    /// </summary>
+    /// <param name="address">The address for which coordinates are requested.</param>
+    /// <returns>A tuple containing latitude and longitude of the address.</returns>
+    /// <exception cref="Exception">Thrown when the address is invalid, API call fails, or coordinates cannot be parsed.</exception>
     public static (double, double) GetCoordinatesFromAddress(string address)
     {
         using var client = new HttpClient();

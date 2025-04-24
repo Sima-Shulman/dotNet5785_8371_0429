@@ -2,6 +2,9 @@
 using static BO.Enums;
 namespace BO;
 
+/// <summary>
+/// Represents a volunteer, including personal details, role, location, preferences, and current activity status.
+/// </summary>
 public class Volunteer
 {
     public int Id { get; init; }

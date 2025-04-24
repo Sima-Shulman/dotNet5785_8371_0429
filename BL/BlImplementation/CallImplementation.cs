@@ -7,12 +7,23 @@ using System.Linq;
 
 
 namespace BlImplementation;
+/// <summary>
+/// Provides business logic operations for managing calls in the system.
+/// This includes operations such as retrieving, creating, updating, and deleting calls,
+/// as well as assigning volunteers and changing call statuses.
+/// </summary>
 
 internal class CallImplementation : BlApi.ICall
 {
 
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-
+    /// <summary>
+    /// Returns an array representing the number of calls per status.
+    /// </summary>
+    /// <returns>
+    /// An array of integers where each index corresponds to a call status 
+    /// and the value at that index represents the number of calls in that status.
+    /// </returns>
     public int[] GetCallQuantitiesByStatus()
     {
         try
@@ -38,7 +49,15 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Returns a list of calls in a summarized form, with optional filtering and sorting.
+    /// </summary>
+    /// <param name="fieldFilter">Optional field to filter calls by.</param>
+    /// <param name="filterValue">The value to filter by.</param>
+    /// <param name="sortField">Optional field to sort the results by.</param>
+    /// <returns>
+    /// An IEnumerable of <see cref="BO.CallInList"/> containing the filtered and sorted calls.
+    /// </returns>
     public IEnumerable<BO.CallInList> GetCallsList(BO.Enums.CallInListFields? fieldFilter = null, object? filterValue = null, BO.Enums.CallInListFields? sortField = null)
     {
         try
@@ -64,6 +83,13 @@ internal class CallImplementation : BlApi.ICall
         }
     }
 
+    /// <summary>
+    /// Returns the details of a specific call by its ID.
+    /// </summary>
+    /// <param name="callId">The ID of the call to retrieve.</param>
+    /// <returns>
+    /// A <see cref="BO.Call"/> object representing the call with the given ID.
+    /// </returns>
     public BO.Call GetCallDetails(int callId)
     {
         try
@@ -109,6 +135,10 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+    /// <summary>
+    /// Updates the details of an existing call.
+    /// </summary>
+    /// <param name="boCall">The <see cref="BO.Call"/> object containing the updated details.</param>
     public void UpdateCallDetails(BO.Call boCall)
     {
         try
@@ -145,6 +175,10 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+    /// <summary>
+    /// Deletes a specific call by its ID.
+    /// </summary>
+    /// <param name="callId">The ID of the call to delete.</param>
 
     public void DeleteCall(int callId)
     {
@@ -173,6 +207,10 @@ internal class CallImplementation : BlApi.ICall
         }
     }
 
+    /// <summary>
+    /// Adds a new call to the system.
+    /// </summary>
+    /// <param name="boCall">The <see cref="BO.Call"/> object to add.</param>
 
     public void AddCall(BO.Call boCall)
     {
@@ -203,7 +241,13 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves a list of closed calls handled by a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer to retrieve closed calls for.</param>
+    /// <param name="callTypeFilter">Optional filter to select specific call types.</param>
+    /// <param name="sortField">Optional field to sort the calls by.</param>
+    /// <returns>An IEnumerable of ClosedCallInList representing the closed calls handled by the volunteer.</returns>
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null)
     {
         //אני צריכה לבדוק שיש כזה וונולטיר ואם לא לזרוק שגיאה??
@@ -244,7 +288,13 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
+    /// <summary>
+    /// Retrieves a list of open calls for a specific volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer to retrieve open calls for.</param>
+    /// <param name="callTypeFilter">Optional filter to select specific call types.</param>
+    /// <param name="sortField">Optional field to sort the calls by.</param>
+    /// <returns>An IEnumerable of OpenCallInList representing the open calls available for the volunteer.</returns>
     public IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null)
     {
         try
@@ -301,6 +351,11 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+    /// <summary>
+    /// Marks a call as canceled by a volunteer or manager.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer requesting the cancellation.</param>
+    /// <param name="assignmentId">The ID of the assignment to cancel.</param>
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
         try
@@ -330,9 +385,11 @@ internal class CallImplementation : BlApi.ICall
         }
     }
 
-
-
-
+    /// <summary>
+    /// Marks a call as completed by a volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer marking the call as completed.</param>
+    /// <param name="assignmentId">The ID of the assignment to mark as completed.</param>
     public void MarkCallCompletion(int volunteerId, int assignmentId)
     {
         try
@@ -359,7 +416,11 @@ internal class CallImplementation : BlApi.ICall
         }
     }
 
-
+    /// <summary>
+    /// Selects a call for treatment by a volunteer.
+    /// </summary>
+    /// <param name="volunteerId">The ID of the volunteer selecting the call for treatment.</param>
+    /// <param name="callId">The ID of the call to be selected for treatment.</param>
     public void SelectCallForTreatment(int volunteerId, int callId)
     {
         try

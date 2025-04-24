@@ -57,6 +57,9 @@ public class Enums
         OpenedAtRisk
     }
 
+    /// <summary>
+    /// Enum representing the fields of a volunteer in list view.
+    /// </summary>
     public enum VolunteerInListFields
     {
         Id,
@@ -67,7 +70,9 @@ public class Enums
         CallId,
         CallType,
     }
-
+    /// <summary>
+    /// Enum representing the fields of a call in list view.
+    /// </summary>
     public enum CallInListFields
     {
         CallId,
@@ -79,7 +84,9 @@ public class Enums
         CallStatus,
         TotalAssignments,
     }
-
+    /// <summary>
+    /// Enum representing the fields of an open call in list view.
+    /// </summary>
     public enum OpenCallInListFields
     {
         Id,
@@ -90,7 +97,9 @@ public class Enums
         MaxFinishTime,
         CallDistance,
     }
-
+    /// <summary>
+    /// Enum representing the fields of a closed call in list view.
+    /// </summary>
     public enum ClosedCallInListFields
     {
         Id,
@@ -101,7 +110,9 @@ public class Enums
         EndTime,
         EndType,
     }
-
+    /// <summary>
+    /// Enum representing time units for durations or intervals.
+    /// </summary>
     public enum TimeUnit
     {
         Minute,
