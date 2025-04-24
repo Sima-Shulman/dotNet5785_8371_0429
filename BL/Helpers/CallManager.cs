@@ -11,6 +11,8 @@ namespace Helpers;
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get;
+    internal static ObserverManager Observers = new(); //stage 5 
+
     /// <summary>
     /// Calculates the status of a given call based on its assignments and timing.
     /// </summary>
@@ -141,8 +143,8 @@ internal static class CallManager
                 s_dal.Assignment.Create(new DO.Assignment(
                 CallId: call.Id,
                 VolunteerId: 0,
-                StartTime: ClockManager.Now,
-                EndTime: ClockManager.Now,
+                StartTime: AdminManager.Now,
+                EndTime: AdminManager.Now,
                 EndType: (DO.EndType)BO.Enums.EndType.Expired
             ));
         });

@@ -12,6 +12,8 @@ namespace Helpers;
 internal static class VolunteerManager
 {
     private static IDal s_dal = Factory.Get;
+    internal static ObserverManager Observers = new(); //stage 5 
+
     /// <summary>
     /// Converts DO.Volunteer to BO.Volunteer with additional calculated fields.
     /// </summary>
@@ -135,7 +137,7 @@ internal static class VolunteerManager
     internal static bool VerifyPassword(string enteredPassword, string storedPassword)
     {
         var encryptedPassword = EncryptPassword(enteredPassword);
-        return encryptedPassword == storedPassword /*|| enteredPassword==storedPassword*/;
+        return encryptedPassword == storedPassword;
     }
 
     /// <summary>

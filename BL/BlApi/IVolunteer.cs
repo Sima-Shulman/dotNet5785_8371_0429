@@ -1,6 +1,6 @@
 ﻿namespace BlApi
 {
-    public interface IVolunteer
+    public interface IVolunteer: IObservable //stage 5 הרחבת ממשק
     {
         /// <summary>
         /// Interface for Volunteer-related functionalities, such as managing volunteers and accessing their details.

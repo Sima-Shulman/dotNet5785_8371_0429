@@ -7,6 +7,8 @@ namespace Helpers;
 internal static class AssignmentManager
 {
     private static IDal s_dal = Factory.Get;
+    //internal static ObserverManager Observers = new(); //stage 5 
+
     /// <summary>
     /// Periodically updates assignments that should be marked as expired based on a time window.
     /// </summary>
@@ -24,7 +26,7 @@ internal static class AssignmentManager
                 assignments.ForEach(assignment =>
                     s_dal.Assignment.Update(assignment with
                     {
-                        EndTime = ClockManager.Now,
+                        EndTime = AdminManager.Now,
                         EndType = (DO.EndType)BO.Enums.EndType.Expired
                     }));
         });

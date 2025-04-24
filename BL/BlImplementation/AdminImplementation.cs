@@ -17,7 +17,7 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current DateTime of the system.</returns>
     public DateTime GetClock()
     {
-        return ClockManager.Now;
+        return AdminManager.Now;
     }
     /// <summary>
     /// Retrieves the current risk time range configured in the system.
@@ -25,16 +25,18 @@ internal class AdminImplementation : IAdmin
     /// <returns>A TimeSpan representing the risk time range.</returns>
     public TimeSpan GetRiskTimeRange()
     {
-        return _dal.Config.RiskRange;
+        return AdminManager.RiskRange;
     }
     /// <summary>
     /// Initializes the database with default test data and resets the system clock.
     /// </summary>
     public void InitializeDatabase()
     {
-        _dal.ResetDB();
-        DalTest.Initialization.Do();
-        ClockManager.UpdateClock(ClockManager.Now);
+        //_dal.ResetDB();
+        //DalTest.Initialization.Do();
+        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.InitializeDB();
+
     }
     /// <summary>
     /// Promotes the system clock forward by the specified time unit.
@@ -45,24 +47,25 @@ internal class AdminImplementation : IAdmin
     {
         DateTime newClock = timeUnit switch
         {
-            TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
-            TimeUnit.Hour => ClockManager.Now.AddHours(1),
-            TimeUnit.Day => ClockManager.Now.AddDays(1),
-            TimeUnit.Month => ClockManager.Now.AddMonths(1),
-            TimeUnit.Year => ClockManager.Now.AddYears(1),
+            TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
+            TimeUnit.Hour => AdminManager.Now.AddHours(1),
+            TimeUnit.Day => AdminManager.Now.AddDays(1),
+            TimeUnit.Month => AdminManager.Now.AddMonths(1),
+            TimeUnit.Year => AdminManager.Now.AddYears(1),
             _ => throw new BO.BlInvalidFormatException(nameof(timeUnit) + "Invalid time unit")
         };
 
-        ClockManager.UpdateClock(newClock);
+        AdminManager.UpdateClock(newClock);
     }
     /// <summary>
     /// Resets the database and updates the system clock.
     /// </summary>
     public void ResetDatabase()
     {
-        _dal.Config.Reset();
-        _dal.ResetDB();
-        ClockManager.UpdateClock(ClockManager.Now);
+        //_dal.Config.Reset();
+        //_dal.ResetDB();
+        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ResetDB();
     }
     /// <summary>
     /// Sets the system's risk time range.
@@ -70,6 +73,16 @@ internal class AdminImplementation : IAdmin
     /// <param name="riskTimeRange">The new TimeSpan value for the risk time range.</param>
     public void SetRiskTimeRange(TimeSpan riskTimeRange)
     {
-        _dal.Config.RiskRange = riskTimeRange;
+        AdminManager.RiskRange = riskTimeRange;
     }
+    #region Stage 5
+    public void AddClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+    AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+   AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+    AdminManager.ConfigUpdatedObservers -= configObserver;
+    #endregion Stage 5
 }

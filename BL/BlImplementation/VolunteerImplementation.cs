@@ -145,6 +145,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -178,6 +180,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id).Any())
                 throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls.");
             _dal.Volunteer.Delete(id);
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5                                                    
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -213,11 +217,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 boVolunteer.Latitude = null;
                 boVolunteer.Longitude = null;
             }
-
-
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
-
             _dal.Volunteer.Create(doVolunteer);
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
+
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -232,4 +235,15 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
+
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
 }

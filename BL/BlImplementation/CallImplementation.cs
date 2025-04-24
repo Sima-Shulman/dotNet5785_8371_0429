@@ -143,16 +143,12 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            /////////////צריך לבדוק את זה? כי בעיקרון זה העבודה של  הפונקציה אופדייט אבל אם לא התוכנית תקרוס כשננסה לגשת לאחד הערכים שלו
-            ////וגם פה מה עדיף לבדוק כל פעם אם הכתובת שונתה אבל לשלוף שוב מהדאל או בכל מקרה לחשב קורדיננטות מחדש?
-            /////פה
             var existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
             //only if the user wants to update th address of the call
             if (boCall.FullAddress != existingCall.FullAddress)
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-                //if (latitude is null || longitude is null)
-                //    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
+
                 boCall.Latitude = latitude;
                 boCall.Longitude = longitude;
             }
@@ -165,6 +161,9 @@ internal class CallImplementation : BlApi.ICall
             CallManager.ValidateCall(boCall);
             DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Update(updatedCall);
+            CallManager.Observers.NotifyItemUpdated(updatedCall.Id);  //stage 5
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -175,11 +174,11 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+
     /// <summary>
     /// Deletes a specific call by its ID.
     /// </summary>
     /// <param name="callId">The ID of the call to delete.</param>
-
     public void DeleteCall(int callId)
     {
         try
@@ -188,6 +187,7 @@ internal class CallImplementation : BlApi.ICall
             if (!_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.Opened)
                 throw new BO.BlDeletionException($"Cannot delete call with ID={callId} as they are handling calls.");
             _dal.Call.Delete(callId);
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -221,12 +221,11 @@ internal class CallImplementation : BlApi.ICall
                 throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exist");
             CallManager.ValidateCall(boCall);
             var (latitude, longitude) = Tools.GetCoordinatesFromAddress((string)boCall.FullAddress);
-            //if (latitude is null || longitude is null)
-            //    throw new BO.BlInvalidFormatException($"Invalid address: {boCall.FullAddress}");
             boCall.Latitude = latitude;
             boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
+            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -467,6 +466,14 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-
-
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    CallManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    CallManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    CallManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    CallManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
 }

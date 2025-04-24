@@ -1,6 +1,6 @@
 ﻿namespace BlApi
 {
-    public interface ICall
+    public interface ICall: IObservable //stage 5 הרחבת ממשק
     {
         /// <summary>
         /// Interface for Call-related functionalities, including retrieving call information, handling call statuses, and updates.
