@@ -61,7 +61,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
                 BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
                 BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),/// למה כתוב שצריך פונקציה נפרדת??
+                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
                 _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
             } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
             return sortedVolunteers;
@@ -127,8 +127,6 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
             {
                 var (latitude, longitude) = Helpers.Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-                //if (latitude is null || longitude is null)
-                //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
                 boVolunteer.Latitude = latitude;
                 boVolunteer.Longitude = longitude;
             }
@@ -143,7 +141,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                     boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
             }
             else
-                boVolunteer.Password =doVolunteer.Password;//if th password is not meant to be updated.
+                boVolunteer.Password = doVolunteer.Password;//if th password is not meant to be updated.
 
             DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Update(updatedVolunteer);
@@ -203,13 +201,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);
             if (string.IsNullOrEmpty(boVolunteer.Password))
                 boVolunteer.Password = VolunteerManager.GenerateStrongPassword();
-            //else
             boVolunteer.Password = VolunteerManager.EncryptPassword(boVolunteer.Password);
             if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
             {
                 var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boVolunteer.FullAddress!);
-                //if (latitude is null || longitude is null)
-                //    throw new BO.BlInvalidFormatException($"Invalid address: {boVolunteer.FullAddress}");
                 boVolunteer.Latitude = latitude;
                 boVolunteer.Longitude = longitude;
             }

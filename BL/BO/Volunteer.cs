@@ -11,7 +11,7 @@ public class Volunteer
     public string FullName { get; set; }
     public string CellphoneNumber { get; set; }
     public string Email { get; set; }
-    public string? Password { get; set; }/////////////////////////לשים לב לתוספת
+    public string? Password { get; set; }
     public string? FullAddress { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }

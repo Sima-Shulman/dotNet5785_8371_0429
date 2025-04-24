@@ -98,10 +98,6 @@ internal static class VolunteerManager
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
         var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
-        //foreach(var a in currentVolunteerAssignments)
-        //{
-        //    Console.WriteLine(a.EndType);
-        //}
         var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
         var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
         var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
@@ -129,6 +125,7 @@ internal static class VolunteerManager
     /// <returns>List of summarized business object volunteers.</returns>
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
         => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
+
     /// <summary>
     /// Verifies a raw password against a stored (hashed) password.
     /// </summary>
@@ -140,6 +137,7 @@ internal static class VolunteerManager
         var encryptedPassword = EncryptPassword(enteredPassword);
         return encryptedPassword == storedPassword /*|| enteredPassword==storedPassword*/;
     }
+
     /// <summary>
     /// Hashes a password using SHA-256.
     /// </summary>
@@ -151,6 +149,7 @@ internal static class VolunteerManager
         var hashedBytes = sha256?.ComputeHash(Encoding.UTF8.GetBytes(password));
         return Convert.ToBase64String(hashedBytes!);
     }
+
     /// <summary>
     /// Generates a strong, random 12-character password.
     /// </summary>
@@ -161,6 +160,7 @@ internal static class VolunteerManager
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*";
         return new string(Enumerable.Repeat(chars, 12).Select(s => s[random.Next(s.Length)]).ToArray());
     }
+
     /// <summary>
     /// Validates a 9-digit Israeli ID using checksum algorithm.
     /// </summary>
@@ -180,6 +180,7 @@ internal static class VolunteerManager
         }
         return sum % 10 == 0;
     }
+
     /// <summary>
     /// Validates all critical fields of a volunteer object.
     /// Throws BO.BlInvalidFormatException if invalid.
@@ -198,45 +199,14 @@ internal static class VolunteerManager
 
         if (!Regex.IsMatch(boVolunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             throw new BO.BlInvalidFormatException("Invalid email!");
-        //var doVolunteer = s_dal.Volunteer.Read(boVolunteer.Id);
-
-        //if (!string.IsNullOrEmpty(boVolunteer.Password))
-        //Console.WriteLine(boVolunteer.Password.Length < 8);
-        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[A-Z]"));
-        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[0-9]"));
-        //Console.WriteLine(!Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]"));
-        //Console.WriteLine(!VerifyPassword(boVolunteer.Password, doVolunteer.Password!));
         if (!string.IsNullOrEmpty(boVolunteer.Password))
         {
-            if (/*!VerifyPassword(boVolunteer.Password, doVolunteer.Password!) ||*/
-                (boVolunteer.Password.Length < 8 &&
+            if ((boVolunteer.Password.Length < 8 &&
                  !Regex.IsMatch(boVolunteer.Password, "[A-Z]") &&
                  !Regex.IsMatch(boVolunteer.Password, "[0-9]") &&
                  !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]")))
                 throw new BO.BlInvalidFormatException("Invalid password!");
         }
-        //    else
-        //    {
-        //        if (boVolunteer.Password.Length < 8 ||
-        //                       !Regex.IsMatch(boVolunteer.Password, "[A-Z]") ||
-        //                       !Regex.IsMatch(boVolunteer.Password, "[0-9]") ||
-        //                       !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]"))
-        //            throw new BO.BlInvalidFormatException("Invalid password!");
-
-        //    }
-        //}328178371
-
-        //var doVolunteer = s_dal.Volunteer.Read(boVolunteer.Id);
-        //if ((boVolunteer.Password.Length < 8 ||
-        //     !Regex.IsMatch(boVolunteer.Password, "[A-Z]") ||
-        //     !Regex.IsMatch(boVolunteer.Password, "[0-9]") ||
-        //     !Regex.IsMatch(boVolunteer.Password, "[!@#$%^&*]")) && !VerifyPassword(boVolunteer.Password, doVolunteer.Password!))
-        //    throw new BO.BlInvalidFormatException("Invalid password!");
-
-
-        //if (!string.IsNullOrEmpty(boVolunteer.FullAddress))
-        //    throw new BO.BlInvalidFormatException("Invalid address!");
-
         if (boVolunteer.Role != BO.Enums.Role.Volunteer && boVolunteer.Role != BO.Enums.Role.Manager)
             throw new BO.BlInvalidFormatException("Invalid role!");
 
@@ -255,6 +225,7 @@ internal static class VolunteerManager
         if (boVolunteer.TotalExpiredCalls < 0)
             throw new BO.BlInvalidFormatException("Invalid sum of expired calls!");
     }
+
     /// <summary>
     /// Checks if a password meets minimum strength criteria.
     /// </summary>

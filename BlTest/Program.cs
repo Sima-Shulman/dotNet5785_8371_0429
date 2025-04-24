@@ -333,11 +333,11 @@ namespace BlTest
         {
 
             Console.Write("Enter Call Description: ");
-            string? description = Console.ReadLine();////
+            string? description = Console.ReadLine();
             Console.Write("Enter Call type(Transportation, CarAccident, VehicleBreakdown, SearchAndRescue): ");
             BO.Enums.CallType callType = Enum.TryParse(Console.ReadLine(), out BO.Enums.CallType parsedType) ? parsedType : throw new ArgumentException("Invalid call type.");
             Console.Write("Enter Full Address: ");
-            string address = Console.ReadLine();///////////////
+            string address = Console.ReadLine();
 
             var newCall = new BO.Call
             {
@@ -385,15 +385,13 @@ namespace BlTest
             try
             {
                 var callToUpdate = s_bl.Call.GetCallDetails(callId);
-                /////////////צריך לבדוק את זה? כי בעיקרון זה העבודה של  הפונקציה אופדייט אבל אם לא התוכנית תקרוס כשננסה לגשת לאחד הערכים שלו
-                ///באימפלמנטיישן
                 if (callToUpdate == null)
                     throw new BO.BlDoesNotExistException($"Call with ID{callId} does not exist!");
                 var newUpdatedCall = new BO.Call
                 {
                     Id = callId,
                     Description = !string.IsNullOrWhiteSpace(description) ? description : callToUpdate.Description,
-                    FullAddress = !string.IsNullOrWhiteSpace(address) ? address : callToUpdate.FullAddress/*"No Address"*/,
+                    FullAddress = !string.IsNullOrWhiteSpace(address) ? address : callToUpdate.FullAddress,
                     OpeningTime = callToUpdate.OpeningTime,
                     MaxFinishTime = (maxFinishTime.HasValue ? DateTime.Now.Date + maxFinishTime.Value : callToUpdate.MaxFinishTime),
                     CallType = callType ?? callToUpdate.CallType
@@ -406,6 +404,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Deletes a call from the system based on a user-provided Call ID.
         /// </summary>
@@ -431,6 +430,7 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+
         /// <summary>
         /// Retrieves and displays a list of all closed calls that were handled by a specific volunteer.
         /// </summary>
@@ -454,6 +454,7 @@ namespace BlTest
             }
 
         }
+
         /// <summary>
         /// Retrieves and displays a list of open calls available for a specific volunteer.
         /// </summary>
@@ -479,6 +480,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Retrieves and displays the quantity of calls grouped by their current status.
         /// </summary>
@@ -491,6 +493,7 @@ namespace BlTest
                 Console.WriteLine(amount);
             }
         }
+
         /// <summary>
         /// Marks a call as canceled by identifying the relevant assignment using the volunteer and assignment IDs.
         /// </summary>
@@ -501,9 +504,6 @@ namespace BlTest
         {
             Console.Write("Enter Volunteer ID: ");
             int.TryParse(Console.ReadLine(), out int volunteerId);
-            ///חשבתי שאין סיבה שלמשתמש יהיה את המזהה של ההשמה אלא רק של הקריאה שבטיפולו 
-            ///ולכן המשתמש מכניס את המזהה שלו ושל הקריאה והתוכנית מזהה לפי זה את ההשמה. 
-            ///אבל מהBL אין לי דרך לקבל השמות????????????
             Console.Write("Enter Assignment ID: ");
             int.TryParse(Console.ReadLine(), out int assignmentId);
 
@@ -518,6 +518,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Marks a call as completed by identifying the relevant assignment using the volunteer and assignment IDs.
         /// </summary>
@@ -525,9 +526,7 @@ namespace BlTest
         /// <param name="assignmentId">The ID of the assignment to complete.</param>
         /// <returns>Displays a success message if the call is marked as completed; otherwise, displays an error message.</returns>
         private static void MarkCallCompletion()
-        { ///חשבתי שאין סיבה שלמשתמש יהיה את המזהה של ההשמה אלא רק של הקריאה שבטיפולו 
-          ///ולכן המשתמש מכניס את המזהה שלו ושל הקריאה והתוכנית מזהה לפי זה את ההשמה. 
-          ///אבל מהBL אין לי דרך לקבל השמות????????????
+        {
             Console.Write("Enter Volunteer ID: ");
             int.TryParse(Console.ReadLine(), out int volunteerId);
             Console.Write("Enter Assignment ID: ");
@@ -622,6 +621,7 @@ namespace BlTest
                 Console.WriteLine("Invalid input. Please enter a valid number.");
             }
         }
+
         /// <summary>
         /// Retrieves and displays a list of volunteers with optional filtering by active status and sorting.
         /// </summary>
@@ -651,6 +651,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Adds a new volunteer to the system based on user-provided input.
         /// </summary>
@@ -703,6 +704,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Updates the details of an existing volunteer based on user input.
         /// </summary>
@@ -776,6 +778,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Deletes a volunteer from the system based on their ID.
         /// </summary>
@@ -795,6 +798,7 @@ namespace BlTest
                 Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
             }
         }
+
         /// <summary>
         /// Logs a volunteer into the system using their name and password.
         /// </summary>
@@ -819,141 +823,3 @@ namespace BlTest
         }
     }
 }
-
-
-//private static void GetVolunteersList()
-//{
-//    Console.WriteLine("Enter filter for active volunteers (optional, true/false): ");
-//    string? isActiveInput = Console.ReadLine();
-//    bool? isActiveFilter = isActiveInput != "" ? bool.TryParse(isActiveInput, out bool isActive) ? isActive : (bool?)null : null;
-
-//    Console.WriteLine("Enter sort field for volunteers (optional): ");
-//    string? sortFieldInput = Console.ReadLine();
-//    BO.Enums.VolunteerInListFields? sortField = sortFieldInput != "" ? Enum.TryParse(sortFieldInput, out BO.Enums.VolunteerInListFields field) ? field : (BO.Enums.VolunteerInListFields?)null : null;
-
-//    try
-//    {
-//        var volunteers = s_bl.Volunteer.GetVolunteersList(isActiveFilter, sortField);
-//        foreach (var volunteer in volunteers)
-//        {
-//            Console.WriteLine(volunteer);
-//        }
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}
-
-//private static void AddVolunteer()
-//{
-//    Console.WriteLine("Enter Volunteer details:");
-//    BO.Volunteer newVolunteer = new BO.Volunteer();
-
-//    // Collect volunteer details from user
-//    Console.Write("Full Name: ");
-//    newVolunteer.FullName = Console.ReadLine();
-
-//    Console.Write("Address: ");
-//    newVolunteer.FullAddress = Console.ReadLine();
-
-//    // You can add other necessary fields here (like Phone Number, Role, etc.)
-
-//    try
-//    {
-//        s_bl.Volunteer.AddVolunteer(newVolunteer);
-//        Console.WriteLine("Volunteer added successfully.");
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}
-
-//private static void UpdateVolunteerDetails()
-//{
-//    Console.Write("Enter Requester ID: ");
-//    int requesterId = int.Parse(Console.ReadLine());
-
-//    Console.Write("Enter Volunteer ID to Update: ");
-//    int volunteerId = int.Parse(Console.ReadLine());
-
-//    Console.WriteLine("Enter new details for Volunteer:");
-//    BO.Volunteer updatedVolunteer = new BO.Volunteer();
-
-//    // Collect updated volunteer details from user
-//    Console.Write("Full Name: ");
-//    updatedVolunteer.FullName = Console.ReadLine();
-
-//    Console.Write("Address: ");
-//    updatedVolunteer.FullAddress = Console.ReadLine();
-
-//    // You can add other fields here (like Phone Number, Role, etc.)
-
-//    try
-//    {
-//        s_bl.Volunteer.UpdateVolunteerDetails(requesterId, updatedVolunteer);
-//        Console.WriteLine("Volunteer details updated successfully.");
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}
-
-//private static void DeleteVolunteer()
-//{
-//    Console.Write("Enter Volunteer ID to Delete: ");
-//    int volunteerId = int.Parse(Console.ReadLine());
-
-//    try
-//    {
-//        s_bl.Volunteer.DeleteVolunteer(volunteerId);
-//        Console.WriteLine("Volunteer deleted successfully.");
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}
-
-
-//private static void EnterVolunteerSystem()
-//{
-//    Console.Write("Enter Volunteer Name: ");
-//    string name = Console.ReadLine();
-
-//    Console.Write("Enter Password: ");
-//    string password = Console.ReadLine();
-
-//    try
-//    {
-//        BO.Enums.Role role = s_bl.Volunteer.EnterSystem(name, password);
-//        Console.WriteLine($"Welcome, {name}. Your role is: {role}");
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}
-
-
-//private static void EnterVolunteerSystem()
-//{
-//    Console.Write("Enter Volunteer ID (Tz): ");
-//    string tz = Console.ReadLine();
-
-//    try
-//    {
-//        // המערכת תוודא שהמתנדב קיים בעזרת תעודת הזהות
-//        int volunteerId = s_bl.Volunteer.EnterSystemByTz(tz);
-//        Console.WriteLine($"Volunteer found! ID: {volunteerId}");
-
-//        // לאחר שהמתנדב נמצא, נבקש את פרטי המתנדב
-//        GetVolunteerDetailsAfterLogin(volunteerId);
-//    }
-//    catch (Exception ex)
-//    {
-//        Console.WriteLine($"Error: {ex.GetType().Name}, Message: {ex.Message}");
-//    }
-//}

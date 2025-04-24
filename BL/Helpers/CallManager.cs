@@ -50,37 +50,6 @@ internal static class CallManager
         }
         return BO.Enums.CallStatus.Opened;
     }
-
-    //        if (lastAssignment.EndType is null)//means that that treatment is not completed.
-    //        {
-    //            if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)//if the dead-line is over.
-    //                return BO.Enums.CallStatus.expired;
-    //            else if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)//if the call is in the risk range.
-    //                return BO.Enums.CallStatus.treated_at_risk;
-    //            else return BO.Enums.CallStatus.is_treated;//not in risk and not expired.
-    //        }
-    //        else if (lastAssignment.EndType == DO.EndType.was_treated)//means the treatment was completed.
-    //            return BO.Enums.CallStatus.closed;
-    //        else//the treatment wasn't completed.
-    //        {
-    //            if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)
-    //                return BO.Enums.CallStatus.expired;//if the dead-line is over.
-    //            else if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)
-    //                return BO.Enums.CallStatus.opened_at_risk;//if it was not completed but the call is in the risk range.
-    //            else return BO.Enums.CallStatus.opened;//it was not completed but still not expired and not in risk.
-    //        }
-    //    }
-    //    else// there is no assignments to this call
-    //    {
-    //        if (call.Max_finish_time - s_dal.Config.Clock < TimeSpan.Zero)
-    //            return BO.Enums.CallStatus.expired;//if the dead-line is over.
-    //        if (call.Max_finish_time - s_dal.Config.Clock <= s_dal.Config.RiskRange)//if the call is in the risk range.
-    //            return BO.Enums.CallStatus.opened_at_risk;
-    //        else return BO.Enums.CallStatus.opened;//it still not expired and not in risk.
-    //    }
-    //}
-
-
     /// <summary>
     /// Converts a list of DO.Call objects to a list of BO.CallInList objects.
     /// </summary>
@@ -120,33 +89,20 @@ internal static class CallManager
     {
         if (call is null)
             throw new BO.BlInvalidFormatException("Call cannot be null!");
-
-        // בדיקת תקינות הכתובת
         if (string.IsNullOrWhiteSpace(call.FullAddress))
             throw new BO.BlInvalidFormatException("Invalid address!");
-
         if (string.IsNullOrWhiteSpace(call.Description))
             throw new BO.BlInvalidFormatException("Invalid description!");
-
-        // בדיקת זמני קריאה
         if (call.OpeningTime == default)
             throw new BO.BlInvalidFormatException("Invalid opening time!");
-
         if (call.MaxFinishTime != default && call.MaxFinishTime <= call.OpeningTime)
             throw new BO.BlInvalidFormatException("Invalid max finish time! Finish time has to be bigger than opening time.");
-
-        // בדיקת מזהה מספרי
         if (call.Id < 0)
             throw new BO.BlInvalidFormatException("Invalid id number! Id number has to be positive.");
-
-        // בדיקת ENUM לשדות שאינם מספרים
         if (!Enum.IsDefined(typeof(CallStatus), call.CallStatus))
             throw new BO.BlInvalidFormatException("סInvalid status!");
-
         if (!Enum.IsDefined(typeof(BO.Enums.CallType), call.CallType))
             throw new BO.BlInvalidFormatException("Invalid call type!");
-
-        // בדיקת רשימה
         if (call.AssignmentsList != null && call.AssignmentsList.Exists(a => a == null))
             throw new BO.BlInvalidFormatException("Invalid assignments list!");
     }
@@ -163,8 +119,8 @@ internal static class CallManager
             CallType = (DO.CallType)call.CallType,
             Description = call.Description,
             FullAddress = call.FullAddress,
-            Latitude = call.Latitude /*?? 0.0*/,
-            Longitude = call.Longitude /*?? 0.0*/,
+            Latitude = call.Latitude,
+            Longitude = call.Longitude,
             OpeningTime = call.OpeningTime,
             MaxFinishTime = call.MaxFinishTime,
         };
@@ -181,7 +137,7 @@ internal static class CallManager
         expiredCalls.ForEach(call =>
         {
             List<DO.Assignment> assignments = s_dal.Assignment.ReadAll(a => a.CallId == call.Id).ToList();
-            if (!assignments.Any())
+            if (!assignments.Any())//the call is expired and there are no assignments to it
                 s_dal.Assignment.Create(new DO.Assignment(
                 CallId: call.Id,
                 VolunteerId: 0,
@@ -189,14 +145,6 @@ internal static class CallManager
                 EndTime: ClockManager.Now,
                 EndType: (DO.EndType)BO.Enums.EndType.Expired
             ));
-            List<DO.Assignment> assignmentsWithNull = s_dal.Assignment.ReadAll(a => a.CallId == call.Id && a.EndType is null).ToList();
-            if (assignmentsWithNull.Any())
-                assignments.ForEach(assignment =>
-                    s_dal.Assignment.Update(assignment with
-                    {
-                        EndTime = ClockManager.Now,
-                        EndType = (DO.EndType)BO.Enums.EndType.Expired
-                    }));
         });
 
     }
