@@ -23,7 +23,6 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
         }
 
         public DateTime CurrentTime
@@ -44,7 +43,7 @@ namespace PL
         public static readonly DependencyProperty RiskRangeProperty =
             DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
 
-        private void MainWindow_Loaded(object sender,EventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Initialize the current time and risk range
             CurrentTime = s_bl.Admin.GetClock();
@@ -83,7 +82,7 @@ namespace PL
         }
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
         {
-           new CallListWindow().Show();
+            new CallListWindow().Show();
         }
         private void btnInitDB_Click(object sender, RoutedEventArgs e)
         {
