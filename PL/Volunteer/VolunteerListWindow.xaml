@@ -21,7 +21,13 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="label:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" Grid.Column="0"/>
-            <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+            <ComboBox 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Grid.Column="1" 
+                SelectedValue="{Binding CallType, Mode=TwoWay}"
+                SelectionChanged="comboBoxFilterVolunteers_SelectionChanged" 
+                ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"/>
         </Grid>
         <DataGrid Grid.Row="1" ItemsSource="{Binding VolunteerList}"/>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
