@@ -41,29 +41,11 @@ namespace PL.Volunteer
 
         private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            VolunteerList = (CallType == BO.Enums.CallType.None) ?
-            s_bl?.Volunteer.GetVolunteersList() : s_bl?.Volunteer.GetVolunteersList(null, BO.Enums.VolunteerInListFields.CallType, CallType)!;//////////??????????????????
+            //VolunteerList = (CallType == BO.Enums.CallType.None) ?
+            //s_bl?.Volunteer.GetVolunteersList() : s_bl?.Volunteer.GetVolunteersList(null, BO.Enums.VolunteerInListFields.CallType, CallType)!;//////////??????????????????
         }
 
-        //public Array VolunteerFieldOptions
-        //{
-        //    get { return (Array)GetValue(VolunteerFieldOptionsProperty); }
-        //    set { SetValue(VolunteerFieldOptionsProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty VolunteerFieldOptionsProperty =
-        //    DependencyProperty.Register("VolunteerFieldOptions", typeof(Array), typeof(VolunteerListWindow), new PropertyMetadata(Enum.GetValues(typeof(CallType))));
-
-        //private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    var comboBox = sender as ComboBox;
-        //    var selectedValue = comboBox.SelectedValue as CallType?;
-        //    if (selectedValue != null && selectedValue is CallType)
-        //    {
-        //        var filteredVolunteers = s_bl.Volunteer.GetVolunteersByCallType(selectedValue);///////////////?????????????????????????????????
-        //        VolunteerList = filteredVolunteers;
-        //    }
-    }
+     }
 
 }
 
