@@ -6,5 +6,39 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerWindow" Height="640" Width="800">
-    <Grid/>
+    <Grid>
+
+        <Label Content="Id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="41,23,0,0"/>
+        <TextBox HorizontalAlignment="Left" Margin="83,31,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Full Name" HorizontalAlignment="Left" Margin="29,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <TextBox HorizontalAlignment="Left" Margin="97,78,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Cellphone Number" HorizontalAlignment="Left" Margin="28,123,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <Label Content="Email" HorizontalAlignment="Left" Margin="28,166,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="28,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <Label Content="Full Address" HorizontalAlignment="Left" Margin="24,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <Label Content="Role" HorizontalAlignment="Left" Margin="24,312,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
+        <StackPanel Width="100" Height="50" Margin="143,300,557,274">
+            <RadioButton Content="Volunteer" GroupName="Roles" />
+            <RadioButton Content="Manger" GroupName="Roles" />
+
+        </StackPanel>
+        <Label Content="Is Active" HorizontalAlignment="Left" Margin="16,362,0,0" VerticalAlignment="Top"/>
+        <Label Content="Distance Type" HorizontalAlignment="Left" Margin="24,409,0,0" VerticalAlignment="Top"/>
+        <Label Content="Max Distance" HorizontalAlignment="Left" Margin="432,92,0,0" VerticalAlignment="Top"/>
+        <Label Content="Total Handled Calls" HorizontalAlignment="Left" Margin="432,123,0,0" VerticalAlignment="Top"/>
+        <Label Content="Total Canceled Calls" HorizontalAlignment="Left" Margin="427,179,0,0" VerticalAlignment="Top"/>
+        <Label Content="Total Expired Calls" HorizontalAlignment="Left" Margin="427,227,0,0" VerticalAlignment="Top"/>
+        <Label Content="Call In Progress" HorizontalAlignment="Left" Margin="427,269,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Margin="186,136,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="143,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="138,219,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="138,269,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="543,92,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="571,123,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="617,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="603,232,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="603,269,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="143,362,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="179,409,0,0" VerticalAlignment="Top" Width="120"/>
+    </Grid>
 </Window>

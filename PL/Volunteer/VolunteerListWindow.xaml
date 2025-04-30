@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="450" Width="800"
-         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="Window_Loaded"
+        Closed=" Window_Closed">
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +31,33 @@
                 SelectionChanged="comboBoxFilterVolunteers_SelectionChanged" 
                 ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"/>
         </Grid>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding VolunteerList}"/>
+        <DataGrid
+            Grid.Row="1"
+            ItemsSource="{Binding VolunteerList}"
+            IsReadOnly ="True" 
+            AutoGenerateColumns="False"
+       	    EnableRowVirtualization="True"
+            RowDetailsVisibilityMode="VisibleWhenSelected"
+            SelectedItem="{Binding SelectedVolunteer}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding FullName}" Header="FullName" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalHandledCalls}" Header="TotalHandledCalls" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalCanceledCalls}" Header="TotalCanceledCalls" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalExpiredCalls}" Header="TotalExpiredCalls" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CallId}" Header="CallId" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="CallType" Width="Auto"/>
+                <DataGridTemplateColumn Header="Is Active" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+        </DataGrid>
+
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
     </Grid>
 </Window>

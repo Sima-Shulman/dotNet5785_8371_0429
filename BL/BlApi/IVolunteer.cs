@@ -1,4 +1,6 @@
-﻿namespace BlApi
+﻿using BO;
+
+namespace BlApi
 {
     public interface IVolunteer: IObservable //stage 5 הרחבת ממשק
     {
@@ -11,5 +13,6 @@
         void UpdateVolunteerDetails(int id, BO.Volunteer volunteer);
         void DeleteVolunteer(int id);
         void AddVolunteer(BO.Volunteer volunteer);
+        IEnumerable<BO.VolunteerInList> GetVolunteersFilterList ( Enums.CallType? callType);
     }
 }

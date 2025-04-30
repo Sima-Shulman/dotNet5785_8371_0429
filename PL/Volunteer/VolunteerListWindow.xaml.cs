@@ -41,11 +41,29 @@ namespace PL.Volunteer
 
         private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //VolunteerList = (CallType == BO.Enums.CallType.None) ?
-            //s_bl?.Volunteer.GetVolunteersList() : s_bl?.Volunteer.GetVolunteersList(null, BO.Enums.VolunteerInListFields.CallType, CallType)!;//////////??????????????????
+            VolunteerList  = FilterVolunteerListList();
+        }
+        private void queryVolunteerList()
+        {
+            VolunteerList = FilterVolunteerListList();
         }
 
-     }
+        private void courseListObserver()
+            => queryVolunteerList();
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+            => s_bl.Volunteer.AddObserver(courseListObserver);
+
+        private void Window_Closed(object sender, EventArgs e)
+            => s_bl.Volunteer.RemoveObserver(courseListObserver);
+
+        private IEnumerable<BO.VolunteerInList> FilterVolunteerListList()
+        {
+            return (CallType == BO.Enums.CallType.None) ?
+                            s_bl?.Volunteer.GetVolunteersList() ?? Enumerable.Empty<BO.VolunteerInList>() :
+                            s_bl?.Volunteer.GetVolunteersFilterList(CallType) ?? Enumerable.Empty<BO.VolunteerInList>();
+        }
+    }
 
 }
 

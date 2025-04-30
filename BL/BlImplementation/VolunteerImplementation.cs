@@ -1,4 +1,5 @@
 ﻿using BlApi;
+using BO;
 using DalApi;
 using Helpers;
 
@@ -245,5 +246,26 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
     VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
-    #endregion Stage 5
+
+    public IEnumerable<VolunteerInList> GetVolunteersFilterList(Enums.CallType? callType)
+    {
+        try
+        {
+            IEnumerable<VolunteerInList> volunteers;
+            if (callType is null)
+                volunteers = GetVolunteersList();
+            else
+                volunteers = GetVolunteersList().Where(v => v.CallType == callType);
+            return volunteers;
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Error accessing Volunteers.", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+        #endregion Stage 5
+    }
 }
