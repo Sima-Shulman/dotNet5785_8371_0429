@@ -1,28 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using System.ComponentModel;
 
 namespace PL.Volunteer
 {
     /// <summary>
     /// Interaction logic for VolunteerWindow.xaml
     /// </summary>
-    public partial class VolunteerWindow : Window
+    public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
-        public VolunteerWindow()
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        public BO.Volunteer? CurrentVolunteer
         {
-            InitializeComponent();
+            get => (BO.Volunteer?)GetValue(CurrentVolunteerProperty);
+            set => SetValue(CurrentVolunteerProperty, value);
         }
 
+        public static readonly DependencyProperty CurrentVolunteerProperty =
+            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
+
+        private string _buttonText;
+        public string ButtonText
+        {
+            get => _buttonText;
+            set
+            {
+                _buttonText = value;
+                OnPropertyChanged(nameof(ButtonText));
+            }
+        }
+        public VolunteerWindow(int id = 0)
+        {
+
+            ButtonText = id == 0 ? "Add" : "Update";
+            InitializeComponent();
+            DataContext = this;
+
+            try
+            {
+                CurrentVolunteer = id != 0
+                    ? s_bl.Volunteer.GetVolunteerDetails(id)!
+                    : new BO.Volunteer() {
+                        Id = 0,
+                        FullName = string.Empty,
+                        CellphoneNumber = string.Empty,
+                        Email = string.Empty,
+                        Password = string.Empty,
+                        FullAddress = string.Empty,
+                        Latitude = null,
+                        Longitude = null,
+                        //Role = BO.Role.None, 
+                        IsActive = true,
+                        //DistanceType = BO.DistanceType.None, 
+                        MaxDistance = null,
+                        TotalHandledCalls = 0,
+                        TotalCanceledCalls = 0,
+                        TotalExpiredCalls = 0,
+                        CallInProgress = null
+                    };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Close();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Button clicked!");
+        }
     }
 }

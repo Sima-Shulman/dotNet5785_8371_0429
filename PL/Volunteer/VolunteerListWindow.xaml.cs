@@ -27,6 +27,15 @@ namespace PL.Volunteer
             InitializeComponent();
 
         }
+        public BO.VolunteerInList? SelectedVolunteer
+        {
+            get => (BO.VolunteerInList?)GetValue(SelectedVolunteerProperty);
+            set => SetValue(SelectedVolunteerProperty, value);
+        }
+
+        public static readonly DependencyProperty SelectedVolunteerProperty =
+            DependencyProperty.Register("SelectedVolunteer", typeof(BO.VolunteerInList), typeof(VolunteerListWindow), new PropertyMetadata(null));
+
 
         public IEnumerable<BO.VolunteerInList> VolunteerList
         {
@@ -62,6 +71,15 @@ namespace PL.Volunteer
             return (CallType == BO.Enums.CallType.None) ?
                             s_bl?.Volunteer.GetVolunteersList() ?? Enumerable.Empty<BO.VolunteerInList>() :
                             s_bl?.Volunteer.GetVolunteersFilterList(CallType) ?? Enumerable.Empty<BO.VolunteerInList>();
+        }
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedVolunteer is BO.VolunteerInList volunteer)
+            {
+                var window = new VolunteerWindow(volunteer.Id);
+                window.ShowDialog();
+            }
+            
         }
     }
 

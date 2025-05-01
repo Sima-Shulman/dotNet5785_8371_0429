@@ -38,6 +38,7 @@
             AutoGenerateColumns="False"
        	    EnableRowVirtualization="True"
             RowDetailsVisibilityMode="VisibleWhenSelected"
+            MouseDoubleClick="DataGrid_MouseDoubleClick"
             SelectedItem="{Binding SelectedVolunteer}">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>

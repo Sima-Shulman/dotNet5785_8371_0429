@@ -14,5 +14,6 @@ namespace BlApi
         void DeleteVolunteer(int id);
         void AddVolunteer(BO.Volunteer volunteer);
         IEnumerable<BO.VolunteerInList> GetVolunteersFilterList ( Enums.CallType? callType);
+        //object Read(int id);
     }
 }

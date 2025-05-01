@@ -1,44 +1,129 @@
-﻿<Window x:Class="PL.Volunteer.VolunteerWindow"
+﻿
+
+
+<Window x:Class="PL.Volunteer.VolunteerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL.Volunteer"
-        mc:Ignorable="d"
-        Title="VolunteerWindow" Height="640" Width="800">
-    <Grid>
+        Title="VolunteerWindow" Height="640" Width="900"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
-        <Label Content="Id" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="41,23,0,0"/>
-        <TextBox HorizontalAlignment="Left" Margin="83,31,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Full Name" HorizontalAlignment="Left" Margin="29,74,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <TextBox HorizontalAlignment="Left" Margin="97,78,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Cellphone Number" HorizontalAlignment="Left" Margin="28,123,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <Label Content="Email" HorizontalAlignment="Left" Margin="28,166,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <Label Content="Password" HorizontalAlignment="Left" Margin="28,219,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <Label Content="Full Address" HorizontalAlignment="Left" Margin="24,269,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <Label Content="Role" HorizontalAlignment="Left" Margin="24,312,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,-0.526"/>
-        <StackPanel Width="100" Height="50" Margin="143,300,557,274">
-            <RadioButton Content="Volunteer" GroupName="Roles" />
-            <RadioButton Content="Manger" GroupName="Roles" />
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
 
-        </StackPanel>
-        <Label Content="Is Active" HorizontalAlignment="Left" Margin="16,362,0,0" VerticalAlignment="Top"/>
-        <Label Content="Distance Type" HorizontalAlignment="Left" Margin="24,409,0,0" VerticalAlignment="Top"/>
-        <Label Content="Max Distance" HorizontalAlignment="Left" Margin="432,92,0,0" VerticalAlignment="Top"/>
-        <Label Content="Total Handled Calls" HorizontalAlignment="Left" Margin="432,123,0,0" VerticalAlignment="Top"/>
-        <Label Content="Total Canceled Calls" HorizontalAlignment="Left" Margin="427,179,0,0" VerticalAlignment="Top"/>
-        <Label Content="Total Expired Calls" HorizontalAlignment="Left" Margin="427,227,0,0" VerticalAlignment="Top"/>
-        <Label Content="Call In Progress" HorizontalAlignment="Left" Margin="427,269,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="186,136,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="143,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="138,219,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="138,269,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="543,92,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="571,123,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="617,179,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="603,232,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <TextBox HorizontalAlignment="Left" Margin="603,269,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-        <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="143,362,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" Margin="179,409,0,0" VerticalAlignment="Top" Width="120"/>
-    </Grid>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer>
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Content="Id"/>
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, ValidatesOnExceptions=True, NotifyOnValidationError=True}" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Full Name"/>
+            <TextBox Grid.Row="1" Grid.Column="1" 
+                     Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay}" />
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Cellphone Number"/>
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.CellphoneNumber, Mode=TwoWay}" />
+
+            <Label Grid.Row="3" Grid.Column="0" Content="Email"/>
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}" />
+
+            <Label Grid.Row="4" Grid.Column="0" Content="Password"/>
+            <TextBox Grid.Row="4" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.Password, Mode=TwoWay}" />
+
+            <Label Grid.Row="5" Grid.Column="0" Content="Full Address"/>
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     Text="{Binding CurrentVolunteer.FullAddress, Mode=TwoWay}" />
+
+            <Label Grid.Row="6" Grid.Column="0" Content="Role"/>
+            <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Vertical">
+                <RadioButton Content="Volunteer" GroupName="Roles" IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Volunteer, Mode=TwoWay}" />
+                <RadioButton Content="Manager" GroupName="Roles"  IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Manager, Mode=TwoWay}" />
+            </StackPanel>
+
+            <Label Grid.Row="0" Grid.Column="2" Content="Max Distance"/>
+            <TextBox Grid.Row="0" Grid.Column="3"
+                     Text="{Binding CurrentVolunteer.MaxDistance, Mode=TwoWay}" />
+
+            <Label Grid.Row="1" Grid.Column="2" Content="Total Handled Calls"/>
+            <TextBox Grid.Row="1" Grid.Column="3"
+                     Text="{Binding CurrentVolunteer.TotalHandledCalls, Mode=TwoWay}" />
+
+            <Label Grid.Row="2" Grid.Column="2" Content="Total Canceled Calls"/>
+            <TextBox Grid.Row="2" Grid.Column="3"
+                     Text="{Binding CurrentVolunteer.TotalCanceledCalls, Mode=TwoWay}" />
+
+            <Label Grid.Row="3" Grid.Column="2" Content="Total Expired Calls"/>
+            <TextBox Grid.Row="3" Grid.Column="3"
+                     Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay}" />
+
+            <Label Grid.Row="4" Grid.Column="2" Content="Call In Progress"/>
+            <TextBox Grid.Row="4" Grid.Column="3"
+                     Text="{Binding CurrentVolunteer.CallInProgress, Mode=TwoWay}" />
+
+            <Label Grid.Row="5" Grid.Column="2" Content="Is Active"/>
+            <CheckBox Grid.Row="5" Grid.Column="3"
+                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" />
+
+            <Label Grid.Row="6" Grid.Column="2" Content="Distance Type"/>
+            <ComboBox Grid.Row="6" Grid.Column="3"
+                        SelectedValue="{Binding CurrentVolunteer.DistanceType, Mode=TwoWay}"/>
+            <Button Grid.Row="7" Grid.ColumnSpan="4"
+        Content="{Binding ButtonText}"
+        Click="btnAddUpdate_Click"
+        Height="45"
+        Width="250"
+        Margin="20"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        FontWeight="Bold"
+        BorderThickness="2"/>
+        </Grid>
+    </ScrollViewer>
 </Window>
+<!--ItemsSource="{Binding Source={StaticResource DistanceTypeCollectionKey}}"-->
