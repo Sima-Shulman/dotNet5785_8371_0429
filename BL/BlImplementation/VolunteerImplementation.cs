@@ -178,7 +178,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         try
         {
             var volunteer = _dal.Volunteer.Read(id);
-            if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id).Any())
+            if (_dal.Assignment.ReadAll(a => a!.VolunteerId == id && a.EndTime is null).Any())
                 throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls.");
             _dal.Volunteer.Delete(id);
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5                                                    
@@ -247,7 +247,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     public void RemoveObserver(int id, Action observer) =>
     VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
 
-    public IEnumerable<VolunteerInList> GetVolunteersFilterList(Enums.CallType? callType)
+    public IEnumerable<VolunteerInList> GetVolunteersFilterList(Enums.CallType? callType)//stage
     {
         try
         {
@@ -266,6 +266,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         {
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
-        #endregion Stage 5
+
     }
+    #endregion Stage 5
 }
+

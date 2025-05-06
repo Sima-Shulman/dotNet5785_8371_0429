@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="450" Width="800"
          DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Loaded="Window_Loaded"
-        Closed=" Window_Closed">
+        Loaded="volunteerListWindow_Loaded"
+        Closed=" volunteerLisWindow_Closed">
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -55,10 +55,17 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Delete" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" Click="btnDeleteVolunteer_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
 
         </DataGrid>
 
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"  Click="btnAddVolunteer_Click"/>
     </Grid>
 </Window>

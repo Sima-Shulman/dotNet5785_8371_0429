@@ -285,10 +285,10 @@ public static class Initialization
         {
             s_dal!.Volunteer.Create(new Volunteer() with
             {
-                Id = rand.Next(100000000, 999999999),
+                Id = GenerateValidIsraeliId(rand),
                 FullName = name,
                 CellphoneNumber = $"0{rand.Next(100000000, 999999999)}",
-                Email = $"{fullNames[i]}@gmail.com",
+                Email = name.Replace(" ", "").ToLower() + "@gmail.com",
                 FullAddress = addresses[i],
                 Latitude = latitudes[i],
                 Longitude = latitudes[i++],
@@ -301,10 +301,10 @@ public static class Initialization
         //create 1 manager.
         s_dal!.Volunteer.Create(new Volunteer() with
         {
-            Id = rand.Next(100000000, 999999999),
+            Id = GenerateValidIsraeliId(rand),
             FullName = fullNames[19],
             CellphoneNumber = $"0{rand.Next(100000000, 999999999)}",
-            Email = $"{fullNames[19]}@gmail.com",
+            Email = fullNames[19].Replace(" ", "").ToLower() + "@gmail.com",
             FullAddress = addresses[19],
             Latitude = latitudes[19],
             Longitude = latitudes[19],
@@ -313,6 +313,26 @@ public static class Initialization
             DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
             MaxDistance = rand.Next(0, 100000)
         });
+    }
+    //Generate random valid ID numbers.
+    private static int GenerateValidIsraeliId(Random rand)
+    {
+        int idWithoutCheckDigit = rand.Next(10000000, 99999999); // מספר בן 8 ספרות בלבד
+        int checkDigit = CalculateIsraeliIdCheckDigit(idWithoutCheckDigit);
+        int finalId = unchecked(idWithoutCheckDigit * 10 + checkDigit); // לוודא שהתוצאה לא חורגת
+
+        return finalId >= 0 ? finalId : -finalId; // לוודא שהתוצאה חיובית
+    }
+    private static int CalculateIsraeliIdCheckDigit(int idWithoutCheckDigit)
+    {
+        int sum = 0;
+        for (int i = 0; i < 8; i++)
+        {
+            int digit = (idWithoutCheckDigit / (int)Math.Pow(10, 7 - i)) % 10;
+            int weighted = digit * (i % 2 == 0 ? 1 : 2);
+            sum += (weighted > 9) ? weighted - 9 : weighted;
+        }
+        return (10 - (sum % 10)) % 10;
     }
     /// <summary>
     /// A function that calls all the functions of initializing the DataSource and is called in the main function in the test program for to actually initialize the 'BD'.

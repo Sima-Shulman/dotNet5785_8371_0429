@@ -27,14 +27,16 @@ namespace PL.Volunteer
             InitializeComponent();
 
         }
-        public BO.VolunteerInList? SelectedVolunteer
-        {
-            get => (BO.VolunteerInList?)GetValue(SelectedVolunteerProperty);
-            set => SetValue(SelectedVolunteerProperty, value);
-        }
+        //public BO.VolunteerInList? SelectedVolunteer
+        //{
+        //    get => (BO.VolunteerInList?)GetValue(SelectedVolunteerProperty);
+        //    set => SetValue(SelectedVolunteerProperty, value);
+        //}
 
-        public static readonly DependencyProperty SelectedVolunteerProperty =
-            DependencyProperty.Register("SelectedVolunteer", typeof(BO.VolunteerInList), typeof(VolunteerListWindow), new PropertyMetadata(null));
+        //public static readonly DependencyProperty SelectedVolunteerProperty =
+        //    DependencyProperty.Register("SelectedVolunteer", typeof(BO.VolunteerInList), typeof(VolunteerListWindow), new PropertyMetadata(null));
+
+        public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
 
         public IEnumerable<BO.VolunteerInList> VolunteerList
@@ -50,7 +52,7 @@ namespace PL.Volunteer
 
         private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            VolunteerList  = FilterVolunteerListList();
+            VolunteerList = FilterVolunteerListList();
         }
         private void queryVolunteerList()
         {
@@ -60,10 +62,10 @@ namespace PL.Volunteer
         private void courseListObserver()
             => queryVolunteerList();
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void volunteerListWindow_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Volunteer.AddObserver(courseListObserver);
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void volunteerLisWindow_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(courseListObserver);
 
         private IEnumerable<BO.VolunteerInList> FilterVolunteerListList()
@@ -75,11 +77,30 @@ namespace PL.Volunteer
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer is BO.VolunteerInList volunteer)
+                new VolunteerWindow(volunteer.Id).Show();
+
+
+
+        }
+        private void btnAddVolunteer_Click(object sender, RoutedEventArgs e)
+        {
+            new VolunteerWindow().Show();
+        }
+        private void btnDeleteVolunteer_Click(Object sender, RoutedEventArgs e)
+        {
+            if (SelectedVolunteer is BO.VolunteerInList volunteer)
             {
-                var window = new VolunteerWindow(volunteer.Id);
-                window.ShowDialog();
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {volunteer.FullName}?", "Delete Volunteer", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                try
+                {
+                    if (result == MessageBoxResult.Yes)
+                        s_bl.Volunteer.DeleteVolunteer(volunteer.Id);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            
         }
     }
 

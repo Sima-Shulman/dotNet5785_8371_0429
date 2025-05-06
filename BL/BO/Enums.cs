@@ -8,7 +8,8 @@ public class Enums
     public enum Role
     {
         Manager,
-        Volunteer
+        Volunteer,
+        None
     }
 
     /// <summary>
@@ -18,7 +19,8 @@ public class Enums
     {
         AerialDistance,
         WalkingDistance,
-        DrivingDistance
+        DrivingDistance,
+        None
     }
 
     /// <summary>

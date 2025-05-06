@@ -13,7 +13,7 @@ namespace BlApi
         void UpdateVolunteerDetails(int id, BO.Volunteer volunteer);
         void DeleteVolunteer(int id);
         void AddVolunteer(BO.Volunteer volunteer);
-        IEnumerable<BO.VolunteerInList> GetVolunteersFilterList ( Enums.CallType? callType);
-        //object Read(int id);
+        IEnumerable<BO.VolunteerInList> GetVolunteersFilterList ( Enums.CallType? callType);//stage 5
+        
     }
 }
