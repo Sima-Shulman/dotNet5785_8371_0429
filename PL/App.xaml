@@ -7,5 +7,7 @@
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
         <local:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
         <local:RoleToBooleanConverter x:Key="RoleToBooleanConverter" />
+        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
+        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
     </Application.Resources>
 </Application>

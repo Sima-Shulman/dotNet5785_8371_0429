@@ -120,6 +120,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             var doVolunteer = _dal.Volunteer.Read(boVolunteer.Id);
             if (doVolunteer is null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID {boVolunteer.Id} does  not exist! ");
+            if (!string.IsNullOrEmpty(boVolunteer.Password) && boVolunteer.Password == doVolunteer.Password)
+                boVolunteer.Password = null;
             VolunteerManager.ValidateVolunteer(boVolunteer);
             if (!string.IsNullOrEmpty(boVolunteer.Password) && !VolunteerManager.IsPasswordStrong(boVolunteer.Password!))
                 throw new BO.BlInvalidFormatException("Password is not strong!");
@@ -220,7 +222,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             }
             DO.Volunteer doVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
             _dal.Volunteer.Create(doVolunteer);
-            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
 
         }
         catch (DO.DalAlreadyExistsException ex)

@@ -295,20 +295,6 @@
     <Password>Ue1v5z85B2TppPEL3tMX/uxZ5pu2Mhg4zxIJxEPPvfI=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>328178371</Id>
-    <FullName>Simi Shulman</FullName>
-    <CellphoneNumber>0583295158</CellphoneNumber>
-    <Email>s053295158@gmail.com</Email>
-    <FullAddress>58 druk ramat shlomo jerusalem israel</FullAddress>
-    <Latitude>31.8139395</Latitude>
-    <Longitude>35.216089</Longitude>
-    <Role>Manager</Role>
-    <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>2</MaxDistance>
-    <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>334600046</Id>
     <FullName>Bracha  Shulman</FullName>
     <CellphoneNumber>0548446804</CellphoneNumber>
@@ -320,6 +306,34 @@
     <IsActive>true</IsActive>
     <DistanceTypes>AerialDistance</DistanceTypes>
     <MaxDistance>4</MaxDistance>
+    <Password>1WJUbNSpziOJdGX/1jMpoDFTKKNQGiYtAwyJlaNVDBY=</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>328178371</Id>
+    <FullName>Simi Shulman</FullName>
+    <CellphoneNumber>0583295158</CellphoneNumber>
+    <Email>s0583295158@gmail.com</Email>
+    <FullAddress>14 Zholti Street, Ramat Shlomo, Jerusalem, Israel</FullAddress>
+    <Latitude>31.779042</Latitude>
+    <Longitude>35.229702</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>3</MaxDistance>
+    <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>40379257</Id>
+    <FullName>Yisca Shulman</FullName>
+    <CellphoneNumber>0548446804</CellphoneNumber>
+    <Email>0548446804y@gmail.com</Email>
+    <FullAddress>5 Zholti Street, Ramat Shlomo, Jerusalem, Israel</FullAddress>
+    <Latitude>31.551539</Latitude>
+    <Longitude>35.097244</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>5</MaxDistance>
     <Password>1WJUbNSpziOJdGX/1jMpoDFTKKNQGiYtAwyJlaNVDBY=</Password>
   </Volunteer>
 </ArrayOfVolunteer>

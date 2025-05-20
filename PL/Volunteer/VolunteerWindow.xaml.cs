@@ -78,7 +78,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             try
             {
                 s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
-                MessageBox.Show("Volunteer added successfully");
+                //MessageBox.Show("Volunteer added successfully");
                 Close();
             }
             catch (Exception ex)
@@ -91,7 +91,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             try
             {
                 s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer!);
-                MessageBox.Show("Volunteer updated successfully");
+                //MessageBox.Show("Volunteer updated successfully");
                 Close();
             }
             catch (Exception ex)

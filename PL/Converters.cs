@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -29,6 +30,40 @@ namespace PL
                 return Enum.Parse(typeof(BO.Enums.Role), roleName);
             }
             return BO.Enums.Role.None;
+        }
+    }
+    public class ConvertUpdateToVisible : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // Example logic: Show the element if ButtonText is "Update"
+            if (value is string buttonText && buttonText == "Update")
+            {
+                return Visibility.Visible;
+            }
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ConvertUpdateToTrue : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // Example logic: Show the element if ButtonText is "Update"
+            if (value is string buttonText && buttonText == "Update")
+            {
+                return true;
+            }
+            return false;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
     //class ConvertRoleToBolean: IValueConverter
