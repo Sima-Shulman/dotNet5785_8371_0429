@@ -74,7 +74,7 @@
                      Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}" />
 
             <Label Grid.Row="4" Grid.Column="0" Content="Password"/>
-            <TextBox Grid.Row="4" Grid.Column="1"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.Password, Mode=OneWayToSource}"/>
 
             <Label Grid.Row="5" Grid.Column="0" Content="Full Address"/>
             <TextBox Grid.Row="5" Grid.Column="1"

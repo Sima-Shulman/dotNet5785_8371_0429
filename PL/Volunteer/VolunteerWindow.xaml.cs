@@ -91,7 +91,6 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             try
             {
                 s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer!);
-                //MessageBox.Show("Volunteer updated successfully");
                 Close();
             }
             catch (Exception ex)
