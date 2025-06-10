@@ -74,7 +74,7 @@
                      Text="{Binding CurrentVolunteer.Email, Mode=TwoWay}" />
 
             <Label Grid.Row="4" Grid.Column="0" Content="Password"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.Password, Mode=OneWayToSource}"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.Password, Mode=TwoWay}"/>
 
             <Label Grid.Row="5" Grid.Column="0" Content="Full Address"/>
             <TextBox Grid.Row="5" Grid.Column="1"
@@ -83,9 +83,7 @@
             <Label Grid.Row="6" Grid.Column="0" Content="Role"/>
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Vertical">
                 <RadioButton Content="Volunteer" GroupName="Roles"   IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Volunteer, Mode=TwoWay}"  />
-                <!-- Converter={StaticResource RoleToBooleanConverter} , ConverterParameter=Volunteer, -->
                 <RadioButton Content="Manager" GroupName="Roles"   IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Manager, Mode=TwoWay}"/>
-                <!--Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Manager , -->
             </StackPanel>
 
             <Label Grid.Row="0" Grid.Column="2" Content="Max Distance"/>

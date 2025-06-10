@@ -190,6 +190,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist", ex);
         }
+        catch (BO.BlDeletionException ex)
+        {
+            throw new BO.BlDeletionException($"Cannot delete volunteer with ID={id} as he is handling calls", ex);
+        }
         catch (Exception ex)
         {
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
