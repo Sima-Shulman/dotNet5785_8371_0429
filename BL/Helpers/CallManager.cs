@@ -62,8 +62,8 @@ internal static class CallManager
         return calls.Select(call =>
         {
             List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
-            var lastAssignment = assignments.LastOrDefault(a => a.CallId == call.Id);
-            var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId).FullName : null;
+            var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.Id);
+            var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null;
             TimeSpan? timeLeft = call.MaxFinishTime > DateTime.Now ? call.MaxFinishTime - DateTime.Now : null;
             BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
             TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.Closed ? (call.MaxFinishTime - call.OpeningTime) : null;

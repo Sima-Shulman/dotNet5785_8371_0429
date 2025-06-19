@@ -11,5 +11,7 @@
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
         <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
         <local:ConvertUpdateToFalse x:Key="ConvertUpdateToFalseKey" />
+        <local:InverseBoolConverter x:Key="InverseBoolConverterKey"/>
+
     </Application.Resources>
 </Application>
