@@ -82,9 +82,21 @@
 
             <Label Grid.Row="6" Grid.Column="0" Content="Role"/>
             <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Vertical">
-                <RadioButton Content="Volunteer" GroupName="Roles"   IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Volunteer, Mode=TwoWay}"  />
-                <RadioButton Content="Manager" GroupName="Roles"   IsChecked="{Binding CurrentVolunteer.Role, Converter={StaticResource RoleToBooleanConverter}, ConverterParameter=Manager, Mode=TwoWay}"/>
+                <RadioButton Content="Volunteer"
+                 GroupName="Roles"
+                 IsChecked="{Binding CurrentVolunteer.Role, 
+                                     Converter={StaticResource RoleToBooleanConverter}, 
+                                     ConverterParameter=Volunteer}" 
+                 IsEnabled="{Binding ButtonText, Converter={StaticResource ConvertUpdateToFalseKey}}"/>
+
+                <RadioButton Content="Manager"
+                 GroupName="Roles"
+                 IsChecked="{Binding CurrentVolunteer.Role, 
+                                     Converter={StaticResource RoleToBooleanConverter}, 
+                                     ConverterParameter=Manager}" 
+                 IsEnabled="{Binding ButtonText, Converter={StaticResource ConvertUpdateToFalseKey}}"/>
             </StackPanel>
+
 
             <Label Grid.Row="0" Grid.Column="2" Content="Max Distance"/>
             <TextBox Grid.Row="0" Grid.Column="3"
@@ -93,25 +105,29 @@
             <Label Grid.Row="1" Grid.Column="2" Content="Total Handled Calls" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <TextBox Grid.Row="1" Grid.Column="3"
                      Text="{Binding CurrentVolunteer.TotalHandledCalls, Mode=TwoWay}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" />
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" 
+                      IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
 
             <Label Grid.Row="2" Grid.Column="2" Content="Total Canceled Calls" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <TextBox Grid.Row="2" Grid.Column="3"
                      Text="{Binding CurrentVolunteer.TotalCanceledCalls, Mode=TwoWay}"
                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"
-                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"
+/>
 
             <Label Grid.Row="3" Grid.Column="2" Content="Total Expired Calls" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <TextBox Grid.Row="3" Grid.Column="3"
                      Text="{Binding CurrentVolunteer.TotalExpiredCalls, Mode=TwoWay}" 
                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"
-                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"
+/>
 
             <Label Grid.Row="4" Grid.Column="2" Content="Call In Progress" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <TextBox Grid.Row="4" Grid.Column="3"
                      Text="{Binding CurrentVolunteer.CallInProgress, Mode=TwoWay}" 
                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"
-                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"
+/>
 
             <Label Grid.Row="5" Grid.Column="2" Content="Is Active"/>
             <CheckBox Grid.Row="5" Grid.Column="3"
