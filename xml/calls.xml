@@ -41,16 +41,6 @@
     <Id>1003</Id>
   </Call>
   <Call>
-    <CallType>VehicleBreakdown</CallType>
-    <Description>A vehicle's door is locked, and the driver is stranded on the highway.</Description>
-    <FullAddress>13 Ben-Gurion Boulevard, Ashdod</FullAddress>
-    <Latitude>33.1303</Latitude>
-    <Longitude>34.7671</Longitude>
-    <OpeningTime>2025-06-09T20:36:23</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
-    <Id>1004</Id>
-  </Call>
-  <Call>
     <CallType>SearchAndRescue</CallType>
     <Description>A hiker got lost in the forest and requires search and rescue.</Description>
     <FullAddress>34 King George Street, Jerusalem</FullAddress>

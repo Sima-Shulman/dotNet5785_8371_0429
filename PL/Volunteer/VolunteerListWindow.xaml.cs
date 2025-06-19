@@ -59,14 +59,14 @@ namespace PL.Volunteer
             VolunteerList = FilterVolunteerListList();
         }
 
-        private void courseListObserver()
+        private void voluteerListObserver()
             => queryVolunteerList();
 
         private void volunteerListWindow_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Volunteer.AddObserver(courseListObserver);
+            => s_bl.Volunteer.AddObserver(voluteerListObserver);
 
         private void volunteerLisWindow_Closed(object sender, EventArgs e)
-            => s_bl.Volunteer.RemoveObserver(courseListObserver);
+            => s_bl.Volunteer.RemoveObserver(voluteerListObserver);
 
         private IEnumerable<BO.VolunteerInList> FilterVolunteerListList()
         {

@@ -51,6 +51,7 @@ public class Enums
     /// </summary>
     public enum CallStatus
     {
+        None,
         InTreatment,
         InTreatmentAtRisk,
         Opened,
