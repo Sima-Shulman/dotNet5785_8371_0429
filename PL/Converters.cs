@@ -66,6 +66,24 @@ namespace PL
             throw new NotImplementedException();
         }
     }
+
+    public class ConvertUpdateToFalse : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string buttonText && buttonText == "Update")
+            {
+                return false;
+            }
+            return true; ; 
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
+        }
+    }
+
     //class ConvertRoleToBolean: IValueConverter
     //{
     //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

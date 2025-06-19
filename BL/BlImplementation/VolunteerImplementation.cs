@@ -41,6 +41,26 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlGeneralException("An unexpected error occurred.", ex);
         }
     }
+    public BO.Enums.Role Login(int id, string pass)//stage 6
+    {
+        try
+        {
+            var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Id == id && VolunteerManager.VerifyPassword(pass, v.Password!));
+            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid ID or password") : (BO.Enums.Role)volunteer.Role;
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Error accessing volunteers.", ex);
+        }
+        catch (BO.BlUnauthorizedException ex)
+        {
+            throw new BO.BlUnauthorizedException(ex.Message, ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("An unexpected error occurred.", ex);
+        }
+    }
     /// <summary>
     /// Retrieves a list of volunteers with optional filters for activity status and sorting.
     /// </summary>

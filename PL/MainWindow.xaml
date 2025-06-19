@@ -6,48 +6,8 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        Loaded="MainWindow_Loaded"
-        Closed="MainWindow_Closed"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+>
     <Grid>
-        <!--Clock Grid-->
-        <Grid Width="200" Height="150" Margin="10,24,590,260" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="{Binding CurrentTime}"  FontWeight="Bold" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-            <Button Content="Add 1 minute" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Click="btnAddOneMinute_Click" />
-            <Button Content="Add 1 hour" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Click="btnAddOneHour_Click"/>
-            <Button Content="Add 1 day" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Click="btnAddOneDay_Click"/>
-            <Button Content="Addd 1 year" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Click="btnAddOneYear_Click"/>
-        </Grid>
-        <!--Risk Range Grid-->
-        <Grid>
-            <Label Content="Risk Range:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,217,0,0" Width="72" />
-            <TextBox HorizontalAlignment="Left" Margin="82,221,0,0"  Text="{Binding RiskRange}" VerticalAlignment="Top" Width="50"/>
-            <Button Content="Update" HorizontalAlignment="Left" Margin="137,219,0,0" VerticalAlignment="Top" Click="btnUpdateRiskRange_Click" />
-        </Grid>
-        <!--Handle Btns Grid-->
-        <Grid Width="100" Height="50" Margin="10,293,690,91">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Handle Volunteers" Grid.Row="0" Margin="2" Click="btnHandleVolunteers_Click"/>
-            <Button Content="Handle Calls"  Grid.Row="1" Margin="2" Click="btnHandleCalls_Click"/>
-        </Grid>
-        <!--DB Btns Grid-->
-        <Grid Width="100" Height="50" Margin="145,293,555,91">
-             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Init DB" Grid.Row="0" Margin="2" Click="btnInitDB_Click" />
-            <Button Content="Reset DB"  Grid.Row="1" Margin="2" Click="btnResetDB_Click"/>
-        </Grid>
+       
     </Grid>
 </Window>

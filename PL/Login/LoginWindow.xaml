@@ -1,0 +1,17 @@
+﻿<Window x:Class="PL.Login.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Login"
+        mc:Ignorable="d"
+        Title="LoginWindow" Height="450" Width="800"
+       DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Grid>
+        <Label Content="Enter ID Number:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="51" Width="120"/>
+        <TextBox HorizontalAlignment="Left"  TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"  Margin="135,18,0,0"  Text="{Binding UserId, Mode=TwoWay}"/>
+        <Label Content="Enter Passsword:" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" Height="51" Width="120" />
+        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120" Margin="135,52,0,0" Text="{Binding Password, Mode=TwoWay}"/>
+        <Button Content="Login" HorizontalAlignment="Left" Margin="172,112,0,0" VerticalAlignment="Top" Click="loginBtn_Click"/>
+    </Grid>
+</Window>
