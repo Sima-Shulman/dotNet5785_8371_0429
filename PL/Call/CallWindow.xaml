@@ -22,8 +22,10 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="Type:" Width="120"/>
-                <TextBox Text="{Binding CurrentCall.CallType}" Width="200" 
-                         IsReadOnly="{Binding IsEditableAllFields, Converter={StaticResource InverseBoolConverterKey}}"/>
+                <ComboBox Grid.Row="6" Grid.Column="3"
+                    ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
+                    SelectedValue="{Binding CurrentCall.CallType, Mode=TwoWay}" Width="200"
+                    IsEnabled="{Binding IsEditableAllFields}"  />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="Description:" Width="120"/>
@@ -42,7 +44,7 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="Max Finish Time:" Width="120" />
                 <TextBox Text="{Binding CurrentCall.MaxFinishTime}"  Width="200"
-                                 IsReadOnly="{Binding IsEditableOnlyMaxFinish, Converter={StaticResource InverseBoolConverterKey}}"/>
+                 IsReadOnly="{Binding IsEditableOnlyMaxFinish, Converter={StaticResource InverseBoolConverterKey}}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5" >
                 <TextBlock Text="Status:" Width="120"/>

@@ -61,16 +61,6 @@
     <Id>1006</Id>
   </Call>
   <Call>
-    <CallType>CarAccident</CallType>
-    <Description>Two cars are involved in a crash on a busy intersection.</Description>
-    <FullAddress>4 Moshe Dayan Boulevard, Rehovot</FullAddress>
-    <Latitude>31.897</Latitude>
-    <Longitude>34.811</Longitude>
-    <OpeningTime>2025-06-19T21:35:09</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
-    <Id>1007</Id>
-  </Call>
-  <Call>
     <CallType>VehicleBreakdown</CallType>
     <Description>A car has overheated and stopped on the side of the highway.</Description>
     <FullAddress>27 Bethlehem Road, Jerusalem</FullAddress>
@@ -489,5 +479,15 @@
     <OpeningTime>2025-06-19T07:37:09</OpeningTime>
     <MaxFinishTime>2025-06-21T07:39:09</MaxFinishTime>
     <Id>1003</Id>
+  </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>Two cars are involved in a crash on a busy intersection.</Description>
+    <FullAddress>4 Moshe Dayan Boulevard, Rehovot</FullAddress>
+    <Latitude>31.897</Latitude>
+    <Longitude>34.811</Longitude>
+    <OpeningTime>2025-06-19T21:35:09</OpeningTime>
+    <MaxFinishTime>2025-08-19T23:00:00</MaxFinishTime>
+    <Id>1007</Id>
   </Call>
 </ArrayOfCall>
