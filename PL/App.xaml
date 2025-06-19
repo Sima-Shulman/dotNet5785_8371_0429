@@ -2,12 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Login/LoginWindow.xaml">
     <Application.Resources>
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
         <local:DistanceTypeCollection x:Key="DistanceTypeCollectionKey" />
         <local:RoleToBooleanConverter x:Key="RoleToBooleanConverter" />
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
         <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
+        <local:ConvertUpdateToFalse x:Key="ConvertUpdateToFalseKey" />
     </Application.Resources>
 </Application>

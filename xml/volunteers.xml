@@ -280,4 +280,18 @@
     <MaxDistance>99885</MaxDistance>
     <Password>1TGT3f9fdcqIKY2dcAoUWwMqm3y/1ZYdmSejzbWEnkM=</Password>
   </Volunteer>
+  <Volunteer>
+    <Id>328178371</Id>
+    <FullName>Simi Shulman</FullName>
+    <CellphoneNumber>0583295158</CellphoneNumber>
+    <Email>s0583295158@gmail.com</Email>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>2</MaxDistance>
+    <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+  </Volunteer>
 </ArrayOfVolunteer>
