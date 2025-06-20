@@ -490,4 +490,14 @@
     <MaxFinishTime>2025-08-19T23:00:00</MaxFinishTime>
     <Id>1007</Id>
   </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>A car crashed into a polel</Description>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <OpeningTime>2025-06-20T11:28:23.059972+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1049</Id>
+  </Call>
 </ArrayOfCall>

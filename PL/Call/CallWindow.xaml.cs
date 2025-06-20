@@ -16,104 +16,152 @@ using System.Windows.Shapes;
 using BO;
 using static BO.Enums;
 
-namespace PL.Call
+namespace PL.Call;
+
+/// <summary>
+/// Interaction logic for CallWindow.xaml
+/// </summary>
+public partial class CallWindow : Window, INotifyPropertyChanged
 {
-    /// <summary>
-    /// Interaction logic for CallWindow.xaml
-    /// </summary>
-    public partial class CallWindow : Window, INotifyPropertyChanged
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string propertyName) =>
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    private string _buttonText;
+    public string ButtonText
     {
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        public CallWindow(int callId)
+        get => _buttonText;
+        set
         {
-            InitializeComponent();
+            _buttonText = value;
+            OnPropertyChanged(nameof(ButtonText));
+        }
+    }
 
-            try
+    public CallWindow(int callId = 0)
+    {
+        _buttonText = string.Empty;
+        PropertyChanged = delegate { };
+
+        ButtonText = callId == 0 ? "Add" : "Update";
+        InitializeComponent();
+
+        try
+        {
+            if (callId != 0)
             {
                 CurrentCall = s_bl.Call.GetCallDetails(callId);
-                if (CurrentCall == null)
-                {
-                    MessageBox.Show("Call not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Close();
-                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                CurrentCall = new BO.Call()
+                {
+                    Id = 0,
+                    Description = string.Empty,
+                    FullAddress = string.Empty,
+                    Latitude = 0.0,
+                    Longitude = 0.0,
+                    OpeningTime = DateTime.Now,
+                    MaxFinishTime = null,
+                    CallType = CallType.None,
+                    CallStatus = CallStatus.None
+                };
+            }
+            if (CurrentCall == null)
+            {
+                MessageBox.Show("Call not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Close();
             }
         }
-
-        public BO.Call CurrentCall
+        catch (Exception ex)
         {
-            get => (BO.Call)GetValue(CurrentCallProperty);
-            set => SetValue(CurrentCallProperty, value);
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Close();
+        }
+    }
+
+    public BO.Call CurrentCall
+    {
+        get => (BO.Call)GetValue(CurrentCallProperty);
+        set => SetValue(CurrentCallProperty, value);
+    }
+
+    public static readonly DependencyProperty CurrentCallProperty =
+        DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow),
+            new PropertyMetadata(null, OnCurrentCallChanged));
+
+    private static void OnCurrentCallChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var window = d as CallWindow;
+        if (window == null) return;
+
+        window.OnPropertyChanged(nameof(IsEditableAllFields));
+        window.OnPropertyChanged(nameof(IsEditableOnlyMaxFinish));
+        window.OnPropertyChanged(nameof(IsEditable));
+    }
+
+    public bool IsEditableAllFields =>
+        CurrentCall?.CallStatus == CallStatus.Opened ||
+        CurrentCall?.CallStatus == CallStatus.OpenedAtRisk || _buttonText == "Add";
+
+    public bool IsEditableOnlyMaxFinish =>
+        CurrentCall?.CallStatus == CallStatus.InTreatment ||
+        CurrentCall?.CallStatus == CallStatus.InTreatmentAtRisk || IsEditableAllFields;
+
+    public bool IsEditable => IsEditableAllFields || IsEditableOnlyMaxFinish;
+
+    private void btnUpdate_Click(object sender, RoutedEventArgs e)
+    {
+        if (CurrentCall == null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(CurrentCall.Description))
+        {
+            MessageBox.Show("Description is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
         }
 
-        public static readonly DependencyProperty CurrentCallProperty =
-            DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow),
-                new PropertyMetadata(null, OnCurrentCallChanged));
-
-        private static void OnCurrentCallChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        if (IsEditableAllFields && string.IsNullOrWhiteSpace(CurrentCall.FullAddress))
         {
-            var window = d as CallWindow;
-            if (window == null) return;
-
-            window.OnPropertyChanged(nameof(IsEditableAllFields));
-            window.OnPropertyChanged(nameof(IsEditableOnlyMaxFinish));
-            window.OnPropertyChanged(nameof(IsEditable));
+            MessageBox.Show("Address is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
         }
 
-        public bool IsEditableAllFields =>
-            CurrentCall?.CallStatus == CallStatus.Opened ||
-            CurrentCall?.CallStatus == CallStatus.OpenedAtRisk;
-
-        public bool IsEditableOnlyMaxFinish =>
-            CurrentCall?.CallStatus == CallStatus.InTreatment ||
-            CurrentCall?.CallStatus == CallStatus.InTreatmentAtRisk||IsEditableAllFields;
-
-        public bool IsEditable => IsEditableAllFields || IsEditableOnlyMaxFinish;
-
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        if (CurrentCall.MaxFinishTime != null)
         {
-            if (CurrentCall == null)
+            if (CurrentCall.MaxFinishTime <= CurrentCall.OpeningTime)
+            {
+                MessageBox.Show("Max Finish Time must be after Opening Time.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
+            }
+            if (CurrentCall.MaxFinishTime < DateTime.Now)
+            {
+                MessageBox.Show("Max Finish Time cannot be in the past.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+        }
 
-            if (string.IsNullOrWhiteSpace(CurrentCall.Description))
+        if (!Enum.IsDefined(typeof(CallType), CurrentCall.CallType) || CurrentCall.CallType == CallType.None)
+        {
+            MessageBox.Show("Please select a valid Call Type.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+        if (ButtonText == "Add")
+        {
+            try
             {
-                MessageBox.Show("Description is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                s_bl.Call.AddCall(CurrentCall!);
+                MessageBox.Show("Call added successfully");
+                Close();
             }
-
-            if (IsEditableAllFields && string.IsNullOrWhiteSpace(CurrentCall.FullAddress))
+            catch (Exception ex)
             {
-                MessageBox.Show("Address is required.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                MessageBox.Show(ex.Message);
             }
-            if (CurrentCall.MaxFinishTime != null)
-            {
-                if (CurrentCall.MaxFinishTime <= CurrentCall.OpeningTime)
-                {
-                    MessageBox.Show("Max Finish Time must be after Opening Time.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                if (CurrentCall.MaxFinishTime < DateTime.Now)
-                {
-                    MessageBox.Show("Max Finish Time cannot be in the past.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-            }
-
-            if (!Enum.IsDefined(typeof(CallType), CurrentCall.CallType) || CurrentCall.CallType == CallType.None)
-            {
-                MessageBox.Show("Please select a valid Call Type.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+        }
+        else if (ButtonText == "Update")
+        {
             try
             {
                 s_bl.Call.UpdateCallDetails(CurrentCall);
@@ -127,6 +175,6 @@ namespace PL.Call
         }
 
 
-      
+
     }
 }
