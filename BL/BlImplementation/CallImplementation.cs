@@ -225,6 +225,7 @@ internal class CallImplementation : BlApi.ICall
             boCall.Longitude = longitude;
             DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
             _dal.Call.Create(doCall);
+            NotifyVolunteersAboutNewCall(doCall);
             CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
         }
         catch (DO.DalAlreadyExistsException ex)
@@ -466,6 +467,64 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+    private void NotifyVolunteersAboutNewCall(DO.Call call)
+    {
+        try
+        {
+            var volunteers = _dal.Volunteer.ReadAll(v =>
+                v!.IsActive &&
+                v.Latitude != null && v.Longitude != null &&
+                v.Email != null);
+
+            foreach (var volunteer in volunteers)
+            {
+                double distance = Tools.CalculateDistance(
+                    volunteer?.Latitude!.Value,
+                    volunteer?.Longitude!.Value,
+                    call.Latitude,
+                    call.Longitude,
+                    volunteer.DistanceTypes);
+
+                if (volunteer.MaxDistance == null || distance <= volunteer.MaxDistance)
+                {
+                    string subject = "New Call Available Near You!";
+                    string body = BuildEmailBody(volunteer, call, distance);
+                    EmailHelper.SendEmail(volunteer.Email, subject, body);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Failed to notify volunteers: " + ex.Message);
+        }
+    }
+    private string BuildEmailBody(DO.Volunteer volunteer, DO.Call call, double distance)
+    {
+        string message = call.CallType switch
+        {
+            DO.CallType.CarAccident => "This is a car accident emergency call.",
+            DO.CallType.Transportation => "This is a transportation assistance call.",
+            DO.CallType.SearchAndRescue => "This is an sear and rescue emergency call.",
+            DO.CallType.VehicleBreakdown => "This is an vehicle breakdown support call.",
+            _ => "A new call has been opened."
+        };
+
+        return
+            $"Hello {volunteer.FullName},\n\n" +
+            $"{message}\n\n" +
+            $"Call details:\n" +
+            $"- ID: {call.Id}\n" +
+            $"- Description: {call.Description}\n" +
+            $"- Address: {call.FullAddress}\n" +
+            $"- Opening Time: {call.OpeningTime}\n" +
+            $"- Max Finish Time: {call.MaxFinishTime}\n" +
+            $"- Distance: {distance:F2} km\n\n" +
+            $"Please log in to the system to accept the call.\n\n" +
+            $"Thank you for your service!";
+    }
+
+
+
     #region Stage 5
     public void AddObserver(Action listObserver) =>
     CallManager.Observers.AddListObserver(listObserver); //stage 5

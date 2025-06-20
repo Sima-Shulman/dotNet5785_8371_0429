@@ -500,4 +500,64 @@
     <MaxFinishTime xsi:nil="true" />
     <Id>1049</Id>
   </Call>
+  <Call>
+    <CallType>SearchAndRescue</CallType>
+    <Description>A 2- year-old kid disappeared</Description>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <OpeningTime>2025-06-20T12:08:38.5737253+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-25T00:00:00</MaxFinishTime>
+    <Id>1050</Id>
+  </Call>
+  <Call>
+    <CallType>VehicleBreakdown</CallType>
+    <Description>a car is stuck!</Description>
+    <FullAddress>zolti 14 ramat shlomo jerusalem usrael</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <OpeningTime>2025-06-20T12:12:58.5045323+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-27T00:00:00</MaxFinishTime>
+    <Id>1051</Id>
+  </Call>
+  <Call>
+    <CallType>Transportation</CallType>
+    <Description>drive an old lady to the doctor</Description>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <OpeningTime>2025-06-20T12:16:47.8110741+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-28T00:00:00</MaxFinishTime>
+    <Id>1052</Id>
+  </Call>
+  <Call>
+    <CallType>VehicleBreakdown</CallType>
+    <Description>Car with a flat tire</Description>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <OpeningTime>2025-06-20T12:18:45.5972807+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-24T00:00:00</MaxFinishTime>
+    <Id>1053</Id>
+  </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>two cars crashed</Description>
+    <FullAddress>druk 25 jerusalem israel</FullAddress>
+    <Latitude>31.8096575</Latitude>
+    <Longitude>35.2136454</Longitude>
+    <OpeningTime>2025-06-20T12:23:36.526446+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-20T14:30:00</MaxFinishTime>
+    <Id>1054</Id>
+  </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>a car crashed</Description>
+    <FullAddress>5 HaRav Shrira Gaon Street, Givat Shaul, Jerusalem, Israel</FullAddress>
+    <Latitude>31.794098</Latitude>
+    <Longitude>35.187064</Longitude>
+    <OpeningTime>2025-06-20T12:35:56.1286243+03:00</OpeningTime>
+    <MaxFinishTime>2025-06-21T00:00:00</MaxFinishTime>
+    <Id>1055</Id>
+  </Call>
 </ArrayOfCall>
