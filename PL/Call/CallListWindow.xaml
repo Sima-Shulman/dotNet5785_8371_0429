@@ -14,7 +14,8 @@
                 <RowDefinition Height="500*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-        </Grid>        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+        </Grid>
+        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
@@ -81,7 +82,7 @@
 
         </DataGrid>
 
-        <!--<Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"  Click="btnAddVolunteer_Click"/>-->
+        <Button Content="Add" HorizontalAlignment="Center" Height="50" Width="100"  Click="btnAddCall_Click" Margin="0,384,0,0" RenderTransformOrigin="0.277,0.244"/>
     </Grid>
 </Window>
 

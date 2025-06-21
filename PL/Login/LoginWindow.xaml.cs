@@ -62,7 +62,7 @@ namespace PL.Login
                 if (userRole == BO.Enums.Role.Volunteer)
                 {
                     MessageBox.Show("Login successful!");
-                    new Volunteer.VolunteerWindow(UserId).Show();
+                    new MainVolunteer(UserId).Show();
                 }
                 else if (userRole == BO.Enums.Role.Manager)
                 {
@@ -80,7 +80,7 @@ namespace PL.Login
                     else if (result == MessageBoxResult.No)
                     {
                         MessageBox.Show("You are navigated to volunteer window.");
-                        new Volunteer.VolunteerWindow(UserId).Show();
+                        new MainVolunteer(UserId).Show();
                     }
                 }
                 else

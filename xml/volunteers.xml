@@ -294,4 +294,18 @@
     <MaxDistance>2</MaxDistance>
     <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
   </Volunteer>
+  <Volunteer>
+    <Id>334600046</Id>
+    <FullName>Brachi Shulman</FullName>
+    <CellphoneNumber>0527159386</CellphoneNumber>
+    <Email>ssh95158@gmail.com</Email>
+    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <Role>Volunteer</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>5</MaxDistance>
+    <Password>W+K9RL7b8XF6LpjV0grTGnMEuGrEvrtIjxBjtA7FBR0=</Password>
+  </Volunteer>
 </ArrayOfVolunteer>

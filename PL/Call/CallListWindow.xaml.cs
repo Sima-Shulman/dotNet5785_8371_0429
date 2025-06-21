@@ -101,7 +101,10 @@ namespace PL.Call
         }
 
 
-
+        private void btnAddCall_Click(object sender, RoutedEventArgs e)
+        {
+            new VolunteerWindow().Show();
+        }
 
 
 

@@ -33,6 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlTest", "BlTest\BlTest.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{2829B9B7-B3D1-427A-84EE-43F8F3B3657F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Downloads\GreatMaps-v2015.16-60e678cde033c70d3c060b6aaffb685236d97351\Release-NETv3.5\GMap.NET.WindowsPresentation.dll = ..\..\..\Downloads\GreatMaps-v2015.16-60e678cde033c70d3c060b6aaffb685236d97351\Release-NETv3.5\GMap.NET.WindowsPresentation.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
