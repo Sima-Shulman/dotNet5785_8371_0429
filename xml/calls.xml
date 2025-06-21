@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Call>
-    <CallType>SearchAndRescue</CallType>
-    <Description>A child is lost in a park and needs immediate rescue.</Description>
-    <FullAddress>1 Jaffa Street, Jerusalem</FullAddress>
-    <Latitude>31.7683</Latitude>
-    <Longitude>35.2137</Longitude>
-    <OpeningTime>2025-06-19T08:51:09</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
-    <Id>1000</Id>
-  </Call>
-  <Call>
     <CallType>Transportation</CallType>
     <Description>An elderly person needs to be driven to a hospital for an urgent check-up.</Description>
     <FullAddress>5 Herzl Boulevard, Tel Aviv</FullAddress>
@@ -559,5 +549,25 @@
     <OpeningTime>2025-06-20T12:35:56.1286243+03:00</OpeningTime>
     <MaxFinishTime>2025-06-21T00:00:00</MaxFinishTime>
     <Id>1055</Id>
+  </Call>
+  <Call>
+    <CallType>SearchAndRescue</CallType>
+    <Description>A child is lost in a park and needs immediate rescue.</Description>
+    <FullAddress>1 Jaffa Street, Jerusalem</FullAddress>
+    <Latitude>31.7683</Latitude>
+    <Longitude>35.2137</Longitude>
+    <OpeningTime>2025-06-19T08:51:09</OpeningTime>
+    <MaxFinishTime>2025-06-22T08:51:09</MaxFinishTime>
+    <Id>1000</Id>
+  </Call>
+  <Call>
+    <CallType>Transportation</CallType>
+    <Description>Take and old man to the doctor</Description>
+    <FullAddress>druk 90 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8096575</Latitude>
+    <Longitude>35.2136454</Longitude>
+    <OpeningTime>2025-06-21T22:49:02.0755194+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1056</Id>
   </Call>
 </ArrayOfCall>

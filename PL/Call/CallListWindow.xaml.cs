@@ -44,20 +44,12 @@ namespace PL.Call
             DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(PL.Call.CallListWindow), new PropertyMetadata(null));
 
         private void comboBoxFilterCallType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CallList = (CallType == BO.Enums.CallType.None) ?
-                s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>() :
-                s_bl.Call.GetCallsList(Enums.CallInListFields.CallType, CallType, null);
-        }
+            => queryVolunteerList();
 
         private void comboBoxFilterCallStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            CallList = (CallStatus == BO.Enums.CallStatus.None) ?
-                      s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>() :
-                      s_bl.Call.GetCallsList(Enums.CallInListFields.CallStatus, CallStatus, null);
-        }
+             => queryVolunteerList();
 
-       
+
 
         private void btnDeleteCall_Click(object sender, RoutedEventArgs e)
         {
@@ -97,16 +89,33 @@ namespace PL.Call
 
         private void DataGrid_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-           new CallWindow(SelectedCall!.CallId).Show();
+            new CallWindow(SelectedCall!.CallId).Show();
         }
 
 
         private void btnAddCall_Click(object sender, RoutedEventArgs e)
         {
-            new VolunteerWindow().Show();
+            new CallWindow().Show();
         }
 
+        private IEnumerable<BO.CallInList> FilterCallList()
+        {
+            return (CallStatus == BO.Enums.CallStatus.None) ?
+              s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>() :
+              s_bl.Call.GetCallsList(Enums.CallInListFields.CallStatus, CallStatus, null);
+        }
+        private void queryVolunteerList()
+        {
+            CallList = FilterCallList();
+        }
+        private void callListObserver()
+                => queryVolunteerList();
 
+        private void callListWindow_Loaded(object sender, RoutedEventArgs e)
+            => s_bl.Call.AddObserver(callListObserver);
+
+        private void callLisWindow_Closed(object sender, EventArgs e)
+            => s_bl.Call.RemoveObserver(callListObserver);
 
 
     }

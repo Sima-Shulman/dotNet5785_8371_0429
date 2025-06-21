@@ -52,11 +52,11 @@ namespace PL.Volunteer
 
         private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            VolunteerList = FilterVolunteerListList();
+            VolunteerList = FilterVolunteerList();
         }
         private void queryVolunteerList()
         {
-            VolunteerList = FilterVolunteerListList();
+            VolunteerList = FilterVolunteerList();
         }
 
         private void voluteerListObserver()
@@ -68,7 +68,7 @@ namespace PL.Volunteer
         private void volunteerLisWindow_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(voluteerListObserver);
 
-        private IEnumerable<BO.VolunteerInList> FilterVolunteerListList()
+        private IEnumerable<BO.VolunteerInList> FilterVolunteerList()
         {
             return (CallType == BO.Enums.CallType.None) ?
                             s_bl?.Volunteer.GetVolunteersList() ?? Enumerable.Empty<BO.VolunteerInList>() :
