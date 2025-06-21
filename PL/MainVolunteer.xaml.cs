@@ -121,10 +121,7 @@ namespace PL
 
         private void btnChooseCall_Click(object sender, RoutedEventArgs e)
         {
-
-            MessageBox.Show("btnChooseCall_Click");
-            //new ChooseCallWindow(CurrentVolunteer!.Id).ShowDialog();
-            //RefreshCallDetails();
+            new ChooseCallWindow(CurrentVolunteer!.Id).Show();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)

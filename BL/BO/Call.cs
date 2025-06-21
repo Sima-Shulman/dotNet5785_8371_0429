@@ -18,6 +18,4 @@ public class Call
     public CallStatus CallStatus { get; set; }
     public List<BO.CallAssignInList>? AssignmentsList { get; set; }
     public override string ToString() => this.ToStringProperty();
-
-
 }
