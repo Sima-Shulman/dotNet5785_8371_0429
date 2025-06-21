@@ -97,7 +97,7 @@ namespace PL.Call
 
         private void DataGrid_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-           new CallWindow().Show();
+           new CallWindow(SelectedCall!.CallId).Show();
         }
 
 

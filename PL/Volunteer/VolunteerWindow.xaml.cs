@@ -28,8 +28,11 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             OnPropertyChanged(nameof(ButtonText));
         }
     }
+
     public VolunteerWindow(int id = 0)
     {
+        _buttonText = string.Empty; 
+        PropertyChanged = delegate { };
 
         ButtonText = id == 0 ? "Add" : "Update";
         InitializeComponent();

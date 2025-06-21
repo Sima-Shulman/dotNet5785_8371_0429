@@ -5,8 +5,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="CallWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="Call Details" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}">
+                <TextBlock Text="ID:" Width="120"/>
+                <TextBox Text="{Binding CurrentCall.Id}" Width="200" IsReadOnly="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Type:" Width="120"/>
+                <ComboBox Grid.Row="6" Grid.Column="3"
+                    ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}"
+                    SelectedValue="{Binding CurrentCall.CallType, Mode=TwoWay}" Width="200"
+                    IsEnabled="{Binding IsEditableAllFields}"  />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Description:" Width="120"/>
+                <TextBox Text="{Binding CurrentCall.Description}" Width="200" 
+                         IsReadOnly="{Binding IsEditableAllFields, Converter={StaticResource InverseBoolConverterKey}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Address:" Width="120"/>
+                <TextBox Text="{Binding CurrentCall.FullAddress}"  Width="200"
+                         IsReadOnly="{Binding IsEditableAllFields, Converter={StaticResource InverseBoolConverterKey}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Opening Time:" Width="120"/>
+                <TextBox Text="{Binding CurrentCall.OpeningTime}"  Width="200" IsReadOnly="True"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                <TextBlock Text="Max Finish Time:" Width="120" />
+                <TextBox Text="{Binding CurrentCall.MaxFinishTime}"  Width="200"
+                 IsReadOnly="{Binding IsEditableOnlyMaxFinish, Converter={StaticResource InverseBoolConverterKey}}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,5"                  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}">
+                <TextBlock Text="Status:" Width="120"/>
+                <TextBox Text="{Binding CurrentCall.CallStatus}"  Width="200" IsReadOnly="True"/>
+            </StackPanel>
+        </StackPanel>
+
+        <GroupBox Header="Assignments" Grid.Row="1" Margin="0,0,0,10"  Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}">
+            <DataGrid ItemsSource="{Binding CurrentCall.AssignmentsList}" AutoGenerateColumns="False" IsEnabled="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Width="*"/>
+                    <DataGridTextColumn Header="Volunteer" Binding="{Binding VolunteerFullName}" Width="*"/>
+                    <DataGridTextColumn Header="Assigned Time" Binding="{Binding StartTime}" Width="*"/>
+                    <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="*"/>
+                    <DataGridTextColumn Header="End Type" Binding="{Binding EndType}" Width="*"/>
+
+                    <!-- Add more columns as needed -->
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <Button Content="{Binding ButtonText}" Grid.Row="2"
+        Width="100" Height="30" HorizontalAlignment="Right"
+        Margin="0,10,0,0"
+        Click="btnUpdate_Click"
+        IsEnabled="{Binding IsEditable}" />
+
     </Grid>
+
 </Window>

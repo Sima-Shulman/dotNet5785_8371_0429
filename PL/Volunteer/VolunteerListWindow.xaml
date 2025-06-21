@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="label:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" Grid.Column="0"/>
+            <Label Content="filter:" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" Grid.Column="0"/>
             <ComboBox 
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch"

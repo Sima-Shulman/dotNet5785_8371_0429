@@ -33,7 +33,7 @@ namespace PL.Manager
             set { SetValue(CurrentTimeProperty, value); }
         }
         public static readonly DependencyProperty CurrentTimeProperty =
-            DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
+            DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(ManagerWindow));
 
 
         public TimeSpan RiskRange
@@ -43,7 +43,7 @@ namespace PL.Manager
         }
 
         public static readonly DependencyProperty RiskRangeProperty =
-            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
+            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(ManagerWindow));
 
         private void ManagerWindow_Loaded(object sender, RoutedEventArgs e)
         {
