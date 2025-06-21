@@ -341,13 +341,13 @@
     <FullName>Simi Shulman</FullName>
     <CellphoneNumber>0583295158</CellphoneNumber>
     <Email>s0583295158@gmail.com</Email>
-    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
-    <Latitude>31.759595</Latitude>
-    <Longitude>35.215315</Longitude>
+    <FullAddress>druk 58 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8139395</Latitude>
+    <Longitude>35.216089</Longitude>
     <Role>Manager</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>4</MaxDistance>
+    <MaxDistance>1</MaxDistance>
     <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
   </Volunteer>
 </ArrayOfVolunteer>

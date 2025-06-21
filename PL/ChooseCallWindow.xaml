@@ -8,9 +8,14 @@
         Title="ChooseCallWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={ RelativeSource Mode=Self}}">
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,5" >
-            <TextBlock Text="MaxDistnace:" Width="120"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0" Height="40" >
+            <TextBlock Text="Max Distnace:" Width="120" />
             <TextBox Text="{Binding MaxDistance, UpdateSourceTrigger=Explicit}" Width="200"
+             KeyDown="TextBox_KeyDown"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,50,0,0" Height="40" >
+            <TextBlock Text="Your Address:" Width="120" />
+            <TextBox Text="{Binding FullAddress, UpdateSourceTrigger=Explicit}" Width="200"
              KeyDown="TextBox_KeyDown"/>
         </StackPanel>
         <DataGrid
@@ -20,7 +25,7 @@
   	    EnableRowVirtualization="True"
     RowDetailsVisibilityMode="VisibleWhenSelected"
     SelectionChanged="CallList_SelectionChanged"
-    SelectedItem="{Binding SelectedCall}" Margin="0,31,0,-31">
+    SelectedItem="{Binding SelectedCall}" Margin="0,86,0,0">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CallType}" Header="Type" Width="Auto"/>

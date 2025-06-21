@@ -29,6 +29,8 @@ public partial class ChooseCallWindow : Window
         CallList = s_bl.Call.GetOpenCallsForVolunteer(_volunteerId);
         Volunteer = s_bl.Volunteer.GetVolunteerDetails(_volunteerId);
         SetValue(MaxDistanceProperty, Volunteer.MaxDistance);
+        SetValue(FullAddressProperty, Volunteer.FullAddress);
+
     }
 
     public BO.OpenCallInList? SelectedCall { get; set; }
@@ -69,7 +71,32 @@ public partial class ChooseCallWindow : Window
             MessageBox.Show("CallList is updated!");
         }
     }
+    public string FullAddress
+    {
+        get { return (string)GetValue(FullAddressProperty); }
+    }
+    public static readonly DependencyProperty FullAddressProperty =
+    DependencyProperty.Register(
+        "FullAddress",
+        typeof(string),
+        typeof(ChooseCallWindow),
+        new PropertyMetadata(null, OnFullAddressChanged));
 
+    private static void OnFullAddressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var window = d as ChooseCallWindow;
+        if (window == null) return;
+
+        var newValue = (string)e.NewValue;
+        //if (newValue.HasValue && window.Volunteer.MaxDistance != newValue.Value)
+        //{
+        window.Volunteer.FullAddress = newValue;
+            s_bl.Volunteer.UpdateVolunteerDetails(window._volunteerId, window.Volunteer);
+            MessageBox.Show($"Max distance updated to {newValue} km.", "Update Successful", MessageBoxButton.OK, MessageBoxImage.Information);
+            window.CallList = s_bl.Call.GetOpenCallsForVolunteer(window._volunteerId);
+            MessageBox.Show("CallList is updated!");
+        //}
+    }
     //// Using a DependencyProperty as the backing store for MaxDistance.  This enables animation, styling, binding, etc...
     //public static readonly DependencyProperty MaxDistanceProperty =
     //    DependencyProperty.Register("MaxDistance", typeof(double?), typeof(ChooseCallWindow), new PropertyMetadata(null));
