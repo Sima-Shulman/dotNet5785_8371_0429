@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static BO.Enums;
 
 namespace PL;
 
@@ -104,9 +106,10 @@ public partial class ChooseCallWindow : Window
 
     private void CallList_SelectionChanged(object sender, RoutedEventArgs e)
     {
-        if (SelectedCall != null) // Fix for CS8602: Ensure SelectedCall is not null before accessing its properties  
+        if (SelectedCall != null) 
         {
-            MessageBox.Show($"Call {SelectedCall.Id} description {SelectedCall.Description}", "Call Details", MessageBoxButton.OK, MessageBoxImage.Information); // Fix for CS1955: Use MessageBox.Show instead of treating MessageBox as a method  
+            MessageBox.Show($"Call {SelectedCall.Id} description {SelectedCall.Description}", "Call Details", MessageBoxButton.OK, MessageBoxImage.Information); 
+
         }
         else
         {
@@ -129,6 +132,7 @@ public partial class ChooseCallWindow : Window
             {
                 s_bl.Call.SelectCallForTreatment(_volunteerId, SelectedCall.Id);
                 MessageBox.Show("Call selected successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
             else
             {
@@ -150,5 +154,17 @@ public partial class ChooseCallWindow : Window
             }
         }
     }
+    private void queryCallList()
+    {
+        CallList = s_bl.Call.GetOpenCallsForVolunteer(_volunteerId);
 
+    }
+    private void callListObserver()
+            => queryCallList();
+
+    private void callListWindow_Loaded(object sender, RoutedEventArgs e)
+        => s_bl.Call.AddObserver(callListObserver);
+
+    private void callLisWindow_Closed(object sender, EventArgs e)
+        => s_bl.Call.RemoveObserver(callListObserver);
 }

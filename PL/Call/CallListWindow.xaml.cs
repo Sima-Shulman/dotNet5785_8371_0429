@@ -44,10 +44,10 @@ namespace PL.Call
             DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(PL.Call.CallListWindow), new PropertyMetadata(null));
 
         private void comboBoxFilterCallType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-            => queryVolunteerList();
+            => queryCallList();
 
         private void comboBoxFilterCallStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
-             => queryVolunteerList();
+             => queryCallList();
 
 
 
@@ -104,12 +104,12 @@ namespace PL.Call
               s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>() :
               s_bl.Call.GetCallsList(Enums.CallInListFields.CallStatus, CallStatus, null);
         }
-        private void queryVolunteerList()
+        private void queryCallList()
         {
             CallList = FilterCallList();
         }
         private void callListObserver()
-                => queryVolunteerList();
+                => queryCallList();
 
         private void callListWindow_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Call.AddObserver(callListObserver);

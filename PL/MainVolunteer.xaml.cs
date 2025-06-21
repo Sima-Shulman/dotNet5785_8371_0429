@@ -51,7 +51,6 @@ namespace PL
         {
 
             InitializeComponent();
-            DataContext = this;
 
             try
             {
@@ -104,6 +103,9 @@ namespace PL
         {
             if (CurrentVolunteer!.Id != 0)
                 s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, volunteerObserver);
+            //צריך לעקוב פה אחרי שינויים ב assignments
+            // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
+            //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
         }
 
         private void volunteerWindow_Closed(object sender, EventArgs e)
@@ -114,14 +116,18 @@ namespace PL
 
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("פותח את מסך היסטוריית הקריאות למתנדב");
-            //new VolunteerCallHistoryWindow(CurrentVolunteer!.Id).ShowDialog();
+           new CallHistory(CurrentVolunteer!.Id).ShowDialog();
         }
 
 
         private void btnChooseCall_Click(object sender, RoutedEventArgs e)
         {
-            new ChooseCallWindow(CurrentVolunteer!.Id).Show();
+            var chooseCallWindow = new ChooseCallWindow(CurrentVolunteer!.Id);
+            //צריך לעקוב פה אחרי שינויים ב assignments
+            // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
+            //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
+            chooseCallWindow.Closed += (s, args) => RefreshCallDetails();
+            chooseCallWindow.ShowDialog();
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
@@ -129,15 +135,18 @@ namespace PL
             Close();
         }
 
-        //private void RefreshCallDetails()
-        //{
-        //    var id = CurrentVolunteer!.Id;
-        //    CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-        //    CurrentCall = s_bl.Volunteer.GetCurrentCall(id);
-        //    OnPropertyChanged(nameof(CurrentVolunteer));
-        //    OnPropertyChanged(nameof(CurrentCall));
-        //    OnPropertyChanged(nameof(CanChooseCall));
-        //}
+
+        //צריך לעקוב פה אחרי שינויים ב assignments
+        // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
+        //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
+        private void RefreshCallDetails()
+        {
+            var id = CurrentVolunteer!.Id;
+            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            CurrentCall = CurrentVolunteer.CallInProgress;
+            OnPropertyChanged(nameof(CurrentVolunteer));
+            OnPropertyChanged(nameof(CurrentCall));
+        }
 
 
         private void btnEndCall_Click(object sender, RoutedEventArgs e)
@@ -169,8 +178,6 @@ namespace PL
                 MessageBox.Show("שגיאה בביטול טיפול: " + ex.Message);
             }
         }
-
-
 
     }
 }

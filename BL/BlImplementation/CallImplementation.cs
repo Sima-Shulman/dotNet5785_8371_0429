@@ -250,15 +250,12 @@ internal class CallImplementation : BlApi.ICall
     /// <returns>An IEnumerable of ClosedCallInList representing the closed calls handled by the volunteer.</returns>
     public IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null)
     {
-        //אני צריכה לבדוק שיש כזה וונולטיר ואם לא לזרוק שגיאה??
-        //כן , מפה
-
         try
         {
-            //var v = _dal.Volunteer.Read(volunteerId);
-            //if (v is null)
-            //    throw new BO.BlDoesNotExistException($"Volunteer with ID = {volunteerId} does not exist!");
-            var closedCalls = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTime != null)
+            var v = _dal.Volunteer.Read(volunteerId);
+            if (v is null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID = {volunteerId} does not exist!");
+            var closedCalls = _dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && a.EndTime != null)
                          .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId).CallType == callTypeFilter)
                      .Select(a =>
                      {

@@ -50,13 +50,13 @@
 
 
         <DataGrid
-        ItemsSource="{Binding CallList}"
-        IsReadOnly ="True" 
-        AutoGenerateColumns="False"
+            ItemsSource="{Binding CallList}"
+            IsReadOnly ="True" 
+            AutoGenerateColumns="False"
       	    EnableRowVirtualization="True"
-        RowDetailsVisibilityMode="VisibleWhenSelected"
-        MouseDoubleClick="DataGrid_MouseDoubleClick"
-        SelectedItem="{Binding SelectedCall}" Margin="0,63,0,63">
+            RowDetailsVisibilityMode="VisibleWhenSelected"
+            MouseDoubleClick="DataGrid_MouseDoubleClick"
+            SelectedItem="{Binding SelectedCall}" Margin="0,63,0,63">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="CallId" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CallType}" Header="CallType" Width="Auto"/>

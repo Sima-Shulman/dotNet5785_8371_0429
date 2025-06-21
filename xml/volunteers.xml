@@ -295,20 +295,6 @@
     <Password>ghac2BG3bll2pjf/rKu1M2IjSe9/MJHq7Ue9FBqj8iA=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>327820429</Id>
-    <FullName>Efrat Bar Sheshet</FullName>
-    <CellphoneNumber>0583246911</CellphoneNumber>
-    <Email>efrat2508@gmail.com</Email>
-    <FullAddress>7 HaRav Shrira Gaon Street, Givat Shaul, Jerusalem, Israel</FullAddress>
-    <Latitude>31.794098</Latitude>
-    <Longitude>35.187064</Longitude>
-    <Role>Manager</Role>
-    <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>2</MaxDistance>
-    <Password>OO1pmnPXmZ0mnsrR+LW03OVBFg2KTU5h5ibQOfqjoi0=</Password>
-  </Volunteer>
-  <Volunteer>
     <Id>334600046</Id>
     <FullName>Brachi Shulman</FullName>
     <CellphoneNumber>0527159386</CellphoneNumber>
@@ -347,7 +333,21 @@
     <Role>Manager</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>1</MaxDistance>
+    <MaxDistance>1.2</MaxDistance>
     <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>327820429</Id>
+    <FullName>Efrat Bar Sheshet</FullName>
+    <CellphoneNumber>0583246911</CellphoneNumber>
+    <Email>efrat2508@gmail.com</Email>
+    <FullAddress>7 HaRav Shrira Gaon Street, Givat Shaul, Jerusalem, Israel</FullAddress>
+    <Latitude>31.794098</Latitude>
+    <Longitude>35.187064</Longitude>
+    <Role>Volunteer</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>2</MaxDistance>
+    <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
   </Volunteer>
 </ArrayOfVolunteer>
