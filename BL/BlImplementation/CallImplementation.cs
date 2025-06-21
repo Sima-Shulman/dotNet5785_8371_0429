@@ -65,7 +65,7 @@ internal class CallImplementation : BlApi.ICall
             IEnumerable<BO.CallInList?> calls = CallManager.ConvertToCallInList((IEnumerable<DO.Call>)_dal.Call.ReadAll());
             if (fieldFilter.HasValue && filterValue is not null)
             {
-                calls = calls.Where(c => c.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
+                calls = calls.Where(c => c?.GetType().GetProperty(fieldFilter.ToString())?.GetValue(c)?.Equals(filterValue) == true);
             }
 
             calls = sortField.HasValue
@@ -94,15 +94,13 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            DO.Call call = _dal.Call.Read(callId);
-            if (call is null)
-                throw new BO.BlDoesNotExistException($"Call with ID={callId}does not exist!");
+            DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId}does not exist!");
             var callAssignInLists =
-              (from a in _dal.Assignment.ReadAll(a => a.CallId == callId)
+              (from a in _dal.Assignment.ReadAll(a => a?.CallId == callId)
                select new BO.CallAssignInList
                {
                    VolunteerId = a.VolunteerId,
-                   VolunteerFullName = _dal.Volunteer.Read(a.VolunteerId)?.FullName,
+                   VolunteerFullName = _dal.Volunteer.Read(a.VolunteerId)?.FullName ?? "Unknown",
                    StartTime = a.StartTime,
                    EndTime = a.EndTime,
                    EndType = (BO.Enums.EndType?)a.EndType
@@ -360,17 +358,46 @@ internal class CallImplementation : BlApi.ICall
             var assignment = _dal.Assignment.Read(assignmentId);
             if (assignment == null)
                 throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
-            bool isRequesterNotManager = _dal.Volunteer?.Read(volunteerId).Role != DO.Role.Manager;
+
+            bool isRequesterNotManager = _dal.Volunteer?.Read(volunteerId)?.Role != DO.Role.Manager;
+
             if (isRequesterNotManager && assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
+
             if (assignment.EndTime != null)
                 throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
+
             DO.Assignment newAssignment = assignment with
             {
                 EndTime = _dal.Config.Clock,
                 EndType = (DO.EndType)(isRequesterNotManager ? BO.Enums.EndType.SelfCancellation : BO.Enums.EndType.ManagerCancellation),
             };
+
             _dal.Assignment.Update(newAssignment);
+
+            if (!isRequesterNotManager)
+            {
+                var volunteer = _dal.Volunteer?.Read(assignment.VolunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
+                var call = _dal.Call.Read(assignment.CallId);
+
+                if (volunteer?.Email is not null)
+                {
+                    string subject = "Assignment Cancelled by Manager";
+                    string body =
+                        $"Hello {volunteer.FullName},\n\n" +
+                        $"Your assignment to the following call has been cancelled by a system manager:\n\n" +
+                        $"- Call ID: {call?.Id}\n" +
+                        $"- Description: {call?.Description}\n" +
+                        $"- Address: {call?.FullAddress}\n" +
+                        $"- Originally assigned at: {assignment.StartTime}\n\n" +
+                        $"Cancellation Time: {_dal.Config.Clock}\n" +
+                        $"Reason: Manager cancellation\n\n" +
+                        $"Thank you for your willingness to help.\n" +
+                        $"Volunteer System";
+
+                    EmailHelper.SendEmail(volunteer.Email, subject, body);
+                }
+            }
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -381,6 +408,7 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+
 
     /// <summary>
     /// Marks a call as completed by a volunteer.
@@ -433,7 +461,7 @@ internal class CallImplementation : BlApi.ICall
             if (call.CallStatus == BO.Enums.CallStatus.Expired)
                 throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
             //var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
-            //if (existingAssignments.Any(a => a?.End_time == null))
+            //if (existingAssignments.Any(a => a?.EndTime != null))
             //    throw new BO.BlUnauthorizedException($"Call with ID={callId} is in treatment already.You are not authorized to treat it.");
             var newAssignment = new DO.Assignment
             {
