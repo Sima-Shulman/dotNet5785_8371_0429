@@ -84,14 +84,8 @@
                 <Button Content="Exit" Click="btnExit_Click" Width="180" Margin="5"/>
             </StackPanel>
 
-
-            <!-- מפה (כאן אפשר להכניס MapControl או פשוט תחליף ויזואלי לפי הצורך) -->
-            <!--<Border Background="LightGray" Height="200" Margin="0 0 0 10" CornerRadius="8">
-                <TextBlock Text="MAP HERE: Volunteer & Call Location" 
-                   VerticalAlignment="Center" HorizontalAlignment="Center"
-                   Foreground="Gray" FontStyle="Italic"/>
-            </Border>-->
-            <wv2:WebView2 Name="webView" Height="228" />
+            <wv2:WebView2 Name="webView" Height="228" 
+                            Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}"/>
         </StackPanel>
 
 

@@ -46,10 +46,8 @@ namespace PL
 
 
 
-
         public MainVolunteer(int id)
         {
-
             InitializeComponent();
 
             try
@@ -64,21 +62,8 @@ namespace PL
                 else
                 {
                     CurrentCall = null;
-                    ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude);
+                    webView.Visibility = Visibility.Collapsed; // הסתרת המפה כשאין קריאה
                 }
-
-                //CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-                //ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude);
-                ////ShowMap(31.788278, 35.193187);
-                //if (CurrentVolunteer.CallInProgress != null &&
-                //     CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
-                //{
-                //    CurrentCall = CurrentVolunteer.CallInProgress;
-                //}
-                //else
-                //{
-                //    CurrentCall = null;
-                //}
             }
             catch (Exception ex)
             {
@@ -87,72 +72,45 @@ namespace PL
             }
         }
 
-        //private void ShowMap()
-        //{
-        //    webView.Source = new Uri("https://www.openstreetmap.org/export/embed.html?bbox=34.7924,32.0879,34.7935,32.0886&layer=mapnik");
-
-        //}
 
 
-
-        private void ShowMap(double volunteerLat, double volunteerLon, double? callLat = null, double? callLon = null)
+        private void ShowMap(double volunteerLat, double volunteerLon, double? callLat, double? callLon)
         {
+            //webView.Visibility = Visibility.Visible;
+
             string mapHtml = $@"
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset='utf-8' />
-            <title>Map</title>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
-            <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-        </head>
-        <body>
-            <div id='map' style='width: 100%; height: 100vh;'></div>
-            <script>
-                var map = L.map('map').setView([{volunteerLat}, {volunteerLon}], 15);
-                L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                    maxZoom: 19,
-                    attribution: '© OpenStreetMap'
-                }}).addTo(map);
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset='utf-8' />
+        <title>Map</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
+        <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
+    </head>
+    <body>
+        <div id='map' style='width: 100%; height: 100vh;'></div>
+        <script>
+            var map = L.map('map').setView([{volunteerLat}, {volunteerLon}], 15);
+            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }}).addTo(map);
 
-                var volunteerMarker = L.marker([{volunteerLat}, {volunteerLon}]).addTo(map)
-                    .bindPopup('מיקום המתנדב').openPopup();
-    ";
+            var volunteerMarker = L.marker([{volunteerLat}, {volunteerLon}]).addTo(map)
+                .bindPopup('מיקום המתנדב').openPopup();
 
-            if (callLat != null && callLon != null)
-            {
-                mapHtml += $@"
-                var callMarker = L.marker([{callLat}, {callLon}]).addTo(map)
-                    .bindPopup('מיקום הקריאה');
-        ";
-            }
-
-            mapHtml += @"
-            </script>
-        </body>
-        </html>";
+            var callMarker = L.marker([{callLat}, {callLon}]).addTo(map)
+                .bindPopup('מיקום הקריאה');
+        </script>
+    </body>
+    </html>";
 
             string htmlPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "map.html");
             System.IO.File.WriteAllText(htmlPath, mapHtml, Encoding.UTF8);
             webView.Source = new Uri(htmlPath);
         }
 
-        //private void ShowMap(double latitude, double longitude)
-        //{
-        //    // גודל תצוגה סביב המיקום – ככל שקטן יותר, המפה יותר ממוקדת
-        //    double delta = 0.001;
-
-        //    double minLat = latitude - delta;
-        //    double maxLat = latitude + delta;
-        //    double minLon = longitude - delta;
-        //    double maxLon = longitude + delta;
-
-        //    // בניית הקישור עם התמקדות וסמן (marker)
-        //    string url = $"https://www.openstreetmap.org/export/embed.html?bbox={minLon},{minLat},{maxLon},{maxLat}&layer=mapnik&marker={latitude},{longitude}";
-
-        //    webView.Source = new Uri(url);
-        //}
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) =>
@@ -205,7 +163,7 @@ namespace PL
             //צריך לעקוב פה אחרי שינויים ב assignments
             // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
             //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
-            //chooseCallWindow.Closed += (s, args) => RefreshCallDetails();
+            chooseCallWindow.Closed += (s, args) => RefreshCallDetails();
             chooseCallWindow.ShowDialog();
         }
 
@@ -218,14 +176,20 @@ namespace PL
         //צריך לעקוב פה אחרי שינויים ב assignments
         // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
         //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
-        //private void RefreshCallDetails()
-        //{
-        //    var id = CurrentVolunteer!.Id;
-        //    CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-        //    CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-        //    OnPropertyChanged(nameof(CurrentVolunteer));
-        //    OnPropertyChanged(nameof(CurrentCall));
-        //}
+        private void RefreshCallDetails()
+        {
+            var id = CurrentVolunteer!.Id;
+            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+            OnPropertyChanged(nameof(CurrentVolunteer));
+            OnPropertyChanged(nameof(CurrentCall));
+            if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
+            {
+                CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+                ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude,
+                        (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
+            }
+        }
 
 
         private void btnEndCall_Click(object sender, RoutedEventArgs e)
@@ -233,8 +197,9 @@ namespace PL
             try
             {
                 // אותה הבעיה של האסימנט אידי
-                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentCall!.CallId);
+                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentCall!.Id);
                 CurrentCall = null;
+
                 MessageBox.Show("הטיפול בקריאה הסתיים.");
             }
             catch (Exception ex)
@@ -249,7 +214,7 @@ namespace PL
             {
                 // אותה הבעיה של האסימנט אידי
                 
-                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentCall!.CallId);
+                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentCall!.Id);
                 CurrentCall = null;
                 MessageBox.Show("הטיפול בקריאה בוטל.");
             }
