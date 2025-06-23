@@ -333,7 +333,7 @@
     <Role>Manager</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>1.2</MaxDistance>
+    <MaxDistance>20</MaxDistance>
     <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
   </Volunteer>
   <Volunteer>
@@ -347,7 +347,7 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>2</MaxDistance>
+    <MaxDistance>10</MaxDistance>
     <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
   </Volunteer>
 </ArrayOfVolunteer>
