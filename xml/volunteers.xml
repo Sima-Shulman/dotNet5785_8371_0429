@@ -350,4 +350,18 @@
     <MaxDistance>2</MaxDistance>
     <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
   </Volunteer>
+  <Volunteer>
+    <Id>17111832</Id>
+    <FullName>Abraham Bar Sheshet</FullName>
+    <CellphoneNumber>0527654095</CellphoneNumber>
+    <Email>efrat2508@gmail.com</Email>
+    <FullAddress>דרוק 58 , ירושלים</FullAddress>
+    <Latitude>31.8139395</Latitude>
+    <Longitude>35.216089</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>10</MaxDistance>
+    <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
+  </Volunteer>
 </ArrayOfVolunteer>

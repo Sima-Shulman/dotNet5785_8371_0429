@@ -29,6 +29,7 @@ namespace PL.Call
             InitializeComponent();
         }
         public BO.Enums.CallType CallType { get; set; } = BO.Enums.CallType.None;
+
         public BO.Enums.CallStatus CallStatus { get; set; } = BO.Enums.CallStatus.None;
 
         public BO.CallInList? SelectedCall { get; set; }
