@@ -233,8 +233,8 @@ namespace PL
             try
             {
                 // אותה הבעיה של האסימנט אידי
-                //s_bl.Call.MarkCallCompletion();
-                //CurrentCall = null;
+                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentCall!.CallId);
+                CurrentCall = null;
                 MessageBox.Show("הטיפול בקריאה הסתיים.");
             }
             catch (Exception ex)
@@ -248,8 +248,9 @@ namespace PL
             try
             {
                 // אותה הבעיה של האסימנט אידי
-                //s_bl.Call.MarkCallCancellation();
-                //CurrentCall = null;
+                
+                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentCall!.CallId);
+                CurrentCall = null;
                 MessageBox.Show("הטיפול בקריאה בוטל.");
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 
 
 using DalApi;
+using DO;
 using Helpers;
 using System.Collections.Generic;
 using System.Linq;
@@ -253,7 +254,7 @@ internal class CallImplementation : BlApi.ICall
             var v = _dal.Volunteer.Read(volunteerId);
             if (v is null)
                 throw new BO.BlDoesNotExistException($"Volunteer with ID = {volunteerId} does not exist!");
-            var closedCalls = _dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && a.EndTime != null)
+            var closedCalls = _dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && (a.EndTime != null && (a.EndType != DO.EndType.SelfCancellation) && (a.EndType != DO.EndType.ManagerCancellation)))
                          .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a.CallId).CallType == callTypeFilter)
                      .Select(a =>
                      {
@@ -295,6 +296,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            PrintAllCallsAddressAndStatus();
             IEnumerable<BO.OpenCallInList> openCalls;
             if (volunteer.MaxDistance is null)
                 openCalls = from c in _dal.Call.ReadAll(c => c.CalculateCallStatus() == BO.Enums.CallStatus.Opened ||
@@ -346,26 +348,28 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
+
+
     /// <summary>
     /// Marks a call as canceled by a volunteer or manager.
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer requesting the cancellation.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
-    public void MarkCallCancellation(int volunteerId, int assignmentId)
+    public void MarkCallCancellation(int volunteerId, int callId)
     {
         try
         {
-            var assignment = _dal.Assignment.Read(assignmentId);
-            if (assignment == null)
-                throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist");
-
+            //var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+            //var boVolunteer = VolunteerManager.ConvertDoVolunteerToBoVolunteer(volunteer);
+            var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
+                .LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}.")) ?? throw new BO.BlDoesNotExistException($"Assignment with CallId{callId}  and VolunteerId {volunteerId}does not exist");
             bool isRequesterNotManager = _dal.Volunteer?.Read(volunteerId)?.Role != DO.Role.Manager;
 
             if (isRequesterNotManager && assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
 
-            if (assignment.EndTime != null)
-                throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
+            //if (assignment.EndTime != null)
+            //    throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
 
             DO.Assignment newAssignment = assignment with
             {
@@ -377,8 +381,8 @@ internal class CallImplementation : BlApi.ICall
 
             if (!isRequesterNotManager)
             {
-                var volunteer = _dal.Volunteer?.Read(assignment.VolunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
-                var call = _dal.Call.Read(assignment.CallId);
+                var volunteer = _dal.Volunteer?.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
+                var call = _dal.Call.Read(callId);
 
                 if (volunteer?.Email is not null)
                 {
@@ -415,25 +419,24 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer marking the call as completed.</param>
     /// <param name="assignmentId">The ID of the assignment to mark as completed.</param>
-    public void MarkCallCompletion(int volunteerId, int assignmentId)
+    public void MarkCallCompletion(int volunteerId, int callId)
     {
         try
         {
-            var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist.");
-            if (assignment.VolunteerId != volunteerId)
-                throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to complete this call.");
+            var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
+                .LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
             if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
-                throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or expired.");
+                throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
             DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
             _dal.Assignment.Update(newAssignment);
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exist", ex);
+            throw new BO.BlDoesNotExistException($"Assignment with Volunteer ID={volunteerId} and Call ID={callId} does not exist", ex);
         }
         catch (DO.DalDeletionImpossible ex)
         {
-            throw new BO.BlDeletionException($"The assignment with ID={assignmentId} has already been completed or canceled.", ex);
+            throw new BO.BlDeletionException($"The assignment with Volunteer ID={volunteerId} and Call ID={callId} has already been completed or canceled.", ex);
         }
         catch (Exception ex)
         {
@@ -450,7 +453,7 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            var assignments = _dal.Assignment.ReadAll(a => a.VolunteerId == volunteerId && a.EndTime is null);
+            var assignments = _dal.Assignment.ReadAll(a => (a.VolunteerId == volunteerId) && (a.EndTime is null &&(a.EndType != DO.EndType.SelfCancellation) && (a.EndType != DO.EndType.ManagerCancellation)));
             if (assignments.Any())
                 throw new BO.BlUnauthorizedException($"volunteer with ID {volunteerId} cannot select a new call for treatment since he is treating another call now.");
             var call = GetCallDetails(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist.");
@@ -559,5 +562,29 @@ internal class CallImplementation : BlApi.ICall
     CallManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
     CallManager.Observers.RemoveObserver(id, observer); //stage 5
+
+    /// <summary>
+    /// Prints all calls with their address and status.
+    /// </summary>
+    public void PrintAllCallsAddressAndStatus()
+    {
+        try
+        {
+            var calls = _dal.Call.ReadAll();
+            foreach (var call in calls)
+            {
+                if (call.FullAddress == "1 Jaffa Street, Jerusalem")
+                    Console.WriteLine($"Address: {call.FullAddress}, Status: {call.CalculateCallStatus()}");
+            }
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException("Cannot access calls", ex);
+        }
+        catch (Exception ex)
+        {
+            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
+        }
+    }
     #endregion Stage 5
 }

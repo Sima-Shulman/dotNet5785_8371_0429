@@ -71,20 +71,22 @@ namespace PL.Call
 
         private void btnUnassignCall_Click(object sender, RoutedEventArgs e)
         {
-            //if (SelectedCall is BO.CallInList call)
-            //{
-            //    MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {call.CallId}?", "Delete Call", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            //    try
-            //    {
-            //        if (result == MessageBoxResult.Yes)
-            //            s_bl.Call.MarkCallCancellation(call.CallId);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(ex.Message);
-            //    }
-            //}
-            MessageBox.Show("לא עובד בגלל המורה");
+            if (SelectedCall is BO.CallInList call)
+            {
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {call.CallId}?", "Delete Call", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                try
+                {
+                    if (result == MessageBoxResult.Yes)
+                    {
+                      
+                        //s_bl.Call.MarkCallCancellation(call.VolunteerId,call.CallId);????????????????????
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
 
 

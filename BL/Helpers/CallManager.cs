@@ -20,37 +20,63 @@ internal static class CallManager
     /// <returns>The calculated status of the call.</returns>
     public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
     {
-        var assignments = s_dal.Assignment.ReadAll(a => a.CallId == call.Id)
-                .OrderByDescending(a => a.StartTime)
+        var assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id)
+                .OrderByDescending(a => a?.StartTime)
                 .ToList();
 
-        if (assignments.Any())//there is an assignment to this call
+        if (assignments.Any()) // there IS an assignment to this call  
         {
             var lastAssignment = assignments.First();
-            if (lastAssignment.EndTime is null && lastAssignment.StartTime <= s_dal.Config.Clock)
+            if (lastAssignment!.EndTime is not null) // if end time is NOT null  
             {
-                if (call.MaxFinishTime.HasValue && (call.MaxFinishTime.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
-                    return BO.Enums.CallStatus.InTreatmentAtRisk; // InRiskTreatment
-
-                return BO.Enums.CallStatus.InTreatment; // InTreatment
+                if ((lastAssignment.EndType == DO.EndType.SelfCancellation) || (lastAssignment.EndType == DO.EndType.ManagerCancellation) && (lastAssignment.StartTime <= s_dal.Config.Clock)) // if the call was cancelled  
+                {
+                    if (call.MaxFinishTime.HasValue && (call.MaxFinishTime.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange) // if the call is in risk  
+                        return BO.Enums.CallStatus.OpenedAtRisk; // OpenedAtRisk  
+                    else
+                        return BO.Enums.CallStatus.Opened; // Opened  
+                }
+                else // if the end time is not null but the call is not canceled ( - the call was ended in some way)
+                {
+                    if (lastAssignment.EndType == DO.EndType.Expired || call.MaxFinishTime < s_dal.Config.Clock) // Max finish time was over  
+                        return BO.Enums.CallStatus.Expired; // Expired  
+                    else
+                        return BO.Enums.CallStatus.Closed; // Closed  
+                }
             }
-            if (lastAssignment.EndType.HasValue)
+            else // end time IS null (- the assignment is the first one)  
             {
-                if (lastAssignment.EndType == DO.EndType.Expired)
-                    return BO.Enums.CallStatus.Expired; // Expired
+                if (call.MaxFinishTime.HasValue)
+                {
+                    if (call.MaxFinishTime <= s_dal.Config.Clock)
+                        return BO.Enums.CallStatus.InTreatmentAtRisk; // InTreatmentAtRisk  
 
-                return BO.Enums.CallStatus.Closed; // Closed (handled or canceled)
+                    if ((call.MaxFinishTime.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
+                        return BO.Enums.CallStatus.InTreatment; // InTreatment  
+                }
+                else
+                    return BO.Enums.CallStatus.InTreatment;
             }
         }
-        if (call.MaxFinishTime.HasValue)
+        else // there are no assignments to this call  
         {
-            if (call.MaxFinishTime <= s_dal.Config.Clock)
-                return BO.Enums.CallStatus.Expired; // Expired
-
-            if ((call.MaxFinishTime.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
-                return BO.Enums.CallStatus.OpenedAtRisk; // OpenInRisk
+            if (call.MaxFinishTime.HasValue) // if there is a max finish time  
+            {
+                if (call.MaxFinishTime <= s_dal.Config.Clock)
+                    return BO.Enums.CallStatus.Expired; // Expired  
+                else if (call.MaxFinishTime - s_dal.Config.Clock <= s_dal.Config.RiskRange)
+                    return BO.Enums.CallStatus.OpenedAtRisk; // OpenedAtRisk  
+                else
+                    return BO.Enums.CallStatus.Opened; // Opened  
+            }
+            else
+            {
+                return BO.Enums.CallStatus.Opened; // Opened  
+            }
         }
-        return BO.Enums.CallStatus.Opened;
+
+        // Ensure all code paths return a value
+        return BO.Enums.CallStatus.None; // Default fallback
     }
     /// <summary>
     /// Converts a list of DO.Call objects to a list of BO.CallInList objects.

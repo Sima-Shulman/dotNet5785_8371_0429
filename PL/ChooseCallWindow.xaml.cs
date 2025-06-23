@@ -130,6 +130,7 @@ public partial class ChooseCallWindow : Window
 
             if (result == MessageBoxResult.Yes)
             {
+                
                 s_bl.Call.SelectCallForTreatment(_volunteerId, SelectedCall.Id);
                 MessageBox.Show("Call selected successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();

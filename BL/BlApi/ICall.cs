@@ -13,8 +13,8 @@
         void AddCall(BO.Call call);
         IEnumerable<BO.ClosedCallInList> GetClosedCallsHandledByVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.ClosedCallInListFields? sortField = null);
         IEnumerable<BO.OpenCallInList> GetOpenCallsForVolunteer(int volunteerId, BO.Enums.CallType? callTypeFilter = null, BO.Enums.OpenCallInListFields? sortField = null);
-        void MarkCallCompletion(int volunteerId, int assignmentId);
-        void MarkCallCancellation(int volunteerId, int assignmentId);
+        void MarkCallCompletion(int volunteerId, int callId);
+        void MarkCallCancellation(int volunteerId, int callId);
         void SelectCallForTreatment(int volunteerId, int callId);
     }
 }
