@@ -44,14 +44,29 @@ namespace PL.Call
         public static readonly DependencyProperty CallListProperty =
             DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(PL.Call.CallListWindow), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Handles the selection change event of the Call Type filter combo box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxFilterCallType_SelectionChanged(object sender, SelectionChangedEventArgs e)
             => queryCallList();
 
+        /// <summary>
+        /// Handles the selection change event of the Call Status filter combo box.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxFilterCallStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
              => queryCallList();
 
 
 
+        /// <summary>
+        /// Handles the click event of the Delete Call button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDeleteCall_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedCall is BO.CallInList call)
@@ -69,6 +84,11 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// Handles the click event of the Unassign Call button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnUnassignCall_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedCall is BO.CallInList call)
@@ -90,17 +110,31 @@ namespace PL.Call
         }
 
 
+        /// <summary>
+        /// Handles the double-click event on the DataGrid to open the CallWindow for the selected call.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGrid_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
             new CallWindow(SelectedCall!.CallId).Show();
         }
 
 
+        /// <summary>
+        /// Handles the click event of the Add Call button to open a new CallWindow for adding a call.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddCall_Click(object sender, RoutedEventArgs e)
         {
             new CallWindow().Show();
         }
 
+        /// <summary>
+        /// Filters the call list based on the selected CallStatus and CallType.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<BO.CallInList> FilterCallList()
         {
             var allCalls = s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>();
@@ -116,16 +150,35 @@ namespace PL.Call
             return filteredCalls;
         }
 
+        /// <summary>
+        /// Queries the call list and updates the CallList property with the filtered results.
+        /// </summary>
         private void queryCallList()
         {
             CallList = FilterCallList();
         }
+
+        /// <summary>
+        /// Registers the observer for call list updates and queries the initial call list.
+        /// </summary>
         private void callListObserver()
                 => queryCallList();
 
+
+        /// <summary>
+        /// Handles the Loaded event of the CallListWindow to register the call list observer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void callListWindow_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Call.AddObserver(callListObserver);
 
+
+        /// <summary>
+        /// Handles the Closed event of the CallListWindow to remove the call list observer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void callLisWindow_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(callListObserver);
 

@@ -24,6 +24,11 @@ public partial class CallHistory : Window
 
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
+
+    /// <summary>
+    /// Constructor for CallHistory window.
+    /// </summary>
+    /// <param name="volunteerId"></param>
     public CallHistory(int volunteerId)
     {
         VolunteerId = volunteerId;
@@ -46,25 +51,54 @@ public partial class CallHistory : Window
     public int VolunteerId { get; set; } = 0;
 
     public BO.CallInList? SelectedCall { get; set; }
+
+    /// <summary>
+    /// Event handler for the selection change of the combo box that filters call types.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void comboBoxFilterCallType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         => queryClosedCallsList();
 
+
+    /// <summary>
+    /// Filters the closed calls list based on the selected call type and volunteer ID.
+    /// </summary>
+    /// <returns>The filtered  Calls list</returns>
     private IEnumerable<BO.ClosedCallInList> FilterClosedCallsList()
     {
         return (CallType == BO.Enums.CallType.None) ?
           s_bl?.Call.GetClosedCallsHandledByVolunteer(VolunteerId,null,null) ?? Enumerable.Empty<BO.ClosedCallInList>() :
           s_bl.Call.GetClosedCallsHandledByVolunteer(VolunteerId, CallType, null);
     }
+
+    /// <summary>
+    /// Queries the closed calls list and updates the ClosedCallsList property.
+    /// </summary>
     private void queryClosedCallsList()
     {
         ClosedCallsList = FilterClosedCallsList().ToList();
     }
+
+    /// <summary>
+    /// Registers an observer to update the closed calls list when there are changes in the call data.
+    /// </summary>
     private void closedCallsListObserver()
             => queryClosedCallsList();
 
+    /// <summary>
+    /// Event handler for the Loaded event of the CallListWindow.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void callListWindow_Loaded(object sender, RoutedEventArgs e)
         => s_bl.Call.AddObserver(closedCallsListObserver);
 
+    /// <summary>
+    /// Event handler for the Closed event of the CallListWindow.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void callLisWindow_Closed(object sender, EventArgs e)
         => s_bl.Call.RemoveObserver(closedCallsListObserver);
 

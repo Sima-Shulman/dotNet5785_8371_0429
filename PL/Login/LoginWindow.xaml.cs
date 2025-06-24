@@ -48,12 +48,16 @@ namespace PL.Login
         public static readonly DependencyProperty UserIdProperty =
             DependencyProperty.Register("UserId", typeof(int), typeof(LoginWindow), new PropertyMetadata(0));
 
-
+        /// <summary>
+        /// Handles the Click event of the loginBtn control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(UserId.ToString()) || string.IsNullOrEmpty(Password.ToString()))
+            if (!UserId.ToString().All(char.IsDigit) || string.IsNullOrEmpty(Password.ToString()))
             {
-                MessageBox.Show("Please enter both User ID and Password.");
+                MessageBox.Show("Please enter a valid numeric User ID and Password.");
                 return;
             }
             try

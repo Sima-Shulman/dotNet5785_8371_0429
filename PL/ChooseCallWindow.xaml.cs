@@ -24,6 +24,11 @@ public partial class ChooseCallWindow : Window
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     private readonly int _volunteerId;
     private BO.Volunteer Volunteer;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ChooseCallWindow"/> class.
+    /// </summary>
+    /// <param name="volunteerId"> The current volunteer's Id</param>
     public ChooseCallWindow(int volunteerId)
     {
         InitializeComponent();
@@ -36,6 +41,14 @@ public partial class ChooseCallWindow : Window
     }
 
 
+
+    /// <summary>
+    /// Displays a map showing the volunteer's location and the call's location.
+    /// </summary>
+    /// <param name="volunteerLat">The volunteer's coordinates </param>
+    /// <param name="volunteerLon">The volunteer's coordinates </param>
+    /// <param name="callLat">The call's coordinates</param>
+    /// <param name="callLon">The call's coordinates</param>
     private void ShowMap(double volunteerLat, double volunteerLon, double? callLat, double? callLon)
     {
         //webView.Visibility = Visibility.Visible;
@@ -88,6 +101,9 @@ public partial class ChooseCallWindow : Window
     {
         get { return (double?)GetValue(MaxDistanceProperty); }
     }
+    /// <summary>
+    /// Using a DependencyProperty as the backing store for MaxDistance. This enables animation, styling, binding, etc...
+    /// </summary>
     public static readonly DependencyProperty MaxDistanceProperty =
     DependencyProperty.Register(
         "MaxDistance",
@@ -95,6 +111,11 @@ public partial class ChooseCallWindow : Window
         typeof(ChooseCallWindow),
         new PropertyMetadata(null, OnMaxDistanceChanged));
 
+    /// <summary>
+    /// Handles the MaxDistance property change event.
+    /// </summary>
+    /// <param name="d"></param>
+    /// <param name="e"></param>
     private static void OnMaxDistanceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var window = d as ChooseCallWindow;
@@ -110,6 +131,8 @@ public partial class ChooseCallWindow : Window
             MessageBox.Show("CallList is updated!");
         }
     }
+
+    
     public string FullAddress
     {
         get { return (string)GetValue(FullAddressProperty); }
@@ -121,26 +144,29 @@ public partial class ChooseCallWindow : Window
         typeof(ChooseCallWindow),
         new PropertyMetadata(null, OnFullAddressChanged));
 
+    /// <summary>
+    /// Handles the FullAddress property change event.
+    /// </summary>
+    /// <param name="d"></param>
+    /// <param name="e"></param>
     private static void OnFullAddressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var window = d as ChooseCallWindow;
         if (window == null) return;
 
         var newValue = (string)e.NewValue;
-        //if (newValue.HasValue && window.Volunteer.MaxDistance != newValue.Value)
-        //{
         window.Volunteer.FullAddress = newValue;
             s_bl.Volunteer.UpdateVolunteerDetails(window._volunteerId, window.Volunteer);
             MessageBox.Show($"Max distance updated to {newValue} km.", "Update Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             window.CallList = s_bl.Call.GetOpenCallsForVolunteer(window._volunteerId);
             MessageBox.Show("CallList is updated!");
-        //}
     }
-    //// Using a DependencyProperty as the backing store for MaxDistance.  This enables animation, styling, binding, etc...
-    //public static readonly DependencyProperty MaxDistanceProperty =
-    //    DependencyProperty.Register("MaxDistance", typeof(double?), typeof(ChooseCallWindow), new PropertyMetadata(null));
 
-
+    /// <summary>
+    /// Handles the selection change event of the call list.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void CallList_SelectionChanged(object sender, RoutedEventArgs e)
     {
         if (SelectedCall != null) 
@@ -157,6 +183,11 @@ public partial class ChooseCallWindow : Window
         }
     }
 
+    /// <summary>
+    /// Handles the button click event to choose a volunteer for a call.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnChooseVolunteer_Click(object sender, RoutedEventArgs e)
     {
         if (SelectedCall != null)
@@ -183,7 +214,11 @@ public partial class ChooseCallWindow : Window
         }
     }
 
-    //update the max distance only after pressing Enter.
+    /// <summary>
+    /// Handles the KeyDown event for the TextBox to update the source when Enter is pressed.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void TextBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
@@ -195,17 +230,35 @@ public partial class ChooseCallWindow : Window
             }
         }
     }
+
+    /// <summary>
+    /// Queries the call list for open calls assigned to the volunteer.
+    /// </summary>
     private void queryCallList()
     {
         CallList = s_bl.Call.GetOpenCallsForVolunteer(_volunteerId);
 
     }
+
+    /// <summary>
+    /// Calls the observer to update the call list when there are changes.
+    /// </summary>
     private void callListObserver()
             => queryCallList();
 
+    /// <summary>
+    /// Handles the Loaded event of the call list window to add an observer for call updates.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void callListWindow_Loaded(object sender, RoutedEventArgs e)
         => s_bl.Call.AddObserver(callListObserver);
 
+    /// <summary>
+    /// Handles the Closed event of the call list window to remove the observer for call updates.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void callLisWindow_Closed(object sender, EventArgs e)
         => s_bl.Call.RemoveObserver(callListObserver);
 }

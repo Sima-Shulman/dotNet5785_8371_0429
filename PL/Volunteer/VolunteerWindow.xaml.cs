@@ -29,6 +29,11 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
     }
 
+
+    /// <summary>
+    /// Constructor for VolunteerWindow.
+    /// </summary>
+    /// <param name="id"></param>
     public VolunteerWindow(int id = 0)
     {
         _buttonText = string.Empty; 
@@ -70,18 +75,58 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    /// <summary>
+    /// Method to raise the PropertyChanged event for data binding.
+    /// </summary>
+    /// <param name="propertyName"></param>
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    /// <summary>
+    /// Event handler for the Add/Update button click event.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
+        if (CurrentVolunteer == null)
+        {
+            MessageBox.Show("Volunteer details are missing.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(CurrentVolunteer.FullName))
+        {
+            MessageBox.Show("Full Name cannot be empty.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(CurrentVolunteer.CellphoneNumber) || !System.Text.RegularExpressions.Regex.IsMatch(CurrentVolunteer.CellphoneNumber, @"^\d{10}$"))
+        {
+            MessageBox.Show("Cellphone Number must be a valid 10-digit number.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(CurrentVolunteer.Email) || !System.Text.RegularExpressions.Regex.IsMatch(CurrentVolunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            MessageBox.Show("Email must be in a valid format.");
+            return;
+        }
+
+        if (CurrentVolunteer.MaxDistance.HasValue && CurrentVolunteer.MaxDistance <= 0)
+        {
+            MessageBox.Show("Max Distance must be greater than 0.");
+            return;
+        }
+
         if (ButtonText == "Add")
         {
             try
             {
                 s_bl.Volunteer.AddVolunteer(CurrentVolunteer!);
-                //MessageBox.Show("Volunteer added successfully");
                 Close();
             }
             catch (Exception ex)
@@ -107,17 +152,33 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
         }
     }
 
+
+    /// <summary>
+    /// Observer method to refresh the volunteer details when changes occur.
+    /// </summary>
     private void volunteerObserver()
     {
         int id = CurrentVolunteer!.Id;
         CurrentVolunteer = null;
         CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
     }
+
+    /// <summary>
+    /// Event handler for the window loaded event to add the observer for volunteer updates.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void volunteerWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
             s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, volunteerObserver);
     }
+
+    /// <summary>
+    /// Event handler for the window closed event to remove the observer for volunteer updates.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void volunteerWindow_Closed(object sender, EventArgs e)
     {
         if (CurrentVolunteer!.Id != 0)
