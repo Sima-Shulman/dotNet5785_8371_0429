@@ -95,7 +95,7 @@ internal static class CallManager
             TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.Closed ? (call.MaxFinishTime - call.OpeningTime) : null;
             return new BO.CallInList
             {
-                Id = lastAssignment?.Id,
+                AssignmentId = lastAssignment?.Id,
                 CallId = call.Id,
                 CallType = (BO.Enums.CallType)call.CallType,
                 OpeningTime = call.OpeningTime,

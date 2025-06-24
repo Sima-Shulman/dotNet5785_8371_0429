@@ -17,34 +17,30 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         </Grid>
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+        <Grid HorizontalAlignment="Stretch" Height="50" Grid.Row="0" VerticalAlignment="Top" Width="auto"  >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="label:" HorizontalContentAlignment="Center" Grid.Column="0" Height="25" VerticalAlignment="Top"/>
+            <Label Content="Call Type:" HorizontalContentAlignment="Center" Grid.Column="0" Height="50" VerticalAlignment="Top"/>
             <ComboBox 
             SelectedValue="{Binding CallType, Mode=TwoWay}"
             SelectionChanged="comboBoxFilterCallType_SelectionChanged" 
-            ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" Margin="86,0,0,750" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
-                <ComboBox.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform AngleX="-0.751"/>
-                        <RotateTransform/>
-                        <TranslateTransform X="-0.387"/>
-                    </TransformGroup>
-                </ComboBox.RenderTransform>
+            ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" Grid.Column="1" Height="50" HorizontalContentAlignment="Center" VerticalContentAlignment="Top"  >
+
             </ComboBox>
 
-            <Label Content="status" HorizontalContentAlignment="Center" Grid.Column="2" Margin="0,0,0,409"/>
+            <Label Content="status" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Grid.Column="2"  Height="50"/>
             <ComboBox
             Grid.Column="3" 
             SelectedValue="{Binding CallStatus, Mode=TwoWay}"
             SelectionChanged="comboBoxFilterCallStatus_SelectionChanged" 
-            ItemsSource="{Binding Source={StaticResource CallStatusCollectionKey}}" Margin="86,0,0,750"/>
+            ItemsSource="{Binding Source={StaticResource CallStatusCollectionKey}}" 
+            Height="50"
+            HorizontalContentAlignment="Center" 
+            VerticalContentAlignment="Top"/>
         </Grid>
 
 
@@ -56,7 +52,7 @@
       	    EnableRowVirtualization="True"
             RowDetailsVisibilityMode="VisibleWhenSelected"
             MouseDoubleClick="DataGrid_MouseDoubleClick"
-            SelectedItem="{Binding SelectedCall}" Margin="0,63,0,63">
+            SelectedItem="{Binding SelectedCall}" Margin="0,60,0,75">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="CallId" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding CallType}" Header="CallType" Width="Auto"/>
@@ -84,7 +80,7 @@
 
         </DataGrid>
 
-        <Button Content="Add" HorizontalAlignment="Center" Height="50" Width="100"  Click="btnAddCall_Click" Margin="0,384,0,0" RenderTransformOrigin="0.277,0.244"/>
+        <Button Content="Add" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0, 10" Height="50" Width="100"  Click="btnAddCall_Click" />
     </Grid>
 </Window>
 

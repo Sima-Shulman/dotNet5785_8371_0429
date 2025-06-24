@@ -35,7 +35,7 @@ internal static class VolunteerManager
             {
                 callInProgress = new BO.CallInProgress
                 {
-                    Id = currentAssignment.Id,
+                    AssignmentId = currentAssignment.Id,
                     CallId = currentAssignment.CallId,
                     CallType = (BO.Enums.CallType)callDetails.CallType,
                     Description = callDetails.Description,

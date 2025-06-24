@@ -62,7 +62,7 @@ namespace PL
                 else
                 {
                     CurrentCall = null;
-                    webView.Visibility = Visibility.Collapsed; // הסתרת המפה כשאין קריאה
+                    //webView.Visibility = Visibility.Collapsed; // הסתרת המפה כשאין קריאה
                 }
             }
             catch (Exception ex)
@@ -197,7 +197,7 @@ namespace PL
             try
             {
                 // אותה הבעיה של האסימנט אידי
-                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentCall!.Id);
+                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id,CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
 
                 MessageBox.Show("הטיפול בקריאה הסתיים.");
@@ -214,7 +214,7 @@ namespace PL
             {
                 // אותה הבעיה של האסימנט אידי
                 
-                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentCall!.Id);
+                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
                 MessageBox.Show("הטיפול בקריאה בוטל.");
             }

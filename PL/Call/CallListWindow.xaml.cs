@@ -79,7 +79,7 @@ namespace PL.Call
                     if (result == MessageBoxResult.Yes)
                     {
                       
-                        //s_bl.Call.MarkCallCancellation(call.VolunteerId,call.CallId);????????????????????
+                        //s_bl.Call.MarkCallCancellation(call.VolunteerId,Call.AssignmentId);????????????????????
                     }
                 }
                 catch (Exception ex)
@@ -103,10 +103,19 @@ namespace PL.Call
 
         private IEnumerable<BO.CallInList> FilterCallList()
         {
-            return (CallStatus == BO.Enums.CallStatus.None) ?
-              s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>() :
-              s_bl.Call.GetCallsList(Enums.CallInListFields.CallStatus, CallStatus, null);
+            var allCalls = s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>();
+
+            var filteredCalls = allCalls;
+
+            if (CallStatus != BO.Enums.CallStatus.None)
+                filteredCalls = filteredCalls.Where(c => c.CallStatus == CallStatus);
+
+            if (CallType != BO.Enums.CallType.None)
+                filteredCalls = filteredCalls.Where(c => c.CallType == CallType);
+
+            return filteredCalls;
         }
+
         private void queryCallList()
         {
             CallList = FilterCallList();
