@@ -27,15 +27,6 @@ namespace PL.Volunteer
             InitializeComponent();
 
         }
-        //public BO.VolunteerInList? SelectedVolunteer
-        //{
-        //    get => (BO.VolunteerInList?)GetValue(SelectedVolunteerProperty);
-        //    set => SetValue(SelectedVolunteerProperty, value);
-        //}
-
-        //public static readonly DependencyProperty SelectedVolunteerProperty =
-        //    DependencyProperty.Register("SelectedVolunteer", typeof(BO.VolunteerInList), typeof(VolunteerListWindow), new PropertyMetadata(null));
-
         public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
 
@@ -48,44 +39,88 @@ namespace PL.Volunteer
         public static readonly DependencyProperty VolunteerListProperty =
             DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(PL.Volunteer.VolunteerListWindow), new PropertyMetadata(null));
 
+
         public BO.Enums.CallType CallType { get; set; } = BO.Enums.CallType.None;
 
+        /// <summary>
+        /// Handles the SelectionChanged event of the comboBoxFilterVolunteers control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void comboBoxFilterVolunteers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             VolunteerList = FilterVolunteerList();
         }
+
+        /// <summary>
+        /// Queries the volunteer list based on the selected filter.
+        /// </summary>
         private void queryVolunteerList()
         {
             VolunteerList = FilterVolunteerList();
         }
 
+
+        /// <summary>
+        /// Registers an observer to update the volunteer list when changes occur.
+        /// </summary>
         private void voluteerListObserver()
             => queryVolunteerList();
 
+
+        /// <summary>
+        /// Handles the Loaded event of the volunteerListWindow control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void volunteerListWindow_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Volunteer.AddObserver(voluteerListObserver);
 
+        /// <summary>
+        /// Handles the Closed event of the volunteerLisWindow control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void volunteerLisWindow_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(voluteerListObserver);
 
+        /// <summary>
+        /// Filters the volunteer list based on the selected call type.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerable<BO.VolunteerInList> FilterVolunteerList()
         {
             return (CallType == BO.Enums.CallType.None) ?
                             s_bl?.Volunteer.GetVolunteersList() ?? Enumerable.Empty<BO.VolunteerInList>() :
                             s_bl?.Volunteer.GetVolunteersFilterList(CallType) ?? Enumerable.Empty<BO.VolunteerInList>();
         }
+
+        /// <summary>
+        /// Handles the MouseDoubleClick event of the DataGrid control to open the VolunteerWindow for the selected volunteer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer is BO.VolunteerInList volunteer)
                 new VolunteerWindow(volunteer.Id).Show();
-
-
-
         }
+
+        /// <summary>
+        /// Handles the Click event of the btnAddVolunteer control to open a new VolunteerWindow for adding a volunteer.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddVolunteer_Click(object sender, RoutedEventArgs e)
         {
             new VolunteerWindow().Show();
         }
+
+        /// <summary>
+        /// Handles the Click event of the btnDeleteVolunteer control to delete the selected volunteer after confirmation.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDeleteVolunteer_Click(Object sender, RoutedEventArgs e)
         {
             if (SelectedVolunteer is BO.VolunteerInList volunteer)

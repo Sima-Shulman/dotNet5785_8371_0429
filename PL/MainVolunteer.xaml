@@ -51,12 +51,25 @@
                        IsEnabled="{Binding CurrentVolunteer.CallInProgress, Converter={StaticResource NullToTrueConverter}}" />
                 <Label Content="Role"/>
                 <TextBox Text="{Binding CurrentVolunteer.Role}" IsEnabled="False" />
+
+                <GroupBox Header="Assignments" VerticalAlignment="Bottom"  Margin="0,10,0,10"  Grid.Column="0"   Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}" >
+                    <DataGrid ItemsSource="{Binding CurrentCall.AssignmentsList}" AutoGenerateColumns="False" IsEnabled="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Width="*"/>
+                            <DataGridTextColumn Header="Volunteer" Binding="{Binding VolunteerFullName}" Width="*"/>
+                            <DataGridTextColumn Header="Assigned Time" Binding="{Binding StartTime}" Width="*"/>
+                            <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="*"/>
+                            <DataGridTextColumn Header="End Type" Binding="{Binding EndType}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+                
                 <Button Content="Update" 
                      Click="btnAddUpdate_Click" 
                      Height="58" Width="180" FontWeight="Bold" />
             </StackPanel>
         </ScrollViewer>
-
+        
         <StackPanel Grid.Column="1" Margin="20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <GroupBox Header="Current Call" Margin="0 0 0 10" Height="200"
           Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}">
@@ -87,7 +100,6 @@
             <wv2:WebView2 Name="webView" Height="228" 
                             Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}"/>
         </StackPanel>
-
 
     </Grid>
 

@@ -44,9 +44,6 @@ namespace PL
             }
         }
 
-
-
-
         public MainVolunteer(int id)
         {
             InitializeComponent();
@@ -63,7 +60,6 @@ namespace PL
                 else
                 {
                     CurrentCall = null;
-                    webView.Visibility = Visibility.Collapsed; // הסתרת המפה כשאין קריאה
                 }
             }
             catch (Exception ex)
@@ -73,8 +69,13 @@ namespace PL
             }
         }
 
-
-
+        /// <summary>
+        /// Displays a map showing the volunteer's location and the call's location.
+        /// </summary>
+        /// <param name="volunteerLat"></param>
+        /// <param name="volunteerLon"></param>
+        /// <param name="callLat"></param>
+        /// <param name="callLon"></param>
         private void ShowMap(double volunteerLat, double volunteerLon, double? callLat, double? callLon)
         {
             if (callLat == null || callLon == null)
@@ -135,22 +136,81 @@ namespace PL
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// Raises the PropertyChanged event for the specified property name.
+        /// </summary>
+        /// <param name="name"></param>
         protected void OnPropertyChanged(string name) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
+
+        /// <summary>
+        /// Event handler for the Update button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer!.Id, CurrentVolunteer);
-                MessageBox.Show("פרטי המתנדב עודכנו בהצלחה");
+                if (CurrentVolunteer == null)
+                {
+                    MessageBox.Show("Cannot update details for an empty volunteer.");
+                    return;
+                }
+
+                if (!ValidateVolunteerDetails(CurrentVolunteer))
+                {
+                    return;
+                }
+
+                s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
+                MessageBox.Show("Volunteer details updated successfully.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בעדכון: " + ex.Message);
+                MessageBox.Show("Error updating details: " + ex.Message);
             }
         }
+        private bool ValidateVolunteerDetails(BO.Volunteer volunteer)
+        {
+            if (string.IsNullOrWhiteSpace(volunteer.FullName))
+            {
+                MessageBox.Show("Volunteer name cannot be empty.");
+                return false;
+            }
 
+            if (string.IsNullOrWhiteSpace(volunteer.CellphoneNumber) || !System.Text.RegularExpressions.Regex.IsMatch(volunteer.CellphoneNumber, @"^\d{10}$"))
+            {
+                MessageBox.Show("Phone number must be exactly 10 digits.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(volunteer.Email) || !System.Text.RegularExpressions.Regex.IsMatch(volunteer.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Invalid email address format.");
+                return false;
+            }
+
+            if (volunteer.Latitude == null || volunteer.Longitude == null)
+            {
+                MessageBox.Show("Volunteer location must be defined.");
+                return false;
+            }
+
+            if (volunteer.MaxDistance == null || volunteer.MaxDistance <= 0)
+            {
+                MessageBox.Show("Maximum distance must be a positive number.");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Observer method that updates the volunteer details when changes occur.
+        /// </summary>
         private void volunteerObserver()
         {
             int id = CurrentVolunteer!.Id;
@@ -158,6 +218,11 @@ namespace PL
             CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
         }
 
+        /// <summary>
+        /// Event handler for the Loaded event of the volunteer window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void volunteerWindow_Loaded(object sender, RoutedEventArgs e)
         {
             if (CurrentVolunteer!.Id != 0)
@@ -167,18 +232,34 @@ namespace PL
             //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
         }
 
+
+        /// <summary>
+        /// Event handler for the Closed event of the volunteer window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void volunteerWindow_Closed(object sender, EventArgs e)
         {
             if (CurrentVolunteer!.Id != 0)
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, volunteerObserver);
         }
 
+
+        /// <summary>
+        ///  Event handler for the History button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
            new CallHistory(CurrentVolunteer!.Id).ShowDialog();
         }
 
-
+        /// <summary>
+        /// Event handler for the Choose Call button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnChooseCall_Click(object sender, RoutedEventArgs e)
         {
             var chooseCallWindow = new ChooseCallWindow(CurrentVolunteer!.Id);
@@ -189,6 +270,11 @@ namespace PL
             chooseCallWindow.ShowDialog();
         }
 
+        /// <summary>
+        /// Event handler for the Exit button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -198,6 +284,9 @@ namespace PL
         //צריך לעקוב פה אחרי שינויים ב assignments
         // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
         //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
+        /// <summary>
+        /// Refreshes the call details for the current volunteer.
+        /// </summary>
         private void RefreshCallDetails()
         {
             var id = CurrentVolunteer!.Id;
@@ -213,13 +302,16 @@ namespace PL
             }
         }
 
-
+        /// <summary>
+        /// Event handler for the End Call button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnEndCall_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // אותה הבעיה של האסימנט אידי
-                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentCall!.Id);
+                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id,CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
 
                 MessageBox.Show("הטיפול בקריאה הסתיים.");
@@ -230,13 +322,17 @@ namespace PL
             }
         }
 
+
+        /// <summary>
+        /// Event handler for the Cancel Call button click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancelCall_Click(object sender, RoutedEventArgs e)
         {
             try
-            {
-                // אותה הבעיה של האסימנט אידי
-                
-                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentCall!.Id);
+            {               
+                s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
                 MessageBox.Show("הטיפול בקריאה בוטל.");
             }

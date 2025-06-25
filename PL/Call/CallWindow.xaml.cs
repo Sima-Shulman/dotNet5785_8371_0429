@@ -39,6 +39,10 @@ public partial class CallWindow : Window, INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Constructor for CallWindow.
+    /// </summary>
+    /// <param name="callId"></param>
     public CallWindow(int callId = 0)
     {
         _buttonText = string.Empty;
@@ -91,6 +95,12 @@ public partial class CallWindow : Window, INotifyPropertyChanged
         DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow),
             new PropertyMetadata(null, OnCurrentCallChanged));
 
+
+    /// <summary>
+    /// Callback for when the CurrentCall property changes.
+    /// </summary>
+    /// <param name="d"></param>
+    /// <param name="e"></param>
     private static void OnCurrentCallChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var window = d as CallWindow;
@@ -101,16 +111,31 @@ public partial class CallWindow : Window, INotifyPropertyChanged
         window.OnPropertyChanged(nameof(IsEditable));
     }
 
+    /// <summary>
+    /// Determines if all fields of the call are editable based on the call status or if the button text is "Add".
+    /// </summary>
     public bool IsEditableAllFields =>
         CurrentCall?.CallStatus == CallStatus.Opened ||
         CurrentCall?.CallStatus == CallStatus.OpenedAtRisk || _buttonText == "Add";
 
+    /// <summary>
+    /// Determines if only the Max Finish Time field is editable based on the call status.
+    /// </summary>
     public bool IsEditableOnlyMaxFinish =>
         CurrentCall?.CallStatus == CallStatus.InTreatment ||
         CurrentCall?.CallStatus == CallStatus.InTreatmentAtRisk || IsEditableAllFields;
 
+    /// <summary>
+    /// Determines if the call is editable based on the statuses that allow editing all fields or only the Max Finish Time field.
+    /// </summary>
     public bool IsEditable => IsEditableAllFields || IsEditableOnlyMaxFinish;
 
+
+    /// <summary>
+    /// Handles the click event for the Update button.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnUpdate_Click(object sender, RoutedEventArgs e)
     {
         if (CurrentCall == null)

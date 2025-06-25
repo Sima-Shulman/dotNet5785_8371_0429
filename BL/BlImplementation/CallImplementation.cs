@@ -355,19 +355,22 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer requesting the cancellation.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
-    public void MarkCallCancellation(int volunteerId, int callId)
+    public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
         try
         {
             //var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
             //var boVolunteer = VolunteerManager.ConvertDoVolunteerToBoVolunteer(volunteer);
-            var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
-                .LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}.")) ?? throw new BO.BlDoesNotExistException($"Assignment with CallId{callId}  and VolunteerId {volunteerId}does not exist");
+            //var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
+            var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
             bool isRequesterNotManager = _dal.Volunteer?.Read(volunteerId)?.Role != DO.Role.Manager;
 
             if (isRequesterNotManager && assignment.VolunteerId != volunteerId)
                 throw new BO.BlUnauthorizedException("Requester does not have permission to cancel this assignment");
-
+             if((assignment.EndTime != null) && (assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation))
+                throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
+            if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
+                throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
             //if (assignment.EndTime != null)
             //    throw new BO.BlDeletionException("Cannot cancel an assignment that has already been completed or expired");
 
@@ -382,7 +385,7 @@ internal class CallImplementation : BlApi.ICall
             if (!isRequesterNotManager)
             {
                 var volunteer = _dal.Volunteer?.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
-                var call = _dal.Call.Read(callId);
+                var call = _dal.Call.Read(assignment.CallId);
 
                 if (volunteer?.Email is not null)
                 {
@@ -419,12 +422,15 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer marking the call as completed.</param>
     /// <param name="assignmentId">The ID of the assignment to mark as completed.</param>
-    public void MarkCallCompletion(int volunteerId, int callId)
+    public void MarkCallCompletion(int volunteerId, int assignmentId)
     {
         try
         {
-            var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
-                .LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
+            //var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
+            var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
+            if ((assignment.EndTime != null) && (assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation))
+                throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
+            //.LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
             if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
                 throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
             DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
@@ -432,11 +438,11 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Assignment with Volunteer ID={volunteerId} and Call ID={callId} does not exist", ex);
+            throw new BO.BlDoesNotExistException($"Assignment with  ID={assignmentId} does not exist", ex);
         }
         catch (DO.DalDeletionImpossible ex)
         {
-            throw new BO.BlDeletionException($"The assignment with Volunteer ID={volunteerId} and Call ID={callId} has already been completed or canceled.", ex);
+            throw new BO.BlDeletionException($"The assignment with  ID={assignmentId} has already been completed or canceled.", ex);
         }
         catch (Exception ex)
         {

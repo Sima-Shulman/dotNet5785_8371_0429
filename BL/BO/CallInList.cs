@@ -7,7 +7,7 @@ namespace BO;
 /// </summary>
 public class CallInList
 {
-    public int? Id {  get; set; }
+    public int? AssignmentId {  get; set; }
     public int CallId { get; set; }
     public CallType CallType { get; set; }
     public DateTime OpeningTime { get; set; }

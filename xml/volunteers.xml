@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Volunteer>
-    <Id>924498868</Id>
+    <Id>466352812</Id>
     <FullName>Yitzhak Cohen</FullName>
-    <CellphoneNumber>0609321624</CellphoneNumber>
+    <CellphoneNumber>0847038331</CellphoneNumber>
     <Email>yitzhakcohen@gmail.com</Email>
     <FullAddress>12 Keren Hayesod Street, Tel Aviv</FullAddress>
     <Latitude>32.0777</Latitude>
     <Longitude>32.0777</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>31805</MaxDistance>
-    <Password>8py7AdWrjRAmNsnezLirrrmOW/Trxvqi5GCNVcVGYSM=</Password>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>62029</MaxDistance>
+    <Password>mGK1/wsed7YqdSR9ehqSxPwpUYu518K9CDNZM/j4k+I=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>263040149</Id>
+    <Id>185299385</Id>
     <FullName>Menachem Levy</FullName>
-    <CellphoneNumber>0244979295</CellphoneNumber>
+    <CellphoneNumber>0890119925</CellphoneNumber>
     <Email>menachemlevy@gmail.com</Email>
     <FullAddress>3 Allenby Street, Haifa</FullAddress>
     <Latitude>32.817</Latitude>
     <Longitude>32.817</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>68439</MaxDistance>
-    <Password>3Plp9IJJidxn5D8MH1bqDPsz21NKJUU5dEqiDMhcoNs=</Password>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>85107</MaxDistance>
+    <Password>CvcfTUJfsgwCeSR6o5SXaJEF/jaaGoEhTgsJ0e9AoIc=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>959287962</Id>
+    <Id>222580383</Id>
     <FullName>Shmuel Goldstein</FullName>
-    <CellphoneNumber>0747415815</CellphoneNumber>
+    <CellphoneNumber>0507885499</CellphoneNumber>
     <Email>shmuelgoldstein@gmail.com</Email>
     <FullAddress>45 Yehuda Halevi Street, Jerusalem</FullAddress>
     <Latitude>31.7683</Latitude>
@@ -39,13 +39,13 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>43022</MaxDistance>
-    <Password>uRcko+TDa+sJ5iu89dqrQSoaAvs5cux+nRIEwkL/EfY=</Password>
+    <MaxDistance>41826</MaxDistance>
+    <Password>Dc/qSyV7+KA29buN47jdvW5rbbQTqUXywKJpRg79VCE=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>930323639</Id>
+    <Id>261837603</Id>
     <FullName>David Ben-David</FullName>
-    <CellphoneNumber>0250902961</CellphoneNumber>
+    <CellphoneNumber>0504174292</CellphoneNumber>
     <Email>davidben-david@gmail.com</Email>
     <FullAddress>22 Jaffa Street, Netanya</FullAddress>
     <Latitude>32.321</Latitude>
@@ -53,97 +53,97 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>90282</MaxDistance>
-    <Password>G1GCl/yhO+Pz8c95glnzr6QNKJF04eWplD36AbvtCeY=</Password>
+    <MaxDistance>86064</MaxDistance>
+    <Password>uuju2G+mPK8TQKLglWqABM/3BYXni2nSFrMh5RfPKdA=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>663626414</Id>
+    <Id>751343898</Id>
     <FullName>Yosef Shapiro</FullName>
-    <CellphoneNumber>0373277335</CellphoneNumber>
+    <CellphoneNumber>0339634370</CellphoneNumber>
     <Email>yosefshapiro@gmail.com</Email>
     <FullAddress>8 Shlomo Ben Yosef Street, Rishon Lezion</FullAddress>
     <Latitude>31.9463</Latitude>
     <Longitude>31.9463</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>77660</MaxDistance>
-    <Password>Zve9W3Qcw0K0DtR/+RCzSMwNFO4Jl21LtT2O4hPicvo=</Password>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>7095</MaxDistance>
+    <Password>a9LOCCA0hvmrDPSqyQxziIF43C/qHWnXcOacE9DAJwE=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>172453516</Id>
+    <Id>791755457</Id>
     <FullName>Aryeh Rosen</FullName>
-    <CellphoneNumber>0312666865</CellphoneNumber>
+    <CellphoneNumber>0259439618</CellphoneNumber>
     <Email>aryehrosen@gmail.com</Email>
     <FullAddress>5 Bograshov Street, Tel Aviv</FullAddress>
     <Latitude>32.084</Latitude>
     <Longitude>32.084</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>3015</MaxDistance>
-    <Password>qbQw5jHsQXrFDf6q4ba5mxutzj8ooNVdT97VnF0sqH4=</Password>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>76959</MaxDistance>
+    <Password>tbcOIusGOJXOiu4W/y2YKZsaN4KuhlU1nz7EedqZa50=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>561163262</Id>
+    <Id>869392845</Id>
     <FullName>Chaim Mizrahi</FullName>
-    <CellphoneNumber>0748555337</CellphoneNumber>
+    <CellphoneNumber>0192095864</CellphoneNumber>
     <Email>chaimmizrahi@gmail.com</Email>
     <FullAddress>77 Herzl Boulevard, Holon</FullAddress>
     <Latitude>32.0496</Latitude>
     <Longitude>32.0496</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>14903</MaxDistance>
-    <Password>WYP4CqaB3c6Z5pb3aX8N57x7sTAuAtDJk1ig+o/M20A=</Password>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>38629</MaxDistance>
+    <Password>7HtIBOhXtX4G+odf/wBl28C9NzHQfj14wiVETplxfP8=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>417158607</Id>
+    <Id>441206265</Id>
     <FullName>Shlomo Klein</FullName>
-    <CellphoneNumber>0475380644</CellphoneNumber>
+    <CellphoneNumber>0396352630</CellphoneNumber>
     <Email>shlomoklein@gmail.com</Email>
     <FullAddress>12 Moshe Dayan Boulevard, Rehovot</FullAddress>
     <Latitude>31.8991</Latitude>
     <Longitude>31.8991</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>6727</MaxDistance>
-    <Password>B+9swGTo7xZAucza2lOWSaJcckmR1wqHfCYNVAv4JmY=</Password>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>49167</MaxDistance>
+    <Password>11V96iPg/a4exzawxnpv9KdZ/4Cx6ZDSfyRmOHER5mQ=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>908273113</Id>
+    <Id>983799073</Id>
     <FullName>Avraham Amsalem</FullName>
-    <CellphoneNumber>0678083265</CellphoneNumber>
+    <CellphoneNumber>0655482904</CellphoneNumber>
     <Email>avrahamamsalem@gmail.com</Email>
     <FullAddress>18 Shmuel Hanavi Street, Haifa</FullAddress>
     <Latitude>32.7992</Latitude>
     <Longitude>32.7992</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>68144</MaxDistance>
-    <Password>65XTN8wmXnJkDh0U7A1ISv0rt5Ptvfh/mPMCX3OTHsI=</Password>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>26258</MaxDistance>
+    <Password>/xxit8YlAZFdOtxXdGlifzr97yiFJ20/c3rgIEmkuMk=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>663798809</Id>
+    <Id>828921775</Id>
     <FullName>Yoel Peretz</FullName>
-    <CellphoneNumber>0379768526</CellphoneNumber>
+    <CellphoneNumber>0586942829</CellphoneNumber>
     <Email>yoelperetz@gmail.com</Email>
     <FullAddress>14 Be'er Sheva Boulevard, Ashdod</FullAddress>
     <Latitude>31.8479</Latitude>
     <Longitude>31.8479</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>15733</MaxDistance>
-    <Password>EM0/FwAhjJ1IXWqrgHrQ2jAM4wT4/ZAF9Skq2JIx+V4=</Password>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>63870</MaxDistance>
+    <Password>lV1IODe69soj8rYIXtjW6H986M5c5R+amJnYrWaZyaU=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>711738344</Id>
+    <Id>632712733</Id>
     <FullName>Eliahu Carmel</FullName>
-    <CellphoneNumber>0843068151</CellphoneNumber>
+    <CellphoneNumber>0318338127</CellphoneNumber>
     <Email>eliahucarmel@gmail.com</Email>
     <FullAddress>34 Neve Shaanan Street, Beer Sheva</FullAddress>
     <Latitude>31.2383</Latitude>
@@ -151,13 +151,13 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>14232</MaxDistance>
-    <Password>5d+etMJ54krlj+OkJkXEK9Uyfe+Oh4mXcFaWgfS1/LY=</Password>
+    <MaxDistance>98716</MaxDistance>
+    <Password>rRigrAY/1HdUBokQdudCiofw0LA+ZVkmllzEwPL0iM0=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>276484813</Id>
+    <Id>569977804</Id>
     <FullName>Moshe Shtern</FullName>
-    <CellphoneNumber>0946220528</CellphoneNumber>
+    <CellphoneNumber>0742780767</CellphoneNumber>
     <Email>mosheshtern@gmail.com</Email>
     <FullAddress>7 David Remez Street, Petah Tikva</FullAddress>
     <Latitude>32.1093</Latitude>
@@ -165,13 +165,13 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>75883</MaxDistance>
-    <Password>XvADlasa4iAhtRHY5dwTfbfhqv6GWCGobC13YHYzP/k=</Password>
+    <MaxDistance>23511</MaxDistance>
+    <Password>Mp0vYT8iIMbO0TgQg+PqZSSiRhwfrgEPXf0DO3db1yg=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>403833890</Id>
+    <Id>356271247</Id>
     <FullName>Yigal Binyamini</FullName>
-    <CellphoneNumber>0610263720</CellphoneNumber>
+    <CellphoneNumber>0107884053</CellphoneNumber>
     <Email>yigalbinyamini@gmail.com</Email>
     <FullAddress>5 Ben Gurion Boulevard, Tel Aviv</FullAddress>
     <Latitude>32.0853</Latitude>
@@ -179,13 +179,13 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>89135</MaxDistance>
-    <Password>QVM7j58IvoFpfZGqUSKljPyoSX4tXjuqr5orKJPLDNo=</Password>
+    <MaxDistance>83774</MaxDistance>
+    <Password>U0dCEICBc7A5dXdm0QsFaRbfqf5cndpHWVhiY9JjYe4=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>368164299</Id>
+    <Id>670328590</Id>
     <FullName>Reuven Bar</FullName>
-    <CellphoneNumber>0991963663</CellphoneNumber>
+    <CellphoneNumber>0309283251</CellphoneNumber>
     <Email>reuvenbar@gmail.com</Email>
     <FullAddress>22 Kfar Shalem Street, Jaffa</FullAddress>
     <Latitude>32.07</Latitude>
@@ -193,27 +193,27 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>24842</MaxDistance>
-    <Password>Y5sE1xuR6apUFJ710naQAz4dWmM+q14rZNf6i3alZlA=</Password>
+    <MaxDistance>1411</MaxDistance>
+    <Password>eW6dQn0W3vJ7eDzDArwhBPYUlXyaKFIVmfdf6UjqNsE=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>491581112</Id>
+    <Id>939065157</Id>
     <FullName>Daniel Shmuel</FullName>
-    <CellphoneNumber>0640526071</CellphoneNumber>
+    <CellphoneNumber>0871422573</CellphoneNumber>
     <Email>danielshmuel@gmail.com</Email>
     <FullAddress>3 Ze'ev Jabotinsky Street, Holon</FullAddress>
     <Latitude>32.1497</Latitude>
     <Longitude>32.1497</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>92544</MaxDistance>
-    <Password>RWaPbAbpEmSH65nCtZVP/gesYXDxdlZjFMLwCwG2/o4=</Password>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>11459</MaxDistance>
+    <Password>JZYRRZ6kDXWvJvMYIhZSO4e3KelZhl04Tv784C/MaCs=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>326792389</Id>
+    <Id>484815311</Id>
     <FullName>Binyamin Levi</FullName>
-    <CellphoneNumber>0330384167</CellphoneNumber>
+    <CellphoneNumber>0238864969</CellphoneNumber>
     <Email>binyaminlevi@gmail.com</Email>
     <FullAddress>9 Weizmann Street, Tel Aviv</FullAddress>
     <Latitude>31.878</Latitude>
@@ -221,13 +221,13 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>69495</MaxDistance>
-    <Password>FUm41du6E5oqMkfKy2KTwbSNcAS5yDfRNIADYYe+iYQ=</Password>
+    <MaxDistance>85849</MaxDistance>
+    <Password>XYiJjw3jAZx6OS+o2OxQHIa1jaRolPmu1iqYBh2r9kA=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>727625923</Id>
+    <Id>308422690</Id>
     <FullName>Yaakov Avrahami</FullName>
-    <CellphoneNumber>0705555060</CellphoneNumber>
+    <CellphoneNumber>0236771340</CellphoneNumber>
     <Email>yaakovavrahami@gmail.com</Email>
     <FullAddress>16 David Ben Gurion Avenue, Haifa</FullAddress>
     <Latitude>32.0853</Latitude>
@@ -235,133 +235,77 @@
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>78081</MaxDistance>
-    <Password>kCprbhZsxRTJlaVLqGwA0OwyA8iu2yOziNUdOsaGiEU=</Password>
+    <MaxDistance>71402</MaxDistance>
+    <Password>yv/bJKKMdnIEFg1uOstyixvy9rVKnGNYpSdAxD/NZUg=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>811676766</Id>
+    <Id>629466913</Id>
     <FullName>Nataniel Ben Shimon</FullName>
-    <CellphoneNumber>0358306737</CellphoneNumber>
+    <CellphoneNumber>0413258009</CellphoneNumber>
     <Email>natanielbenshimon@gmail.com</Email>
     <FullAddress>11 Yigal Alon Street, Herzliya</FullAddress>
     <Latitude>32.0614</Latitude>
     <Longitude>32.0614</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>84495</MaxDistance>
-    <Password>beeBLiqF24g3bSvG9ggHFopWq7tGaMaNthxw3Yplseg=</Password>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>43132</MaxDistance>
+    <Password>ZT2kFrEwgs1fE4vJRAAipMhJM7ATqaRW0PNYAvXTJF4=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>930822135</Id>
+    <Id>604207225</Id>
     <FullName>Efraim Shani</FullName>
-    <CellphoneNumber>0115022185</CellphoneNumber>
+    <CellphoneNumber>0388019414</CellphoneNumber>
     <Email>efraimshani@gmail.com</Email>
     <FullAddress>24 Ibn Gabirol Street, Tel Aviv</FullAddress>
     <Latitude>32.0911</Latitude>
     <Longitude>32.0911</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>88819</MaxDistance>
-    <Password>LErhq1hWy4yTh9Nd8XRXSr5sEozsInjHRXxSbXw22hk=</Password>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
+    <MaxDistance>90463</MaxDistance>
+    <Password>pKivN/5ilgGq60t7M5KOY/qnlDrSQf3xR4fT9T71pDA=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>725164073</Id>
+    <Id>968661033</Id>
     <FullName>Shimon Tzukrel</FullName>
-    <CellphoneNumber>0290592719</CellphoneNumber>
+    <CellphoneNumber>0421295062</CellphoneNumber>
     <Email>shimontzukrel@gmail.com</Email>
     <FullAddress>14 King George Street, Jerusalem</FullAddress>
     <Latitude>31.7683</Latitude>
     <Longitude>31.7683</Longitude>
     <Role>Volunteer</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>73086</MaxDistance>
-    <Password>fW3juQcurCImRcm7qIE3IohdwK/fI5nWjnebIavuKHw=</Password>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>92180</MaxDistance>
+    <Password>xXCKXQQ2VBc1flSOlB8an8u3S6ja+IKQVYGNDbXx96g=</Password>
   </Volunteer>
   <Volunteer>
-    <Id>433997731</Id>
+    <Id>585444128</Id>
     <FullName>Shimon Tzukrel</FullName>
-    <CellphoneNumber>0531315568</CellphoneNumber>
+    <CellphoneNumber>0147199901</CellphoneNumber>
     <Email>shimontzukrel@gmail.com</Email>
     <FullAddress>14 King George Street, Jerusalem</FullAddress>
     <Latitude>31.7683</Latitude>
     <Longitude>31.7683</Longitude>
     <Role>Manager</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>21478</MaxDistance>
-    <Password>ghac2BG3bll2pjf/rKu1M2IjSe9/MJHq7Ue9FBqj8iA=</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>334600046</Id>
-    <FullName>Brachi Shulman</FullName>
-    <CellphoneNumber>0527159386</CellphoneNumber>
-    <Email>ssh95158@gmail.com</Email>
-    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
-    <Latitude>31.759595</Latitude>
-    <Longitude>35.215315</Longitude>
-    <Role>Volunteer</Role>
-    <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>5</MaxDistance>
-    <Password>W+K9RL7b8XF6LpjV0grTGnMEuGrEvrtIjxBjtA7FBR0=</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>40379257</Id>
-    <FullName>Yisca Shulamn</FullName>
-    <CellphoneNumber>0548446804</CellphoneNumber>
-    <Email>0548446804y@gmail.com</Email>
-    <FullAddress>zolti 14 ramat shlomo jerusalem israel</FullAddress>
-    <Latitude>31.759595</Latitude>
-    <Longitude>35.215315</Longitude>
-    <Role>Manager</Role>
-    <IsActive>false</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>1</MaxDistance>
-    <Password>1WJUbNSpziOJdGX/1jMpoDFTKKNQGiYtAwyJlaNVDBY=</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>328178371</Id>
-    <FullName>Simi Shulman</FullName>
-    <CellphoneNumber>0583295158</CellphoneNumber>
-    <Email>s0583295158@gmail.com</Email>
-    <FullAddress>druk 58 ramat shlomo jerusalem israel</FullAddress>
-    <Latitude>31.8139395</Latitude>
-    <Longitude>35.216089</Longitude>
-    <Role>Manager</Role>
-    <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>20</MaxDistance>
-    <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+    <MaxDistance>35163</MaxDistance>
+    <Password>J6+BffgvNEm9u+R2tLVlGwLjNEZqooul4VV8VI6M55A=</Password>
   </Volunteer>
-  <Volunteer>
-    <Id>327820429</Id>
-    <FullName>Efrat Bar Sheshet</FullName>
-    <CellphoneNumber>0583246911</CellphoneNumber>
-    <Email>efrat2508@gmail.com</Email>
-    <FullAddress>7 HaRav Shrira Gaon Street, Givat Shaul, Jerusalem, Israel</FullAddress>
-    <Latitude>31.794098</Latitude>
-    <Longitude>35.187064</Longitude>
-    <Role>Volunteer</Role>
-    <IsActive>true</IsActive>
-    <DistanceTypes>AerialDistance</DistanceTypes>
-    <MaxDistance>10</MaxDistance>
-    <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
-  </Volunteer>
-  <Volunteer>
-    <Id>17111832</Id>
-    <FullName>Abraham Bar Sheshet</FullName>
-    <CellphoneNumber>0527654095</CellphoneNumber>
-    <Email>efrat2508@gmail.com</Email>
-    <FullAddress>דרוק 58 , ירושלים</FullAddress>
-    <Latitude>31.8139395</Latitude>
-    <Longitude>35.216089</Longitude>
-    <Role>Manager</Role>
-    <IsActive>true</IsActive>
-    <DistanceTypes>WalkingDistance</DistanceTypes>
-    <MaxDistance>50</MaxDistance>
-    <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
-  </Volunteer>
+	<Volunteer>
+		<Id>328178371</Id>
+		<FullName>Simi Shulman</FullName>
+		<CellphoneNumber>0583295158</CellphoneNumber>
+		<Email>s0583295158@gmail.com</Email>
+		<FullAddress>druk 58 ramat shlomo jerusalem israel</FullAddress>
+		<Latitude>31.8139395</Latitude>
+		<Longitude>35.216089</Longitude>
+		<Role>Manager</Role>
+		<IsActive>true</IsActive>
+		<DistanceTypes>DrivingDistance</DistanceTypes>
+		<MaxDistance>20</MaxDistance>
+		<Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+	</Volunteer>
 </ArrayOfVolunteer>
