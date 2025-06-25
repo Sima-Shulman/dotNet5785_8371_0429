@@ -294,18 +294,18 @@
     <MaxDistance>35163</MaxDistance>
     <Password>J6+BffgvNEm9u+R2tLVlGwLjNEZqooul4VV8VI6M55A=</Password>
   </Volunteer>
-	<Volunteer>
-		<Id>328178371</Id>
-		<FullName>Simi Shulman</FullName>
-		<CellphoneNumber>0583295158</CellphoneNumber>
-		<Email>s0583295158@gmail.com</Email>
-		<FullAddress>druk 58 ramat shlomo jerusalem israel</FullAddress>
-		<Latitude>31.8139395</Latitude>
-		<Longitude>35.216089</Longitude>
-		<Role>Manager</Role>
-		<IsActive>true</IsActive>
-		<DistanceTypes>DrivingDistance</DistanceTypes>
-		<MaxDistance>20</MaxDistance>
-		<Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
-	</Volunteer>
+  <Volunteer>
+    <Id>328178371</Id>
+    <FullName>Simi Shulman</FullName>
+    <CellphoneNumber>0583295158</CellphoneNumber>
+    <Email>s0583295158@gmail.com</Email>
+    <FullAddress>druk 58 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8139395</Latitude>
+    <Longitude>35.216089</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>80</MaxDistance>
+    <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
+  </Volunteer>
 </ArrayOfVolunteer>

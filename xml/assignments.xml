@@ -352,4 +352,12 @@
     <End_time>2025-06-25T12:07:38</End_time>
     <EndType>Expired</EndType>
   </Assignment>
+  <Assignment>
+    <Id>45</Id>
+    <VolunteerId>328178371</VolunteerId>
+    <CallId>1025</CallId>
+    <Start_time>2025-06-25T12:07:38</Start_time>
+    <End_time />
+    <EndType />
+  </Assignment>
 </ArrayOfAssignment>
