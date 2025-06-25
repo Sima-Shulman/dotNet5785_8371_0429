@@ -2,6 +2,8 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// The implementation class for the Calls. Implementing all the CRUD functions.
 /// </summary>
@@ -11,6 +13,7 @@ internal class CallImplementation : ICall
     /// A function that creates a new object.
     /// </summary>
     /// <param name="item">The new item</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Call item)
     {
         int newId = Config.NextCallId;
@@ -23,6 +26,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+     [MethodImpl(MethodImplOptions.Synchronized)] 
     public void Delete(int id)
     {
         Call? newCall = Read(id);
@@ -35,6 +39,7 @@ internal class CallImplementation : ICall
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Calls.Clear();
@@ -45,6 +50,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <returns>The item</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(int id)
     {
         return DataSource.Calls.FirstOrDefault(item => item!.Id == id); //stage 2
@@ -55,6 +61,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Call?> ReadAll(Func<Call?, bool>? filter = null) //stage 2
        => filter == null
            ? DataSource.Calls // החזר את הרשימה כמות שהיא אם אין פילטר
@@ -65,6 +72,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Call item)
     {
         Call? newCall = Read(item.Id);
@@ -81,6 +89,7 @@ internal class CallImplementation : ICall
     /// </summary>
     /// <param name="filter">The filter function</param>
     /// <returns>The first item of this entity that meets the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(Func<Call, bool> filter)
     => DataSource.Calls.FirstOrDefault(filter!);
 }
