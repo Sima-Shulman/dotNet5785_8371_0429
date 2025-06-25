@@ -140,6 +140,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="boCall">The <see cref="BO.Call"/> object containing the updated details.</param>
     public void UpdateCallDetails(BO.Call boCall)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             var existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
@@ -180,6 +181,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callId">The ID of the call to delete.</param>
     public void DeleteCall(int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
@@ -213,6 +215,7 @@ internal class CallImplementation : BlApi.ICall
 
     public void AddCall(BO.Call boCall)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             var existingCall = _dal.Call.Read(boCall.Id);
@@ -296,7 +299,6 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-            PrintAllCallsAddressAndStatus();
             IEnumerable<BO.OpenCallInList> openCalls;
             if (volunteer.MaxDistance is null)
                 openCalls = from c in _dal.Call.ReadAll(c => c.CalculateCallStatus() == BO.Enums.CallStatus.Opened ||
@@ -357,6 +359,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
     public void MarkCallCancellation(int volunteerId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             //var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
@@ -424,6 +427,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="assignmentId">The ID of the assignment to mark as completed.</param>
     public void MarkCallCompletion(int volunteerId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             //var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
@@ -457,6 +461,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callId">The ID of the call to be selected for treatment.</param>
     public void SelectCallForTreatment(int volunteerId, int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             var assignments = _dal.Assignment.ReadAll(a => (a.VolunteerId == volunteerId) && (a.EndTime is null &&(a.EndType != DO.EndType.SelfCancellation) && (a.EndType != DO.EndType.ManagerCancellation)));
@@ -569,28 +574,5 @@ internal class CallImplementation : BlApi.ICall
     public void RemoveObserver(int id, Action observer) =>
     CallManager.Observers.RemoveObserver(id, observer); //stage 5
 
-    /// <summary>
-    /// Prints all calls with their address and status.
-    /// </summary>
-    public void PrintAllCallsAddressAndStatus()
-    {
-        try
-        {
-            var calls = _dal.Call.ReadAll();
-            foreach (var call in calls)
-            {
-                if (call.FullAddress == "1 Jaffa Street, Jerusalem")
-                    Console.WriteLine($"Address: {call.FullAddress}, Status: {call.CalculateCallStatus()}");
-            }
-        }
-        catch (DO.DalDoesNotExistException ex)
-        {
-            throw new BO.BlDoesNotExistException("Cannot access calls", ex);
-        }
-        catch (Exception ex)
-        {
-            throw new BO.BlGeneralException("Unexpected error occurred.", ex);
-        }
-    }
     #endregion Stage 5
 }
