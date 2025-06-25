@@ -17,7 +17,8 @@ internal class AdminImplementation : IAdmin
     /// <returns>The current DateTime of the system.</returns>
     public DateTime GetClock()
     {
-        return AdminManager.Now;
+        lock (AdminManager.BlMutex)//stage 7
+            return AdminManager.Now;
     }
     /// <summary>
     /// Retrieves the current risk time range configured in the system.
@@ -25,7 +26,8 @@ internal class AdminImplementation : IAdmin
     /// <returns>A TimeSpan representing the risk time range.</returns>
     public TimeSpan GetRiskTimeRange()
     {
-        return AdminManager.RiskRange;
+        lock (AdminManager.BlMutex)//stage 7
+            return AdminManager.RiskRange;
     }
     /// <summary>
     /// Initializes the database with default test data and resets the system clock.
@@ -33,7 +35,8 @@ internal class AdminImplementation : IAdmin
     public void InitializeDatabase()
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        AdminManager.InitializeDB();
+        lock (AdminManager.BlMutex)//stage 7
+            AdminManager.InitializeDB();
 
     }
     /// <summary>
@@ -43,17 +46,20 @@ internal class AdminImplementation : IAdmin
 
     public void PromoteClock(BO.Enums.TimeUnit timeUnit)
     {
-        DateTime newClock = timeUnit switch
+        lock (AdminManager.BlMutex)//stage 7
         {
-            TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
-            TimeUnit.Hour => AdminManager.Now.AddHours(1),
-            TimeUnit.Day => AdminManager.Now.AddDays(1),
-            TimeUnit.Month => AdminManager.Now.AddMonths(1),
-            TimeUnit.Year => AdminManager.Now.AddYears(1),
-            _ => throw new BO.BlInvalidFormatException(nameof(timeUnit) + "Invalid time unit")
-        };
+            DateTime newClock = timeUnit switch
+            {
+                TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
+                TimeUnit.Hour => AdminManager.Now.AddHours(1),
+                TimeUnit.Day => AdminManager.Now.AddDays(1),
+                TimeUnit.Month => AdminManager.Now.AddMonths(1),
+                TimeUnit.Year => AdminManager.Now.AddYears(1),
+                _ => throw new BO.BlInvalidFormatException(nameof(timeUnit) + "Invalid time unit")
+            };
 
-        AdminManager.UpdateClock(newClock);
+            AdminManager.UpdateClock(newClock);
+        }
     }
     /// <summary>
     /// Resets the database and updates the system clock.
@@ -61,7 +67,8 @@ internal class AdminImplementation : IAdmin
     public void ResetDatabase()
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        AdminManager.ResetDB();
+        lock (AdminManager.BlMutex)//stage 7
+            AdminManager.ResetDB();
     }
     /// <summary>
     /// Sets the system's risk time range.
@@ -70,11 +77,13 @@ internal class AdminImplementation : IAdmin
     public void SetRiskTimeRange(TimeSpan riskTimeRange)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        AdminManager.RiskRange = riskTimeRange;
+        lock (AdminManager.BlMutex)//stage 7
+            AdminManager.RiskRange = riskTimeRange;
     }
     #region Stage 5
     public void AddClockObserver(Action clockObserver) {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+
         AdminManager.ClockUpdatedObservers += clockObserver;
     }
     public void RemoveClockObserver(Action clockObserver) {

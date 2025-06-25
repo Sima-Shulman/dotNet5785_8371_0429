@@ -20,9 +20,11 @@ internal static class CallManager
     /// <returns>The calculated status of the call.</returns>
     public static BO.Enums.CallStatus CalculateCallStatus(this DO.Call call)
     {
-        var assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id)
-                .OrderByDescending(a => a?.StartTime)
-                .ToList();
+        List<DO.Assignment?> assignments;
+        lock (AdminManager.BlMutex)//stage 7
+            assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id)
+          .OrderByDescending(a => a?.StartTime)
+          .ToList();
 
         if (assignments.Any()) // there IS an assignment to this call  
         {
@@ -74,7 +76,6 @@ internal static class CallManager
                 return BO.Enums.CallStatus.Opened; // Opened  
             }
         }
-
         // Ensure all code paths return a value
         return BO.Enums.CallStatus.None; // Default fallback
     }
@@ -87,24 +88,27 @@ internal static class CallManager
     {
         return calls.Select(call =>
         {
-            List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
-            var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.Id);
-            var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null;
-            TimeSpan? timeLeft = call.MaxFinishTime > DateTime.Now ? call.MaxFinishTime - DateTime.Now : null;
-            BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
-            TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.Closed ? (call.MaxFinishTime - call.OpeningTime) : null;
-            return new BO.CallInList
+            lock (AdminManager.BlMutex)//stage 7
             {
-                AssignmentId = lastAssignment?.Id,
-                CallId = call.Id,
-                CallType = (BO.Enums.CallType)call.CallType,
-                OpeningTime = call.OpeningTime,
-                TimeLeft = timeLeft,
-                LastVolunteerName = lastVolunteerName,
-                TotalTime = totalTime,
-                CallStatus = callStatus,
-                TotalAssignments = assignments.Count()
-            };
+                List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
+                var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.Id);
+                var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null;
+                TimeSpan? timeLeft = call.MaxFinishTime > DateTime.Now ? call.MaxFinishTime - DateTime.Now : null;
+                BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
+                TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.Closed ? (call.MaxFinishTime - call.OpeningTime) : null;
+                return new BO.CallInList
+                {
+                    AssignmentId = lastAssignment?.Id,
+                    CallId = call.Id,
+                    CallType = (BO.Enums.CallType)call.CallType,
+                    OpeningTime = call.OpeningTime,
+                    TimeLeft = timeLeft,
+                    LastVolunteerName = lastVolunteerName,
+                    TotalTime = totalTime,
+                    CallStatus = callStatus,
+                    TotalAssignments = assignments.Count()
+                };
+            }
         }).ToList();
 
     }
@@ -160,20 +164,22 @@ internal static class CallManager
     /// <param name="newClock">The current timestamp after update.</param>
     internal static void PeriodicCallUpdates(DateTime oldClock, DateTime newClock)
     {
-        List<DO.Call> expiredCalls = s_dal.Call.ReadAll(c => c.MaxFinishTime > newClock).ToList();
-
-        expiredCalls.ForEach(call =>
+        lock (AdminManager.BlMutex)//stage 7
         {
-            List<DO.Assignment> assignments = s_dal.Assignment.ReadAll(a => a.CallId == call.Id).ToList();
-            if (!assignments.Any())//the call is expired and there are no assignments to it
-                s_dal.Assignment.Create(new DO.Assignment(
-                CallId: call.Id,
-                VolunteerId: 0,
-                StartTime: AdminManager.Now,
-                EndTime: AdminManager.Now,
-                EndType: (DO.EndType)BO.Enums.EndType.Expired
-            ));
-        });
+            List<DO.Call?> expiredCalls = s_dal.Call.ReadAll(c => c?.MaxFinishTime > newClock).ToList();
 
+            expiredCalls.ForEach(call =>
+            {
+                List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call?.Id).ToList();
+                if (!assignments.Any())//the call is expired and there are no assignments to it
+                    s_dal.Assignment.Create(new DO.Assignment(
+                    CallId: call!.Id,
+                    VolunteerId: 0,
+                    StartTime: AdminManager.Now,
+                    EndTime: AdminManager.Now,
+                    EndType: (DO.EndType)BO.Enums.EndType.Expired
+                ));
+            });
+        }
     }
 }
