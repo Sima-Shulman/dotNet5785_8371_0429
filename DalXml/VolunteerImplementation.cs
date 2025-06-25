@@ -3,6 +3,7 @@ using DalApi;
 using DO;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// The implementation class for the Volunteers. Implementing all the CRUD functions.
@@ -14,6 +15,8 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">The new item</param>
     /// <exception cref="DalAlreadyExistsException">An exception in case of attempting to create an item that already exists</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -28,6 +31,8 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Delete(int id)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -39,6 +44,8 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Volunteer>(), Config.s_volunteers_xml);
@@ -49,6 +56,8 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <returns>The item</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Volunteer? Read(int id)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);
@@ -60,6 +69,8 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">The filter function</param>
     /// <returns>The first item of this entity that meets the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Volunteer? Read(Func<Volunteer, bool> filter)
       => XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml).FirstOrDefault(filter);
 
@@ -68,7 +79,9 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
-    public IEnumerable<Volunteer?> ReadAll(Func<Volunteer, bool> filter = null)
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
+    public IEnumerable<Volunteer?> ReadAll(Func<Volunteer, bool> filter = null!)
      => filter == null
          ? XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml) // החזר את הרשימה כמות שהיא אם אין פילטר
          : XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml).Where(filter);
@@ -78,6 +91,8 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Update(Volunteer item)
     {
         List<Volunteer> Volunteers = XMLTools.LoadListFromXMLSerializer<Volunteer>(Config.s_volunteers_xml);

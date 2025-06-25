@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 /// <summary>
@@ -17,6 +18,7 @@ internal class AssignmentImplementation : IAssignment
     /// <param name="a">The assignment you want</param>
     /// <returns>A copy of the a assignment</returns>
     /// <exception cref="FormatException"></exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     static Assignment GetAssignment(XElement a)
     {
         return new DO.Assignment()
@@ -35,6 +37,8 @@ internal class AssignmentImplementation : IAssignment
     /// A function that creates a new object.
     /// </summary>
     /// <param name="item">The new item</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Assignment item)
     {
         XElement assignmentsRoot = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
@@ -60,6 +64,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Delete(int id)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);
@@ -74,6 +80,8 @@ internal class AssignmentImplementation : IAssignment
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void DeleteAll()
     {
         XElement emptyRoot = new XElement("ArrayOfAssignment");
@@ -85,6 +93,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <returns>The item</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Assignment? Read(int id)
     {
         XElement? assignmentElm =
@@ -97,6 +107,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="filter">The filter function</param>
     /// <returns>The first item of this entity that meets the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public Assignment? Read(Func<Assignment, bool> filter)
     {
         return XMLTools.LoadListFromXMLElement(Config.s_assignments_xml).Elements().Select(a => GetAssignment(a)).FirstOrDefault(filter);
@@ -107,6 +119,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public IEnumerable<Assignment?> ReadAll(Func<Assignment?, bool>? filter = null)
     {
         IEnumerable<Assignment> Assignments = XMLTools
@@ -121,6 +135,8 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Update(Assignment item)
     {
         XElement assignmentsRootElem = XMLTools.LoadListFromXMLElement(Config.s_assignments_xml);

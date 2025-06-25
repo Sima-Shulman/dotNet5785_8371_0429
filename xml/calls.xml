@@ -490,4 +490,24 @@
     <MaxFinishTime xsi:nil="true" />
     <Id>1048</Id>
   </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>A car crashed into a pole.</Description>
+    <FullAddress>druk 70 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8139637</Latitude>
+    <Longitude>35.2182104</Longitude>
+    <OpeningTime>2025-06-25T14:16:35.1357079+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1049</Id>
+  </Call>
+  <Call>
+    <CallType>SearchAndRescue</CallType>
+    <Description>A 2 - year - old kid disappeared.</Description>
+    <FullAddress>druk 80 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8133807</Latitude>
+    <Longitude>35.2189722</Longitude>
+    <OpeningTime>2025-06-25T14:22:42.3874474+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1050</Id>
+  </Call>
 </ArrayOfCall>
