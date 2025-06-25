@@ -21,53 +21,56 @@ internal static class VolunteerManager
     /// <returns>Mapped and enriched business object volunteer.</returns>
     public static BO.Volunteer ConvertDoVolunteerToBoVolunteer(DO.Volunteer doVolunteer)
     {
-        var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
-        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
-        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
-        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
-        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
-        var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.EndTime == null).LastOrDefault();
-        BO.CallInProgress? callInProgress = null;
-        if (currentAssignment is not null)
+        lock (AdminManager.BlMutex) //stage 7
         {
-            var callDetails = s_dal.Call.Read(currentAssignment.CallId);
-            if (callDetails is not null)
+            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
+            var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
+            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+            var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
+            var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
+            var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.EndTime == null).LastOrDefault();
+            BO.CallInProgress? callInProgress = null;
+            if (currentAssignment is not null)
             {
-                callInProgress = new BO.CallInProgress
+                var callDetails = s_dal.Call.Read(currentAssignment.CallId);
+                if (callDetails is not null)
                 {
-                    AssignmentId = currentAssignment.Id,
-                    CallId = currentAssignment.CallId,
-                    CallType = (BO.Enums.CallType)callDetails.CallType,
-                    Description = callDetails.Description,
-                    FullAddress = callDetails.FullAddress,
-                    OpeningTime = callDetails.OpeningTime,
-                    MaxFinishTime = (DateTime?)callDetails.MaxFinishTime,
-                    StartTime = currentAssignment.StartTime,
-                    CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude, doVolunteer.DistanceTypes),
-                    CallStatus = callDetails.CalculateCallStatus()
-                };
+                    callInProgress = new BO.CallInProgress
+                    {
+                        AssignmentId = currentAssignment.Id,
+                        CallId = currentAssignment.CallId,
+                        CallType = (BO.Enums.CallType)callDetails.CallType,
+                        Description = callDetails.Description,
+                        FullAddress = callDetails.FullAddress,
+                        OpeningTime = callDetails.OpeningTime,
+                        MaxFinishTime = (DateTime?)callDetails.MaxFinishTime,
+                        StartTime = currentAssignment.StartTime,
+                        CallDistance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude, callDetails.Latitude, callDetails.Longitude, doVolunteer.DistanceTypes),
+                        CallStatus = callDetails.CalculateCallStatus()
+                    };
+                }
             }
-        }
-        return new BO.Volunteer
-        {
-            Id = doVolunteer.Id,
-            FullName = doVolunteer.FullName,
-            CellphoneNumber = doVolunteer.CellphoneNumber,
-            Email = doVolunteer.Email,
-            Password = doVolunteer.Password,
-            FullAddress = doVolunteer.FullAddress,
-            Latitude = doVolunteer?.Latitude,
-            Longitude = doVolunteer?.Longitude,
-            Role = (BO.Enums.Role)doVolunteer.Role,
-            IsActive = doVolunteer.IsActive,
-            DistanceType = (BO.Enums.DistanceType)doVolunteer.DistanceTypes,
-            MaxDistance = doVolunteer.MaxDistance,
-            TotalHandledCalls = totalHandled,
-            TotalCanceledCalls = totalCanceled,
-            TotalExpiredCalls = totalExpired,
-            CallInProgress = callInProgress
+            return new BO.Volunteer
+            {
+                Id = doVolunteer.Id,
+                FullName = doVolunteer.FullName,
+                CellphoneNumber = doVolunteer.CellphoneNumber,
+                Email = doVolunteer.Email,
+                Password = doVolunteer.Password,
+                FullAddress = doVolunteer.FullAddress,
+                Latitude = doVolunteer?.Latitude,
+                Longitude = doVolunteer?.Longitude,
+                Role = (BO.Enums.Role)doVolunteer.Role,
+                IsActive = doVolunteer.IsActive,
+                DistanceType = (BO.Enums.DistanceType)doVolunteer.DistanceTypes,
+                MaxDistance = doVolunteer.MaxDistance,
+                TotalHandledCalls = totalHandled,
+                TotalCanceledCalls = totalCanceled,
+                TotalExpiredCalls = totalExpired,
+                CallInProgress = callInProgress
 
-        };
+            };
+        }
     }
     /// <summary>
     /// Converts BO.Volunteer to DO.Volunteer for database use.
@@ -77,19 +80,19 @@ internal static class VolunteerManager
     public static DO.Volunteer ConvertBoVolunteerToDoVolunteer(BO.Volunteer boVolunteer)
     {
         return new DO.Volunteer(
-    boVolunteer.Id,
-    boVolunteer.FullName,
-    boVolunteer.CellphoneNumber,
-    boVolunteer.Email,
-    boVolunteer.FullAddress,
-    boVolunteer.Latitude,
-    boVolunteer.Longitude,
-    (DO.Role)boVolunteer.Role,
-    boVolunteer.IsActive,
-    (DO.DistanceTypes)boVolunteer.DistanceType,
-    boVolunteer.MaxDistance,
-    boVolunteer.Password
-    );
+            boVolunteer.Id,
+            boVolunteer.FullName,
+            boVolunteer.CellphoneNumber,
+            boVolunteer.Email,
+            boVolunteer.FullAddress,
+            boVolunteer.Latitude,
+            boVolunteer.Longitude,
+            (DO.Role)boVolunteer.Role,
+            boVolunteer.IsActive,
+            (DO.DistanceTypes)boVolunteer.DistanceType,
+            boVolunteer.MaxDistance,
+            boVolunteer.Password
+        );
     }
 
     /// <summary>
@@ -99,25 +102,28 @@ internal static class VolunteerManager
     /// <returns>Summarized volunteer with basic info and current call status.</returns>
     public static BO.VolunteerInList ConvertDoVolunteerToBoVolunteerInList(DO.Volunteer doVolunteer)
     {
-        var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
-        var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
-        var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
-        var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
-        var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
-
-        return new BO.VolunteerInList
+        lock (AdminManager.BlMutex) //stage 7
         {
-            Id = doVolunteer.Id,
-            FullName = doVolunteer.FullName,
-            IsActive = doVolunteer.IsActive,
-            TotalHandledCalls = totalHandled,
-            TotalCanceledCalls = totalCanceled,
-            TotalExpiredCalls = totalExpired,
-            CallId = assignedCallId,
-            CallType = assignedCallId is not null
-                ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.CallType ?? DO.CallType.Transportation)
-                : BO.Enums.CallType.None
-        };
+            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
+            var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
+            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+            var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
+            var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
+
+            return new BO.VolunteerInList
+            {
+                Id = doVolunteer.Id,
+                FullName = doVolunteer.FullName,
+                IsActive = doVolunteer.IsActive,
+                TotalHandledCalls = totalHandled,
+                TotalCanceledCalls = totalCanceled,
+                TotalExpiredCalls = totalExpired,
+                CallId = assignedCallId,
+                CallType = assignedCallId is not null
+                    ? (BO.Enums.CallType)(s_dal.Call.Read(assignedCallId.Value)?.CallType ?? DO.CallType.Transportation)
+                    : BO.Enums.CallType.None
+            };
+        }
     }
 
     /// <summary>
@@ -126,7 +132,10 @@ internal static class VolunteerManager
     /// <param name="volunteers">Raw volunteer list from data layer.</param>
     /// <returns>List of summarized business object volunteers.</returns>
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
-        => volunteers.Select(v => ConvertDoVolunteerToBoVolunteerInList(v)).ToList();
+        => volunteers.Select((v) => {
+            lock (AdminManager.BlMutex) //stage 7
+                ConvertDoVolunteerToBoVolunteerInList(v);
+        }).ToList();
 
     /// <summary>
     /// Verifies a raw password against a stored (hashed) password.
