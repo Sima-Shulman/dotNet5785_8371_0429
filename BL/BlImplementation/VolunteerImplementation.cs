@@ -25,11 +25,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
+            DO.Volunteer? volunteer;
             lock (AdminManager.BlMutex) //stage 7
-            {
-                var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.FullName == name && VolunteerManager.VerifyPassword(pass, v.Password!));
-                return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
-            }
+                volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.FullName == name && VolunteerManager.VerifyPassword(pass, v.Password!));
+            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid username or password") : (BO.Enums.Role)volunteer.Role;
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -48,11 +48,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
+            DO.Volunteer? volunteer;
             lock (AdminManager.BlMutex) //stage 7
-            {
-                var volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Id == id && VolunteerManager.VerifyPassword(pass, v.Password!));
-                return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid ID or password") : (BO.Enums.Role)volunteer.Role;
-            }
+                volunteer = _dal.Volunteer.ReadAll().FirstOrDefault(v => v!.Id == id && VolunteerManager.VerifyPassword(pass, v.Password!));
+            return volunteer is null ? throw new BO.BlUnauthorizedException("Invalid ID or password") : (BO.Enums.Role)volunteer.Role;
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -77,24 +76,24 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
+            List<DO.Volunteer?> volunteers;
             lock (AdminManager.BlMutex) //stage 7
+                volunteers = _dal.Volunteer.ReadAll().ToList();
+            if (isActiveFilter is not null)
+                volunteers = volunteers.Where(v => v?.IsActive == isActiveFilter.Value).ToList();
+            var allVolunteersInList = VolunteerManager.GetVolunteerList(volunteers!);
+            var sortedVolunteers = fieldSort is not null ? fieldSort switch
             {
-                var volunteers = _dal.Volunteer.ReadAll();
-                if (isActiveFilter is not null)
-                    volunteers = volunteers.Where(v => v?.IsActive == isActiveFilter.Value);
-                var allVolunteersInList = VolunteerManager.GetVolunteerList(volunteers!);
-                var sortedVolunteers = fieldSort is not null ? fieldSort switch
-                {
-                    BO.Enums.VolunteerInListFields.FullName => allVolunteersInList.OrderBy(v => v?.FullName).ToList(),
-                    BO.Enums.VolunteerInListFields.TotalHandledCalls => allVolunteersInList.OrderBy(v => v?.TotalHandledCalls).ToList(),
-                    BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
-                    BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                    BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
-                    BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
-                    _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
-                } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
-                return sortedVolunteers;
-            }
+                BO.Enums.VolunteerInListFields.FullName => allVolunteersInList.OrderBy(v => v?.FullName).ToList(),
+                BO.Enums.VolunteerInListFields.TotalHandledCalls => allVolunteersInList.OrderBy(v => v?.TotalHandledCalls).ToList(),
+                BO.Enums.VolunteerInListFields.TotalCanceledCalls => allVolunteersInList.OrderBy(v => v?.TotalCanceledCalls).ToList(),
+                BO.Enums.VolunteerInListFields.TotalExpiredCalls => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
+                BO.Enums.VolunteerInListFields.CallId => allVolunteersInList.OrderBy(v => v?.TotalExpiredCalls).ToList(),
+                BO.Enums.VolunteerInListFields.CallType => allVolunteersInList.OrderBy(v => v?.CallType).ToList(),
+                _ => allVolunteersInList.OrderBy(v => v?.Id).ToList(),
+            } : allVolunteersInList.OrderBy(v => v?.Id).ToList();
+            return sortedVolunteers;
+
 
         }
         catch (DO.DalDoesNotExistException ex)
@@ -115,14 +114,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
+            DO.Volunteer? doVolunteer;
             lock (AdminManager.BlMutex) //stage 7
-            {
-                var doVolunteer = _dal.Volunteer.Read(id);
-                if (doVolunteer is not null)
-                    return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
-                else
-                    return null;
-            }
+                doVolunteer = _dal.Volunteer.Read(id);
+            if (doVolunteer is not null)
+                return Helpers.VolunteerManager.ConvertDoVolunteerToBoVolunteer(doVolunteer);
+            else
+                return null!;
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -146,14 +144,16 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
+            DO.Volunteer? requester;
+            DO.Volunteer? doVolunteer;
             lock (AdminManager.BlMutex) //stage 7
             {
-                DO.Volunteer requester = _dal.Volunteer.Read(requesterId);
+                requester = _dal.Volunteer.Read(requesterId);
                 if (requester is null)
                     throw new BO.BlDoesNotExistException($"Volunteer with ID {requesterId} does  not exist! ");
                 if (requester.Id != boVolunteer.Id && requester.Role != DO.Role.Manager)
                     throw new BO.BlUnauthorizedException("Requester is not authorized!");
-                var doVolunteer = _dal.Volunteer.Read(boVolunteer.Id);
+                doVolunteer = _dal.Volunteer.Read(boVolunteer.Id);
                 if (doVolunteer is null)
                     throw new BO.BlDoesNotExistException($"Volunteer with ID {boVolunteer.Id} does  not exist! ");
                 if (!string.IsNullOrEmpty(boVolunteer.Password) && boVolunteer.Password == doVolunteer.Password)
@@ -183,6 +183,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                     boVolunteer.Password = doVolunteer.Password;//if th password is not meant to be updated.
 
                 DO.Volunteer updatedVolunteer = VolunteerManager.ConvertBoVolunteerToDoVolunteer(boVolunteer);
+
                 _dal.Volunteer.Update(updatedVolunteer);
             }
             VolunteerManager.Observers.NotifyItemUpdated(boVolunteer.Id);  //stage 5

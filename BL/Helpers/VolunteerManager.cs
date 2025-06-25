@@ -23,12 +23,12 @@ internal static class VolunteerManager
     {
         lock (AdminManager.BlMutex) //stage 7
         {
-            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id);
+            var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
             var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
-            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a?.EndType == DO.EndType.SelfCancellation);
             var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
             var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
-            var currentAssignment = s_dal.Assignment.ReadAll(a => a.VolunteerId == doVolunteer.Id && a.EndTime == null).LastOrDefault();
+            var currentAssignment = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id && a.EndTime == null).LastOrDefault();
             BO.CallInProgress? callInProgress = null;
             if (currentAssignment is not null)
             {
@@ -60,7 +60,7 @@ internal static class VolunteerManager
                 FullAddress = doVolunteer.FullAddress,
                 Latitude = doVolunteer?.Latitude,
                 Longitude = doVolunteer?.Longitude,
-                Role = (BO.Enums.Role)doVolunteer.Role,
+                Role = (BO.Enums.Role)doVolunteer!.Role,
                 IsActive = doVolunteer.IsActive,
                 DistanceType = (BO.Enums.DistanceType)doVolunteer.DistanceTypes,
                 MaxDistance = doVolunteer.MaxDistance,
@@ -106,7 +106,7 @@ internal static class VolunteerManager
         {
             var currentVolunteerAssignments = s_dal.Assignment.ReadAll(a => a?.VolunteerId == doVolunteer.Id);
             var totalHandled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.WasTreated);
-            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a.EndType == DO.EndType.SelfCancellation);
+            var totalCanceled = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.ManagerCancellation || a?.EndType == DO.EndType.SelfCancellation);
             var totalExpired = currentVolunteerAssignments.Count(a => a?.EndType == DO.EndType.Expired);
             var assignedCallId = currentVolunteerAssignments.FirstOrDefault(a => a?.EndTime == null)?.CallId;
 
@@ -132,10 +132,11 @@ internal static class VolunteerManager
     /// <param name="volunteers">Raw volunteer list from data layer.</param>
     /// <returns>List of summarized business object volunteers.</returns>
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
-        => volunteers.Select((v) => {
-            lock (AdminManager.BlMutex) //stage 7
-                ConvertDoVolunteerToBoVolunteerInList(v);
-        }).ToList();
+    => volunteers.Select(v => {
+        lock (AdminManager.BlMutex) //stage 7
+            return ConvertDoVolunteerToBoVolunteerInList(v);
+    }).ToList();
+
 
     /// <summary>
     /// Verifies a raw password against a stored (hashed) password.
