@@ -1,5 +1,6 @@
 ﻿using DalApi;
 using DO;
+using System.Runtime.CompilerServices;
 
 namespace Dal;
 /// <summary>
@@ -12,6 +13,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item">The new item</param>
     /// <exception cref="DalAlreadyExistsException">An exception in case of attempting to create an item that already exists</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Volunteer item)
     {
         if (Read(item.Id) is not null)
@@ -28,6 +30,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         Volunteer? newVolunteer = Read(id);
@@ -40,6 +43,7 @@ internal class VolunteerImplementation : IVolunteer
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Volunteers.Clear();
@@ -50,6 +54,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <returns>The item</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(int id)
     {
         return DataSource.Volunteers.FirstOrDefault(item => item!.Id == id); //stage 2
@@ -60,6 +65,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Volunteer?> ReadAll(Func<Volunteer?, bool>? filter = null) //stage 2
      => filter == null
          ? DataSource.Volunteers // החזר את הרשימה כמות שהיא אם אין פילטר
@@ -70,6 +76,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Volunteer item)
     {
         Volunteer? newVolunteer = Read(item.Id);
@@ -88,6 +95,7 @@ internal class VolunteerImplementation : IVolunteer
     /// </summary>
     /// <param name="filter">The filter function</param>
     /// <returns>The first item of this entity that meets the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Volunteer? Read(Func<Volunteer, bool> filter)
         => DataSource.Volunteers.FirstOrDefault(filter!);
 }

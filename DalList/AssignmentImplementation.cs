@@ -2,6 +2,7 @@
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 /// <summary>
@@ -13,6 +14,8 @@ internal class AssignmentImplementation : IAssignment
     /// A function that creates a new object.
     /// </summary>
     /// <param name="item">The new item</param>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+
     public void Create(Assignment item)
     {
         int newId = Config.NextAssignmentId;
@@ -25,6 +28,7 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to delete an item that does not exist </exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id) 
     {
         Assignment? newAssignment = Read(id);
@@ -37,6 +41,7 @@ internal class AssignmentImplementation : IAssignment
     /// <summary>
     /// Delete all the items of this entity.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Assignments.Clear();
@@ -47,6 +52,7 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="id">The item's id</param>
     /// <returns>The item</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Assignment? Read(int id)
     {
         return DataSource.Assignments.FirstOrDefault(item => item!.Id == id); //stage 2
@@ -57,6 +63,7 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="filter">the filtering function.</param>
     /// <returns>All the items of this entity that match the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Assignment?> ReadAll(Func<Assignment?, bool>? filter = null) //stage 2
         => filter == null
             ? DataSource.Assignments // החזר את הרשימה כמות שהיא אם אין פילטר
@@ -67,6 +74,7 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">An exception in case of attempting to update an item that does not exist</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Assignment item)
     {
         Assignment? newAssignment = Read(item.Id);
@@ -86,6 +94,7 @@ internal class AssignmentImplementation : IAssignment
     /// </summary>
     /// <param name="filter">The filter function</param>
     /// <returns>The first item of this entity that meets the filter.</returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Assignment? Read(Func<Assignment, bool> filter)
     => DataSource.Assignments.FirstOrDefault(filter!);
 }
