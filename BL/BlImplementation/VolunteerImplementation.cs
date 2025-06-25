@@ -130,6 +130,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlInvalidFormatException">Thrown if the updated details are not in the correct format.</exception>
     public void UpdateVolunteerDetails(int requesterId, BO.Volunteer boVolunteer)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Volunteer requester = _dal.Volunteer.Read(requesterId);
@@ -197,6 +198,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDeletionException">Thrown if the volunteer is currently handling calls and cannot be deleted.</exception>
     public void DeleteVolunteer(int id)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             var volunteer = _dal.Volunteer.Read(id);
@@ -227,6 +229,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlInvalidFormatException">Thrown if the volunteer's details are not in the correct format.</exception>
     public void AddVolunteer(BO.Volunteer boVolunteer)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             Helpers.VolunteerManager.ValidateVolunteer(boVolunteer);

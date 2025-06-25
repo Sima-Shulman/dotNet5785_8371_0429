@@ -9,7 +9,7 @@ namespace BlImplementation;
 /// </summary>
 internal class AdminImplementation : IAdmin
 {
-   
+
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     /// <summary>
     /// Returns the current system clock.
@@ -69,16 +69,29 @@ internal class AdminImplementation : IAdmin
     /// <param name="riskTimeRange">The new TimeSpan value for the risk time range.</param>
     public void SetRiskTimeRange(TimeSpan riskTimeRange)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.RiskRange = riskTimeRange;
     }
     #region Stage 5
-    public void AddClockObserver(Action clockObserver) =>
-    AdminManager.ClockUpdatedObservers += clockObserver;
-    public void RemoveClockObserver(Action clockObserver) =>
-    AdminManager.ClockUpdatedObservers -= clockObserver;
-    public void AddConfigObserver(Action configObserver) =>
-   AdminManager.ConfigUpdatedObservers += configObserver;
-    public void RemoveConfigObserver(Action configObserver) =>
-    AdminManager.ConfigUpdatedObservers -= configObserver;
+    public void AddClockObserver(Action clockObserver) {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ClockUpdatedObservers += clockObserver;
+    }
+    public void RemoveClockObserver(Action clockObserver) {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ClockUpdatedObservers -= clockObserver;
+    }
+    public void AddConfigObserver(Action configObserver)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ConfigUpdatedObservers += configObserver;
+
+    }
+    public void RemoveConfigObserver(Action configObserver)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
+        AdminManager.ConfigUpdatedObservers -= configObserver;
+
+    }
     #endregion Stage 5
 }
