@@ -93,13 +93,17 @@ namespace PL.Call
         {
             if (SelectedCall is BO.CallInList call)
             {
-                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {call.CallId}?", "Delete Call", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to unassign {call.CallId}?", "Unassign Call", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 try
                 {
                     if (result == MessageBoxResult.Yes)
                     {
-                      
-                        //s_bl.Call.MarkCallCancellation(call.VolunteerId,Call.AssignmentId);????????????????????
+                        var volunteer = s_bl.Volunteer.GetVolunteersList()
+                            .FirstOrDefault(v => v.FullName == SelectedCall.LastVolunteerName && v.CallId is not null);////לבדוק כי יכול להיות כמה עם אותו שם
+                        if (volunteer != null)
+                        {
+                            s_bl.Call.MarkCallCancellation(volunteer.Id, call.AssignmentId!.Value);
+                        }
                     }
                 }
                 catch (Exception ex)

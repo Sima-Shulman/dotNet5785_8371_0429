@@ -128,4 +128,60 @@ namespace PL
             return !(bool)value;
         }
     }
+
+    public class CallStatusToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            BO.Enums.CallStatus callStatus = (BO.Enums.CallStatus)value;
+            return (callStatus == BO.Enums.CallStatus.InTreatment || callStatus == BO.Enums.CallStatus.InTreatmentAtRisk) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return !(bool)value;
+        }
+    }
+
+    public class CallStatusAndNeverAssignedToVisibilityConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length < 2)
+                return Visibility.Collapsed;
+
+            BO.Enums.CallStatus callStatus = (BO.Enums.CallStatus)values[0];
+            int TotalAssignments = values[1] is int assignments ? assignments : -1;
+
+            bool isOpened = callStatus == BO.Enums.CallStatus.Opened || callStatus == BO.Enums.CallStatus.OpenedAtRisk;
+            bool neverAssigned = TotalAssignments == 0;
+
+            return (isOpened && neverAssigned) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    //public class CallStatusAnLastVolunteerNameToVisibilityConverter : IMultiValueConverter
+    //{
+    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if (values.Length < 2)
+    //            return Visibility.Collapsed;
+
+    //        BO.Enums.CallStatus callStatus = (BO.Enums.CallStatus)values[0];
+    //        bool isOpened = callStatus == BO.Enums.CallStatus.Opened || callStatus == BO.Enums.CallStatus.OpenedAtRisk;
+    //        bool neverAssigned = TotalAssignments == 0;
+
+    //        return (isOpened && neverAssigned) ? Visibility.Visible : Visibility.Collapsed;
+    //    }
+
+    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }
+

@@ -65,14 +65,21 @@
                 <DataGridTemplateColumn Header="Unassign" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Unassign" Click="btnUnassignCall_Click"/>
+                            <Button Content="Unassign" Click="btnUnassignCall_Click" Visibility="{Binding CallStatus, Converter={StaticResource CallStatusToVisibilityConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Delete" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" Click="btnDeleteCall_Click"  />
+                            <Button Content="Delete" Click="btnDeleteCall_Click">
+                                <Button.Visibility>
+                                    <MultiBinding Converter="{StaticResource CallStatusAndNeverAssignedToVisibilityConverter}">
+                                        <Binding Path="CallStatus"/>
+                                        <Binding Path="TotalAssignments"/>
+                                    </MultiBinding>
+                                </Button.Visibility>
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
