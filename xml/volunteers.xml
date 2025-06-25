@@ -360,7 +360,7 @@
     <Longitude>35.216089</Longitude>
     <Role>Manager</Role>
     <IsActive>true</IsActive>
-    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <DistanceTypes>WalkingDistance</DistanceTypes>
     <MaxDistance>50</MaxDistance>
     <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
   </Volunteer>

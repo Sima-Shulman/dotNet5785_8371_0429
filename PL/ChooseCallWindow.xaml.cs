@@ -28,6 +28,7 @@ public partial class ChooseCallWindow : Window
     {
         InitializeComponent();
         _volunteerId = volunteerId;
+        
         CallList = s_bl.Call.GetOpenCallsForVolunteer(_volunteerId);
         Volunteer = s_bl.Volunteer.GetVolunteerDetails(_volunteerId);
         SetValue(MaxDistanceProperty, Volunteer.MaxDistance);
@@ -35,43 +36,77 @@ public partial class ChooseCallWindow : Window
 
     }
 
-
     private void ShowMap(double volunteerLat, double volunteerLon, double? callLat, double? callLon)
     {
-        //webView.Visibility = Visibility.Visible;
+        MessageBox.Show("ShowMap called with: " +
+            $"\nVolunteer Lat: {volunteerLat}, Lon: {volunteerLon}" +
+            $"\nCall Lat: {callLat}, Lon: {callLon}");
 
         string mapHtml = $@"
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='utf-8' />
-        <title>Map</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
-        <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-    </head>
-    <body>
-        <div id='map' style='width: 100%; height: 100vh;'></div>
-        <script>
-            var map = L.map('map').setView([{volunteerLat}, {volunteerLon}], 15);
-            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }}).addTo(map);
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
+    <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
 
-            var volunteerMarker = L.marker([{volunteerLat}, {volunteerLon}]).addTo(map)
-                .bindPopup('מיקום המתנדב').openPopup();
+    <!-- Routing machine CSS & JS -->
+    <link rel='stylesheet' href='https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css' />
+    <script src='https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js'></script>
+</head>
+<body>
+    <div id='map' style='width: 100%; height: 100vh;'></div>
+    <script>
+        var map = L.map('map');
+        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }}).addTo(map);
 
-            var callMarker = L.marker([{callLat}, {callLon}]).addTo(map)
-                .bindPopup('מיקום הקריאה');
-        </script>
-    </body>
-    </html>";
+        var volunteerLatLng = [{volunteerLat}, {volunteerLon}];
+        var callLatLng = [{callLat}, {callLon}];
 
-        string htmlPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "map.html");
+        var volunteerMarker = L.marker(volunteerLatLng).addTo(map)
+            .bindPopup('מיקום המתנדב').openPopup();
+
+        var callMarker = L.marker(callLatLng).addTo(map)
+            .bindPopup('מיקום הקריאה');
+
+        // קו אווירי (Polyline) בין המתנדב לקריאה
+        var latlngs = [volunteerLatLng, callLatLng];
+        var polyline = L.polyline(latlngs, {{color: 'red'}}).addTo(map);
+
+        // מיקוד על שני הסמנים
+        var bounds = L.latLngBounds(latlngs);
+        map.fitBounds(bounds, {{ padding: [50, 50] }});
+
+        // מסלול הליכה/נסיעה (Routing)
+        L.Routing.control({{
+            waypoints: [
+                L.latLng(volunteerLatLng),
+                L.latLng(callLatLng)
+            ],
+            lineOptions: {{
+                styles: [{{ color: 'blue', opacity: 0.6, weight: 4 }}]
+            }},
+            router: L.Routing.osrmv1({{ serviceUrl: 'https://router.project-osrm.org/route/v1' }}),
+            createMarker: function() {{ return null; }},
+            draggableWaypoints: false,
+            addWaypoints: false
+        }}).addTo(map);
+    </script>
+</body>
+</html>";
+
+        string uniqueFileName = $"map_{Guid.NewGuid()}.html";
+        string htmlPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), uniqueFileName);
         System.IO.File.WriteAllText(htmlPath, mapHtml, Encoding.UTF8);
         webView.Source = new Uri(htmlPath);
     }
+
+
     public BO.OpenCallInList? SelectedCall { get; set; }
     public IEnumerable<BO.OpenCallInList> CallList
     {

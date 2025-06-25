@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -76,40 +77,61 @@ namespace PL
 
         private void ShowMap(double volunteerLat, double volunteerLon, double? callLat, double? callLon)
         {
-            //webView.Visibility = Visibility.Visible;
+            if (callLat == null || callLon == null)
+                return;
 
+            // 1. בונה את קוד ה־HTML של המפה
             string mapHtml = $@"
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='utf-8' />
-        <title>Map</title>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
-        <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-    </head>
-    <body>
-        <div id='map' style='width: 100%; height: 100vh;'></div>
-        <script>
-            var map = L.map('map').setView([{volunteerLat}, {volunteerLon}], 15);
-            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }}).addTo(map);
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
+    <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
+</head>
+<body>
+    <div id='map' style='width: 100%; height: 100vh;'></div>
+    <script>
+        var map = L.map('map');
+        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }}).addTo(map);
 
-            var volunteerMarker = L.marker([{volunteerLat}, {volunteerLon}]).addTo(map)
-                .bindPopup('מיקום המתנדב').openPopup();
+        var volunteerLatLng = [{volunteerLat}, {volunteerLon}];
+        var callLatLng = [{callLat}, {callLon}];
 
-            var callMarker = L.marker([{callLat}, {callLon}]).addTo(map)
-                .bindPopup('מיקום הקריאה');
-        </script>
-    </body>
-    </html>";
+        var volunteerMarker = L.marker(volunteerLatLng).addTo(map)
+            .bindPopup('מיקום המתנדב').openPopup();
 
-            string htmlPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "map.html");
-            System.IO.File.WriteAllText(htmlPath, mapHtml, Encoding.UTF8);
+        var callMarker = L.marker(callLatLng).addTo(map)
+            .bindPopup('מיקום הקריאה');
+
+        // פוקוס אוטומטי על שני הסמנים
+        var bounds = L.latLngBounds([volunteerLatLng, callLatLng]);
+        map.fitBounds(bounds, {{ padding: [50, 50] }});
+    </script>
+</body>
+</html>";
+
+            // 2. מוחק קבצי מפה זמניים ישנים
+            string tempDir = System.IO.Path.GetTempPath();
+            foreach (var file in Directory.GetFiles(tempDir, "map_*.html"))
+            {
+                try { File.Delete(file); } catch { /* מתעלם משגיאות */ }
+            }
+
+            // 3. יוצר קובץ חדש עם שם ייחודי
+            string uniqueFileName = $"map_{Guid.NewGuid()}.html";
+            string htmlPath = System.IO.Path.Combine(tempDir, uniqueFileName);
+            File.WriteAllText(htmlPath, mapHtml, Encoding.UTF8);
+
+            // 4. טוען את המפה ל־WebView
             webView.Source = new Uri(htmlPath);
         }
+
 
 
         public event PropertyChangedEventHandler? PropertyChanged;

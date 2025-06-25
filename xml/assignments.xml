@@ -456,4 +456,44 @@
     <End_time>2025-06-19T22:19:09</End_time>
     <EndType>ManagerCancellation</EndType>
   </Assignment>
+  <Assignment>
+    <Id>63</Id>
+    <CallId>1048</CallId>
+    <VolunteerId>17111832</VolunteerId>
+    <Start_time>2025-06-19T22:19:09</Start_time>
+    <End_time>2025-06-19T22:19:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>64</Id>
+    <CallId>1048</CallId>
+    <VolunteerId>17111832</VolunteerId>
+    <Start_time>2025-06-19T22:19:09</Start_time>
+    <End_time>2025-06-19T22:19:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>65</Id>
+    <CallId>1048</CallId>
+    <VolunteerId>17111832</VolunteerId>
+    <Start_time>2025-06-19T22:19:09</Start_time>
+    <End_time>2025-06-19T22:19:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>66</Id>
+    <CallId>1049</CallId>
+    <VolunteerId>17111832</VolunteerId>
+    <Start_time>2025-06-19T22:19:09</Start_time>
+    <End_time>2025-06-19T22:19:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>67</Id>
+    <CallId>1048</CallId>
+    <VolunteerId>17111832</VolunteerId>
+    <Start_time>2025-06-19T22:19:09</Start_time>
+    <End_time>2025-06-19T22:19:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
 </ArrayOfAssignment>
