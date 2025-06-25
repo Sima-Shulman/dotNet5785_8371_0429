@@ -77,3 +77,9 @@ public class BlNullPropertyException : Exception
 {
     public BlNullPropertyException(string? message) : base(message) { }
 }
+
+[Serializable]
+public class BLTemporaryNotAvailableException : Exception
+{
+    public BLTemporaryNotAvailableException(string? message) : base(message) { }
+}
