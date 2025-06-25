@@ -32,9 +32,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void InitializeDatabase()
     {
-        //_dal.ResetDB();
-        //DalTest.Initialization.Do();
-        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.InitializeDB();
 
     }
@@ -62,9 +60,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDatabase()
     {
-        //_dal.Config.Reset();
-        //_dal.ResetDB();
-        //AdminManager.UpdateClock(AdminManager.Now);
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.ResetDB();
     }
     /// <summary>
