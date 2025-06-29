@@ -426,6 +426,8 @@ internal class CallImplementation : BlApi.ICall
                 };
 
                 _dal.Assignment.Update(newAssignment);
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
 
                 if (!isRequesterNotManager)
                 {
@@ -484,6 +486,8 @@ internal class CallImplementation : BlApi.ICall
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
                 DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
                 _dal.Assignment.Update(newAssignment);
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)
@@ -540,6 +544,8 @@ internal class CallImplementation : BlApi.ICall
                 if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
                     throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
                 _dal.Assignment.Create(newAssignment);
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)

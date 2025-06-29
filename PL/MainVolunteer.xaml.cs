@@ -310,11 +310,11 @@ namespace PL
                 s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id,CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
 
-                MessageBox.Show("הטיפול בקריאה הסתיים.");
+                MessageBox.Show("Treatment has been completed!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בסיום טיפול: " + ex.Message);
+                MessageBox.Show("Error completing treatment " + ex.Message);
             }
         }
 
@@ -330,11 +330,11 @@ namespace PL
             {               
                 s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
-                MessageBox.Show("הטיפול בקריאה בוטל.");
+                MessageBox.Show("Treatment was cancelled!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בביטול טיפול: " + ex.Message);
+                MessageBox.Show("Error canceling treatment " + ex.Message);
             }
         }
 
