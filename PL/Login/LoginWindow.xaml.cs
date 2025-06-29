@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,14 +40,14 @@ namespace PL.Login
 
 
 
-        public int UserId
+        public int? UserId
         {
             get { return (int)GetValue(UserIdProperty); }
             set { SetValue(UserIdProperty, value); }
         }
 
         public static readonly DependencyProperty UserIdProperty =
-            DependencyProperty.Register("UserId", typeof(int), typeof(LoginWindow), new PropertyMetadata(0));
+            DependencyProperty.Register("UserId", typeof(int), typeof(LoginWindow), new PropertyMetadata(null));
 
         /// <summary>
         /// Handles the Click event of the loginBtn control.
@@ -55,36 +56,42 @@ namespace PL.Login
         /// <param name="e"></param>
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (!UserId.ToString().All(char.IsDigit) || string.IsNullOrEmpty(Password.ToString()))
+            if (UserId is null || !UserId.ToString()!.All(char.IsDigit) || string.IsNullOrEmpty(Password.ToString()))
             {
                 MessageBox.Show("Please enter a valid numeric User ID and Password.");
                 return;
             }
             try
             {
-                var userRole = s_bl.Volunteer.Login(UserId, Password);
+                var userRole = s_bl.Volunteer.Login(UserId.Value, Password);
                 if (userRole == BO.Enums.Role.Volunteer)
                 {
                     MessageBox.Show("Login successful!");
-                    new MainVolunteer(UserId).Show();
+                    new MainVolunteer(UserId.Value).Show();
                 }
                 else if (userRole == BO.Enums.Role.Manager)
                 {
                     var result = MessageBox.Show(
-                     "Choose an option:\n\nClick 'Yes' for Manager\nClick 'No' for Volinteer",
+                     "Choose an option:\n\nClick 'Yes' for Manager\nClick 'No' for Volunteer",
                      "Custom Selection",
                      MessageBoxButton.YesNo,
                      MessageBoxImage.Question
-                    );
+                );
                     if (result == MessageBoxResult.Yes)
                     {
                         MessageBox.Show("You are navigated to manager window.");
-                        new Manager.ManagerWindow().Show();
+                        if (App.Current.Properties["IsManagerLoggedIn"] is true)
+                        {
+                            MessageBox.Show("A Manager is already logged in to the system.");
+                            return;
+                        }
+                        App.Current.Properties["IsManagerLoggedIn"] = true;
+                        new Manager.ManagerWindow(UserId.Value).Show();
                     }
                     else if (result == MessageBoxResult.No)
                     {
                         MessageBox.Show("You are navigated to volunteer window.");
-                        new MainVolunteer(UserId).Show();
+                        new MainVolunteer(UserId.Value).Show();
                     }
                 }
                 else
@@ -98,5 +105,5 @@ namespace PL.Login
             }
 
         }
-    }
+   }
 }

@@ -62,16 +62,18 @@ internal static class Tools
     /// <param name="longitudeC">Longitude of the second location.</param>
     /// <param name="type">Type of distance to calculate (Aerial, Walking, Driving).</param>
     /// <returns>The distance in kilometers.</returns>
-    public static double CalculateDistance(double? latitudeV, double? longitudeV, double latitudeC, double longitudeC, DO.DistanceTypes type)
+    public static double CalculateDistance(double? latitudeV, double? longitudeV, double? latitudeC, double? longitudeC, DO.DistanceTypes type)
     {
-        if (latitudeV == null || longitudeV == null) return 0;
+        if (latitudeV == null || longitudeV == null || latitudeC == null || longitudeC == null || latitudeC == 0 || longitudeC == 0) return 0;
         double latitudeVNotNull = latitudeV.Value;
         double longitudeVNotNull = longitudeV.Value;
+        double latitudeCNotNull = latitudeC.Value;
+        double longitudeCNotNull = longitudeC.Value;
         return type switch
         {
-            DO.DistanceTypes.AerialDistance => HaversineDistance(latitudeVNotNull, longitudeVNotNull, latitudeC, longitudeC),
-            DO.DistanceTypes.WalkingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeC, longitudeC, "pedestrian"),
-            DO.DistanceTypes.DrivingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeC, longitudeC, "car"),
+            DO.DistanceTypes.AerialDistance => HaversineDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull),
+            DO.DistanceTypes.WalkingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull, "pedestrian"),
+            DO.DistanceTypes.DrivingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull, "car"),
             _ => throw new ArgumentException("Invalid distance type", nameof(type))
         };
     }
@@ -145,16 +147,16 @@ internal static class Tools
     /// <param name="address">The address for which coordinates are requested.</param>
     /// <returns>A tuple containing latitude and longitude of the address.</returns>
     /// <exception cref="Exception">Thrown when the address is invalid, API call fails, or coordinates cannot be parsed.</exception>
-    public static (double, double) GetCoordinatesFromAddress(string address)
+    public static async Task<(double, double)> GetCoordinatesFromAddressAsync(string address)
     {
         using var client = new HttpClient();
         string url = $"https://us1.locationiq.com/v1/search.php?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
-        var response = client.GetAsync(url).GetAwaiter().GetResult();
+        var response = await client.GetAsync(url);
         if (!response.IsSuccessStatusCode)
             throw new Exception("Invalid address or API error.");
 
-        var json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+        var json = await response.Content.ReadAsStringAsync();
         using var doc = JsonDocument.Parse(json);
 
         if (doc.RootElement.ValueKind != JsonValueKind.Array || doc.RootElement.GetArrayLength() == 0)
@@ -176,4 +178,5 @@ internal static class Tools
 
         return (latitude, longitude);
     }
+
 }

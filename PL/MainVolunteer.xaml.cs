@@ -54,7 +54,7 @@ namespace PL
                 if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
                 {
                     CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                    ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude,
+                    ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
                             (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
                 }
                 else
@@ -81,55 +81,51 @@ namespace PL
             if (callLat == null || callLon == null)
                 return;
 
-            // 1. בונה את קוד ה־HTML של המפה
             string mapHtml = $@"
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8' />
-    <title>Map</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
-    <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
-</head>
-<body>
-    <div id='map' style='width: 100%; height: 100vh;'></div>
-    <script>
-        var map = L.map('map');
-        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-            maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
-        }}).addTo(map);
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset='utf-8' />
+                    <title>Map</title>
+                    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css'/>
+                    <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
+                </head>
+                <body>
+                    <div id='map' style='width: 100%; height: 100vh;'></div>
+                    <script>
+                        var map = L.map('map');
+                        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                            maxZoom: 19,
+                            attribution: '© OpenStreetMap contributors'
+                        }}).addTo(map);
 
-        var volunteerLatLng = [{volunteerLat}, {volunteerLon}];
-        var callLatLng = [{callLat}, {callLon}];
+                        var volunteerLatLng = [{volunteerLat}, {volunteerLon}];
+                        var callLatLng = [{callLat}, {callLon}];
 
-        var volunteerMarker = L.marker(volunteerLatLng).addTo(map)
-            .bindPopup('מיקום המתנדב').openPopup();
+                        var volunteerMarker = L.marker(volunteerLatLng).addTo(map)
+                            .bindPopup('מיקום המתנדב').openPopup();
 
-        var callMarker = L.marker(callLatLng).addTo(map)
-            .bindPopup('מיקום הקריאה');
+                        var callMarker = L.marker(callLatLng).addTo(map)
+                            .bindPopup('מיקום הקריאה');
 
-        // פוקוס אוטומטי על שני הסמנים
-        var bounds = L.latLngBounds([volunteerLatLng, callLatLng]);
-        map.fitBounds(bounds, {{ padding: [50, 50] }});
-    </script>
-</body>
-</html>";
+                        // פוקוס אוטומטי על שני הסמנים
+                        var bounds = L.latLngBounds([volunteerLatLng, callLatLng]);
+                        map.fitBounds(bounds, {{ padding: [50, 50] }});
+                    </script>
+                </body>
+                </html>";
 
-            // 2. מוחק קבצי מפה זמניים ישנים
             string tempDir = System.IO.Path.GetTempPath();
             foreach (var file in Directory.GetFiles(tempDir, "map_*.html"))
             {
-                try { File.Delete(file); } catch { /* מתעלם משגיאות */ }
+                try { File.Delete(file); } catch {  }
             }
 
-            // 3. יוצר קובץ חדש עם שם ייחודי
             string uniqueFileName = $"map_{Guid.NewGuid()}.html";
             string htmlPath = System.IO.Path.Combine(tempDir, uniqueFileName);
             File.WriteAllText(htmlPath, mapHtml, Encoding.UTF8);
 
-            // 4. טוען את המפה ל־WebView
             webView.Source = new Uri(htmlPath);
         }
 
@@ -291,13 +287,13 @@ namespace PL
         {
             var id = CurrentVolunteer!.Id;
             CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress!.CallId);
             OnPropertyChanged(nameof(CurrentVolunteer));
             OnPropertyChanged(nameof(CurrentCall));
             if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
             {
                 CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude,
+                ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
                         (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
             }
         }

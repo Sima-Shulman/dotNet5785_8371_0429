@@ -510,4 +510,44 @@
     <MaxFinishTime xsi:nil="true" />
     <Id>1050</Id>
   </Call>
+  <Call>
+    <CallType>Transportation</CallType>
+    <Description>Take an old men to the doctor.</Description>
+    <FullAddress>druk 71 ramat shlomo jerusalem israel.</FullAddress>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2025-06-26T13:11:58.7033767+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1051</Id>
+  </Call>
+  <Call>
+    <CallType>VehicleBreakdown</CallType>
+    <Description>A car with falt tire.</Description>
+    <FullAddress>druk 79 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2025-06-26T13:15:32.680629+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1052</Id>
+  </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>dsg</Description>
+    <FullAddress>druk 68 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2025-06-28T22:28:37.0973646+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1057</Id>
+  </Call>
+  <Call>
+    <CallType>Transportation</CallType>
+    <Description>aaa</Description>
+    <FullAddress>druk 68 rmat shlomo jerusalem israel</FullAddress>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <OpeningTime>2025-06-28T23:21:11.3346689+03:00</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
+    <Id>1065</Id>
+  </Call>
 </ArrayOfCall>

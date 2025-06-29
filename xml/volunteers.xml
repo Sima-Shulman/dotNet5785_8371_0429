@@ -295,6 +295,34 @@
     <Password>J6+BffgvNEm9u+R2tLVlGwLjNEZqooul4VV8VI6M55A=</Password>
   </Volunteer>
   <Volunteer>
+    <Id>334600046</Id>
+    <FullName>Brachi Shulman</FullName>
+    <CellphoneNumber>0527159386</CellphoneNumber>
+    <Email>ssh95158@gmail.com</Email>
+    <FullAddress>druk 70 ramat shlomo jerusalem israel</FullAddress>
+    <Latitude>31.8139637</Latitude>
+    <Longitude>35.2182104</Longitude>
+    <Role>Volunteer</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>DrivingDistance</DistanceTypes>
+    <MaxDistance>2</MaxDistance>
+    <Password>W+K9RL7b8XF6LpjV0grTGnMEuGrEvrtIjxBjtA7FBR0=</Password>
+  </Volunteer>
+  <Volunteer>
+    <Id>327820429</Id>
+    <FullName>Efrat Barsheshet</FullName>
+    <CellphoneNumber>0583246911</CellphoneNumber>
+    <Email>efrat2508@gmail.com</Email>
+    <FullAddress>harav shrira gaon 7 jerusalem  israel</FullAddress>
+    <Latitude>31.759595</Latitude>
+    <Longitude>35.215315</Longitude>
+    <Role>Manager</Role>
+    <IsActive>true</IsActive>
+    <DistanceTypes>AerialDistance</DistanceTypes>
+    <MaxDistance>5</MaxDistance>
+    <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
+  </Volunteer>
+  <Volunteer>
     <Id>328178371</Id>
     <FullName>Simi Shulman</FullName>
     <CellphoneNumber>0583295158</CellphoneNumber>

@@ -354,10 +354,34 @@
   </Assignment>
   <Assignment>
     <Id>45</Id>
-    <VolunteerId>328178371</VolunteerId>
     <CallId>1025</CallId>
+    <VolunteerId>328178371</VolunteerId>
     <Start_time>2025-06-25T12:07:38</Start_time>
-    <End_time />
-    <EndType />
+    <End_time>2025-06-25T12:07:38</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>46</Id>
+    <CallId>1065</CallId>
+    <VolunteerId>328178371</VolunteerId>
+    <Start_time>2025-06-25T12:07:38</Start_time>
+    <End_time>2025-06-25T12:07:38</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>47</Id>
+    <CallId>1065</CallId>
+    <VolunteerId>328178371</VolunteerId>
+    <Start_time>2025-06-25T12:07:38</Start_time>
+    <End_time>2025-06-25T12:07:38</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>48</Id>
+    <CallId>1065</CallId>
+    <VolunteerId>328178371</VolunteerId>
+    <Start_time>2025-06-25T12:07:38</Start_time>
+    <End_time>2025-06-25T12:07:38</End_time>
+    <EndType>ManagerCancellation</EndType>
   </Assignment>
 </ArrayOfAssignment>

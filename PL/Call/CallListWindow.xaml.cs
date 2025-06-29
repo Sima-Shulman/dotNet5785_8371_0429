@@ -24,8 +24,10 @@ namespace PL.Call
     {
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public CallListWindow()
+        public int AdminId { get; set; }    
+        public CallListWindow(int id)
         {
+            AdminId = id;
             InitializeComponent();
         }
         public BO.Enums.CallType CallType { get; set; } = BO.Enums.CallType.None;
@@ -98,11 +100,10 @@ namespace PL.Call
                 {
                     if (result == MessageBoxResult.Yes)
                     {
-                        var volunteer = s_bl.Volunteer.GetVolunteersList()
-                            .FirstOrDefault(v => v.FullName == SelectedCall.LastVolunteerName && v.CallId is not null);////לבדוק כי יכול להיות כמה עם אותו שם
-                        if (volunteer != null)
+                        if (AdminId != default)
                         {
-                            s_bl.Call.MarkCallCancellation(volunteer.Id, call.AssignmentId!.Value);
+                            s_bl.Call.MarkCallCancellation(AdminId, call.AssignmentId!.Value);
+                            queryCallList();// Refresh the call list after unassigning because the observers do not observe assignments.
                         }
                     }
                 }

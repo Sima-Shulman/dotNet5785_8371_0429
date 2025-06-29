@@ -26,8 +26,10 @@ namespace PL.Manager
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagerWindow"/> class.
         /// </summary>
-        public ManagerWindow()
+        public int Id { get; set; } 
+        public ManagerWindow(int id)
         {
+            Id = id;
             InitializeComponent();
         }
         public DateTime CurrentTime
@@ -70,6 +72,7 @@ namespace PL.Manager
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            App.Current.Properties["IsManagerLoggedIn"] = false;
         }
 
         /// <summary>
@@ -144,7 +147,7 @@ namespace PL.Manager
         /// <param name="e"></param>
         private void btnHandleCalls_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow().Show();
+            new CallListWindow(Id).Show();
         }
 
         /// <summary>
