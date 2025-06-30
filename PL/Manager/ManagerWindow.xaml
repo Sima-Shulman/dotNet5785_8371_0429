@@ -5,65 +5,102 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Manager"
         mc:Ignorable="d"
-        Title="ManagerWindow" Height="450" Width="800"
+        Title="ManagerWindow" Height="500" Width="800"
+        WindowStartupLocation="CenterScreen"
         Loaded="ManagerWindow_Loaded"
         Closed="ManagerWindow_Closed"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Grid>
-        <!--Clock Grid-->
-        <Grid Width="200" Height="150" Margin="10,24,590,260" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Label Content="{Binding CurrentTime}"  FontWeight="Bold" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-            <Button Content="Add 1 minute" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-            <Button Content="Add 1 hour" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-            <Button Content="Add 1 day" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-            <Button Content="Addd 1 year" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Click="btnAddOneYear_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-        </Grid>
-        <!--Risk Range Grid-->
-        <Grid>
-            <Label Content="Risk Range:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,217,0,0" Width="72" />
-            <TextBox HorizontalAlignment="Left" Margin="82,221,0,0"  Text="{Binding RiskRange}" VerticalAlignment="Top" Width="50"/>
-            <Button Content="Update" HorizontalAlignment="Left" Margin="137,219,0,0" VerticalAlignment="Top" Click="btnUpdateRiskRange_Click" />
-        </Grid>
-        <!--Handle Btns Grid-->
-        <Grid Width="100" Height="50" Margin="10,293,690,91">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Handle Volunteers" Grid.Row="0" Margin="2" Click="btnHandleVolunteers_Click"/>
-            <Button Content="Handle Calls"  Grid.Row="1" Margin="2" Click="btnHandleCalls_Click"/>
-        </Grid>
-        <!--DB Btns Grid-->
-        <Grid Width="100" Height="50" Margin="145,293,555,91">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button Content="Init DB" Grid.Row="0" Margin="2" Click="btnInitDB_Click"  IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-            <Button Content="Reset DB"  Grid.Row="1" Margin="2" Click="btnResetDB_Click"   IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
-        </Grid>
-        <!-- Simulator Control Grid -->
-        <Grid Width="250" Height="100" Margin="363,117,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
-                <Label Content="Interval (min):"/>
-                <TextBox Width="50" Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" 
-                 IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}"/>
-            </StackPanel>
-            <Button Grid.Row="1" Content="{Binding IsSimulatorRunning, Converter={StaticResource SimulatorButtonTextConverter}}" 
-            Click="btnToggleSimulator_Click"/>
-        </Grid>
+
+    <Window.Resources>
+        <!-- Background -->
+        <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#E0F7FA" Offset="0"/>
+            <GradientStop Color="#F1F8FF" Offset="1"/>
+        </LinearGradientBrush>
 
 
+
+        <!-- TextBox style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#aaa"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Button style -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#0078D7"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource WindowBackgroundBrush}">
+        <!-- Centered manager card -->
+        <Border Width="600" Padding="30" Background="White" CornerRadius="15"
+                HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="#888" BlurRadius="8" ShadowDepth="3"/>
+            </Border.Effect>
+
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Clock Section -->
+                <GroupBox Header="Clock" Margin="0,0,0,10">
+                    <StackPanel>
+                        <Label Content="{Binding CurrentTime}" FontSize="20" HorizontalAlignment="Center"/>
+                        <UniformGrid Columns="2" Margin="0,10,0,0">
+                            <Button Content="Add 1 minute" Click="btnAddOneMinute_Click"/>
+                            <Button Content="Add 1 hour" Click="btnAddOneHour_Click"/>
+                            <Button Content="Add 1 day" Click="btnAddOneDay_Click"/>
+                            <Button Content="Add 1 year" Click="btnAddOneYear_Click"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Risk Section -->
+                <GroupBox Header="Risk Range" Grid.Row="1" Margin="0,0,0,10">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                        <Label Content="Risk:" VerticalAlignment="Center"/>
+                        <TextBox Width="50" Text="{Binding RiskRange}"/>
+                        <Button Content="Update" Click="btnUpdateRiskRange_Click"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Bottom Buttons -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left column -->
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                        <Button Content="Handle Volunteers" Click="btnHandleVolunteers_Click"/>
+                        <Button Content="Handle Calls" Click="btnHandleCalls_Click"/>
+                    </StackPanel>
+
+                    <!-- Right column -->
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <Button Content="Init DB" Click="btnInitDB_Click"/>
+                        <Button Content="Reset DB" Click="btnResetDB_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -22,13 +22,11 @@ internal static class CallManager
     {
         List<DO.Assignment?> assignments;
         lock (AdminManager.BlMutex)//stage 7
-            assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id)
-          .OrderByDescending(a => a?.StartTime)
-          .ToList();
+            assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
 
         if (assignments.Any()) // there IS an assignment to this call  
         {
-            var lastAssignment = assignments.First();
+            var lastAssignment = assignments.LastOrDefault();
             if (lastAssignment!.EndTime is not null) // if end time is NOT null  
             {
                 if ((lastAssignment.EndType == DO.EndType.SelfCancellation) || (lastAssignment.EndType == DO.EndType.ManagerCancellation) && (lastAssignment.StartTime <= s_dal.Config.Clock)) // if the call was cancelled  
@@ -180,6 +178,8 @@ internal static class CallManager
                     EndType: (DO.EndType)BO.Enums.EndType.Expired
                 ));
             });
+            AssignmentManager.PeriodicAssignmentUpdates(oldClock, newClock);
+            
         }
     }
 

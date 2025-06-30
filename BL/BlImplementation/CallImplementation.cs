@@ -3,6 +3,7 @@
 using DalApi;
 using DO;
 using Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -154,28 +155,32 @@ internal class CallImplementation : BlApi.ICall
         {
             DO.Call? existingCall;
             lock (AdminManager.BlMutex)//stage 7
-            {
                 existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
-                //only if the user wants to update th address of the call
-                if (boCall.FullAddress != existingCall.FullAddress)
-                {
-                    var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
+            //only if the user wants to update th address of the call
+            //if (boCall.FullAddress != existingCall.FullAddress)
+            //{
+            //    var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
 
-                    boCall.Latitude = latitude;
-                    boCall.Longitude = longitude;
-                }
-                else
-                {
-                    boCall.FullAddress = existingCall.FullAddress;
-                    boCall.Latitude = existingCall.Latitude;
-                    boCall.Longitude = existingCall.Longitude;
-                }
-                CallManager.ValidateCall(boCall);
-                DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
+            //    boCall.Latitude = latitude;
+            //    boCall.Longitude = longitude;
+            //}
+            //else
+            //{
+            //    boCall.FullAddress = existingCall.FullAddress;
+            //    boCall.Latitude = existingCall.Latitude;
+            //    boCall.Longitude = existingCall.Longitude;
+            //}
+            CallManager.ValidateCall(boCall);
+            DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
+            lock (AdminManager.BlMutex)//stage 7
                 _dal.Call.Update(updatedCall);
-            }
             CallManager.Observers.NotifyItemUpdated(boCall.Id);  //stage 5
-            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+            //compute the coordinates asynchronously without waiting for the results
+            if (boCall.FullAddress != existingCall.FullAddress)
+                _ = updateCoordinatesForCallAddressAsync(updatedCall); //stage 7
+
+
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -234,20 +239,21 @@ internal class CallImplementation : BlApi.ICall
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
+            DO.Call existingCall;
             lock (AdminManager.BlMutex)//stage 7
-            {
-                var existingCall = _dal.Call.Read(boCall.Id);
-                if (existingCall != null)
-                    throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exist");
-                CallManager.ValidateCall(boCall);
-                var (latitude, longitude) = Tools.GetCoordinatesFromAddress((string)boCall.FullAddress);
-                boCall.Latitude = latitude;
-                boCall.Longitude = longitude;
-                DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
+                existingCall = _dal.Call.Read(boCall.Id)!;
+            if (existingCall != null)
+                throw new BO.BlAlreadyExistException($"Call with ID={boCall.Id} already exist");
+            CallManager.ValidateCall(boCall);
+            //var (latitude, longitude) = Tools.GetCoordinatesFromAddress((string)boCall.FullAddress);
+            //boCall.Latitude = latitude;
+            //boCall.Longitude = longitude;
+            DO.Call doCall = CallManager.ConvertBoCallToDoCall(boCall);
+            lock (AdminManager.BlMutex)//stage 7
                 _dal.Call.Create(doCall);
-                NotifyVolunteersAboutNewCall(doCall);
-            }
-            CallManager.Observers.NotifyListUpdated(); //stage 5                                                    
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+            _ = updateCoordinatesForCallAddressAsync(doCall); //stage 7
+            _ = NotifyVolunteersAboutNewCall(doCall);
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -422,7 +428,10 @@ internal class CallImplementation : BlApi.ICall
                 };
 
                 _dal.Assignment.Update(newAssignment);
-
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated();  //stage 5
                 if (!isRequesterNotManager)
                 {
                     var volunteer = _dal.Volunteer?.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
@@ -443,7 +452,7 @@ internal class CallImplementation : BlApi.ICall
                             $"Thank you for your willingness to help.\n" +
                             $"Volunteer System";
 
-                        EmailHelper.SendEmail(volunteer.Email, subject, body);
+                        _ = EmailHelper.SendEmailAsync(volunteer.Email, subject, body);
                     }
                 }
             }
@@ -475,13 +484,17 @@ internal class CallImplementation : BlApi.ICall
             lock (AdminManager.BlMutex)//stage 7
             {
                 var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
-                if ((assignment.EndTime != null) &&   ((assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation)))
+                if ((assignment.EndTime != null) && ((assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation)))
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
                 //.LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
                 if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
                 DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
                 _dal.Assignment.Update(newAssignment);
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)
@@ -540,6 +553,10 @@ internal class CallImplementation : BlApi.ICall
                 if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
                     throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
                 _dal.Assignment.Create(newAssignment);
+                CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
+                CallManager.Observers.NotifyListUpdated(); //stage 5
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)
@@ -555,40 +572,44 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlGeneralException("Unexpected error occurred.", ex);
         }
     }
-    private void NotifyVolunteersAboutNewCall(DO.Call call)
+    private async Task NotifyVolunteersAboutNewCall(DO.Call call)
     {
         try
         {
-            lock (AdminManager.BlMutex)//stage 7
+            List<DO.Volunteer?> volunteers;
+            lock (AdminManager.BlMutex) //stage 7
+                volunteers = _dal.Volunteer.ReadAll(v =>
+                    v!.IsActive &&
+                    v.Latitude != null && v.Longitude != null &&
+                    v.Email != null).ToList();
+
+            var emailTasks = new List<Task>();
+
+            foreach (var volunteer in volunteers)
             {
-                var volunteers = _dal.Volunteer.ReadAll(v =>
-                v!.IsActive &&
-                v.Latitude != null && v.Longitude != null &&
-                v.Email != null);
+                double distance = Tools.CalculateDistance(
+                    volunteer?.Latitude!.Value,
+                    volunteer?.Longitude!.Value,
+                    call.Latitude,
+                    call.Longitude,
+                    volunteer!.DistanceTypes);
 
-                foreach (var volunteer in volunteers)
+                if (volunteer.MaxDistance == null || distance <= volunteer.MaxDistance)
                 {
-                    double distance = Tools.CalculateDistance(
-                        volunteer?.Latitude!.Value,
-                        volunteer?.Longitude!.Value,
-                        call.Latitude,
-                        call.Longitude,
-                        volunteer!.DistanceTypes);
-
-                    if (volunteer.MaxDistance == null || distance <= volunteer.MaxDistance)
-                    {
-                        string subject = "New Call Available Near You!";
-                        string body = BuildEmailBody(volunteer, call, distance);
-                        EmailHelper.SendEmail(volunteer.Email, subject, body);
-                    }
+                    string subject = "New Call Available Near You!";
+                    string body = BuildEmailBody(volunteer, call, distance);
+                    emailTasks.Add(EmailHelper.SendEmailAsync(volunteer.Email, subject, body));
                 }
             }
+
+            await Task.WhenAll(emailTasks);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Failed to notify volunteers: " + ex.Message);
         }
     }
+
     private string BuildEmailBody(DO.Volunteer volunteer, DO.Call call, double distance)
     {
         string message = call.CallType switch
@@ -625,6 +646,21 @@ internal class CallImplementation : BlApi.ICall
     CallManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
     CallManager.Observers.RemoveObserver(id, observer); //stage 5
-
     #endregion Stage 5
+    private async Task updateCoordinatesForCallAddressAsync(DO.Call doCall)
+    {
+        if (doCall.FullAddress is not null)
+        {
+            var (lat, lon) = await Tools.GetCoordinatesFromAddressAsync(doCall.FullAddress);
+            if (lat != default && lon != default)
+            {
+                doCall = doCall with { Latitude = lat, Longitude = lon };
+                lock (AdminManager.BlMutex)
+                    _dal.Call.Update(doCall);
+                CallManager.Observers.NotifyListUpdated();
+                CallManager.Observers.NotifyItemUpdated(doCall.Id);
+            }
+        }
+    }
+
 }

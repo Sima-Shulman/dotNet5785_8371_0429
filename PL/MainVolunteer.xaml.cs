@@ -55,7 +55,7 @@ namespace PL
                 if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
                 {
                     CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                    ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude,
+                    ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
                             (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
                 }
                 else
@@ -82,7 +82,6 @@ namespace PL
             if (callLat == null || callLon == null)
                 return;
 
-            // 1. בונה את קוד ה־HTML של המפה
             string mapHtml = $@"
                                 <!DOCTYPE html>
                                 <html>
@@ -121,7 +120,7 @@ namespace PL
             string tempDir = System.IO.Path.GetTempPath();
             foreach (var file in Directory.GetFiles(tempDir, "map_*.html"))
             {
-                try { File.Delete(file); } catch { /* מתעלם משגיאות */ }
+                try { File.Delete(file); } catch {  }
             }
 
             string uniqueFileName = $"map_{Guid.NewGuid()}.html";
@@ -295,13 +294,13 @@ namespace PL
         {
             var id = CurrentVolunteer!.Id;
             CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress!.CallId);
             OnPropertyChanged(nameof(CurrentVolunteer));
             OnPropertyChanged(nameof(CurrentCall));
             if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
             {
                 CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                ShowMap((double)CurrentVolunteer.Latitude, (double)CurrentVolunteer.Longitude,
+                ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
                         (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
             }
         }
@@ -318,11 +317,11 @@ namespace PL
                 s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id,CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
 
-                MessageBox.Show("הטיפול בקריאה הסתיים.");
+                MessageBox.Show("Treatment has been completed!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בסיום טיפול: " + ex.Message);
+                MessageBox.Show("Error completing treatment " + ex.Message);
             }
         }
 
@@ -338,11 +337,11 @@ namespace PL
             {               
                 s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
-                MessageBox.Show("הטיפול בקריאה בוטל.");
+                MessageBox.Show("Treatment was cancelled!");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("שגיאה בביטול טיפול: " + ex.Message);
+                MessageBox.Show("Error canceling treatment " + ex.Message);
             }
         }
 

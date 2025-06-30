@@ -224,10 +224,11 @@ namespace DalTest
                 string full_address = Console.ReadLine()!;
                 Console.WriteLine("Enter Latitude to update (optional): ");
                 string LatitudeInput = Console.ReadLine()!;
-                double latitude = string.IsNullOrEmpty(LatitudeInput) || !double.TryParse(LatitudeInput, out double lat) ? call.Latitude : lat;
+                double latitude = string.IsNullOrEmpty(LatitudeInput) || !double.TryParse(LatitudeInput, out double lat) ? (call.Latitude ?? double.NaN) : lat;
                 Console.WriteLine("Enter Longitude to update (optional): ");
                 string longitudeInput = Console.ReadLine()!;
-                double longitude = string.IsNullOrEmpty(longitudeInput) || !double.TryParse(longitudeInput, out double longit) ? call.Longitude : longit; ;
+                double longitude = string.IsNullOrEmpty(longitudeInput) || !double.TryParse(longitudeInput, out double longit) ? (call.Longitude ?? double.NaN) : longit;
+                ;
                 Call newCall = new()
                 {
                     Id = call.Id,
