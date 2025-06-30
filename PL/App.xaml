@@ -17,6 +17,10 @@
         <local:InverseBoolConverter x:Key="InverseBoolConverterKey"/>
         <local:CallStatusAndNeverAssignedToVisibilityConverter x:Key="CallStatusAndNeverAssignedToVisibilityConverter"/>
         <local:CallStatusToVisibilityConverter x:Key="CallStatusToVisibilityConverter"/>
-
+        <!-- Window Background -->
+        <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#eaf3fc" Offset="0"/>
+            <GradientStop Color="#f7fbff" Offset="1"/>
+        </LinearGradientBrush>
     </Application.Resources>
 </Application>

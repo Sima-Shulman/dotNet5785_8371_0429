@@ -5,10 +5,200 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallListWindow" Height="450" Width="800"
+        Title="CallListWindow"
+        WindowState="Maximized"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="callListWindow_Loaded"
-        Closed=" callLisWindow_Closed">
+        Closed="callLisWindow_Closed">
+
+    <Window.Resources>
+        <!-- סגנון כפתור כללי מודרני -->
+        <Style TargetType="Button" x:Key="ModernButtonStyle">
+            <Setter Property="Background" Value="#2E86C1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6" 
+                                SnapsToDevicePixels="True"
+                                BorderBrush="#1B4F72"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1B4F72"/>
+                                <Setter Property="BorderBrush" Value="#145A86"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#154360"/>
+                                <Setter Property="BorderBrush" Value="#0F2C43"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#AAB7B8"/>
+                                <Setter Property="Foreground" Value="#555"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- סגנון לכפתור מחיקה -->
+        <Style TargetType="Button" x:Key="DeleteButtonStyle" BasedOn="{StaticResource ModernButtonStyle}">
+            <Setter Property="Background" Value="#E74C3C"/>
+            <Setter Property="BorderBrush" Value="#C0392B"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="MinWidth" Value="70"/>
+            <Setter Property="ToolTip" Value="Delete this item" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True"
+                                >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <TextBlock Text="🗑" FontSize="14" Margin="0,0,4,0" />
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#C0392B"/>
+                                <Setter Property="BorderBrush" Value="#922B21"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#922B21"/>
+                                <Setter Property="BorderBrush" Value="#6B2118"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#E6B0AA"/>
+                                <Setter Property="Foreground" Value="#7F4F4B"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- סגנון לכפתור ביטול השמה -->
+        <Style TargetType="Button" x:Key="UnassignButtonStyle" BasedOn="{StaticResource ModernButtonStyle}">
+            <Setter Property="Background" Value="#F39C12"/>
+            <Setter Property="BorderBrush" Value="#D68910"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="ToolTip" Value="Unassign this call" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1"
+                                SnapsToDevicePixels="True"
+                                >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <TextBlock Text="↩" FontSize="14" Margin="0,0,4,0" />
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#D68910"/>
+                                <Setter Property="BorderBrush" Value="#B9770E"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#B9770E"/>
+                                <Setter Property="BorderBrush" Value="#946F0B"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#FAD7A0"/>
+                                <Setter Property="Foreground" Value="#927E5E"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- סגנון לתאים בטבלה למרכז טקסט -->
+        <Style TargetType="DataGridCell" x:Key="CenteredCellStyle">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="6,2"/>
+        </Style>
+
+        <!-- סגנון לכותרות העמודות למרכז טקסט -->
+        <Style TargetType="DataGridColumnHeader" x:Key="CenteredHeaderStyle">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="6,4" />
+        </Style>
+        <!-- הוסף ל־Window.Resources -->
+        <Style TargetType="Button" x:Key="AddButtonStyle" BasedOn="{StaticResource ModernButtonStyle}">
+            <Setter Property="Background" Value="#27AE60"/>
+            <!-- ירוק מודרני -->
+            <Setter Property="BorderBrush" Value="#1E8449"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="ToolTip" Value="Add a new call" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        CornerRadius="8" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="1"
+                        SnapsToDevicePixels="True"
+                        >
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <TextBlock Text="+" FontSize="18" Margin="0,0,6,0" FontWeight="Bold"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1E8449"/>
+                                <Setter Property="BorderBrush" Value="#196F3D"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#196F3D"/>
+                                <Setter Property="BorderBrush" Value="#145A32"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#ABEBC6"/>
+                                <Setter Property="Foreground" Value="#567D46"/>
+                                <Setter Property="Cursor" Value="Arrow"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -17,6 +207,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
         </Grid>
+
         <Grid HorizontalAlignment="Stretch" Height="50" Grid.Row="0" VerticalAlignment="Top" Width="auto"  >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -26,53 +217,61 @@
             </Grid.ColumnDefinitions>
             <Label Content="Call Type:" HorizontalContentAlignment="Center" Grid.Column="0" Height="50" VerticalAlignment="Top"/>
             <ComboBox 
-            SelectedValue="{Binding CallType, Mode=TwoWay}"
-            SelectionChanged="comboBoxFilterCallType_SelectionChanged" 
-            ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" Grid.Column="1" Height="50" HorizontalContentAlignment="Center" VerticalContentAlignment="Top"  >
-
-            </ComboBox>
-
+                SelectedValue="{Binding CallType, Mode=TwoWay}"
+                SelectionChanged="comboBoxFilterCallType_SelectionChanged" 
+                ItemsSource="{Binding Source={StaticResource CallTypeCollectionKey}}" Grid.Column="1" Height="50" HorizontalContentAlignment="Center" VerticalContentAlignment="Top"  />
             <Label Content="status" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Grid.Column="2"  Height="50"/>
             <ComboBox
-            Grid.Column="3" 
-            SelectedValue="{Binding CallStatus, Mode=TwoWay}"
-            SelectionChanged="comboBoxFilterCallStatus_SelectionChanged" 
-            ItemsSource="{Binding Source={StaticResource CallStatusCollectionKey}}" 
-            Height="50"
-            HorizontalContentAlignment="Center" 
-            VerticalContentAlignment="Top"/>
+                Grid.Column="3" 
+                SelectedValue="{Binding CallStatus, Mode=TwoWay}"
+                SelectionChanged="comboBoxFilterCallStatus_SelectionChanged" 
+                ItemsSource="{Binding Source={StaticResource CallStatusCollectionKey}}" 
+                Height="50"
+                HorizontalContentAlignment="Center" 
+                VerticalContentAlignment="Top"/>
         </Grid>
-
-
 
         <DataGrid
             ItemsSource="{Binding CallList}"
-            IsReadOnly ="True" 
+            IsReadOnly="True"
             AutoGenerateColumns="False"
-      	    EnableRowVirtualization="True"
+            EnableRowVirtualization="True"
             RowDetailsVisibilityMode="VisibleWhenSelected"
             MouseDoubleClick="DataGrid_MouseDoubleClick"
-            SelectedItem="{Binding SelectedCall}" Margin="0,60,0,75">
+            SelectedItem="{Binding SelectedCall}" 
+            Margin="0,60,0,75"
+            GridLinesVisibility="None"
+            CellStyle="{StaticResource CenteredCellStyle}"
+            ColumnHeaderStyle="{StaticResource CenteredHeaderStyle}">
+
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding CallId}" Header="CallId" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding CallType}" Header="CallType" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding OpeningTime}" Header="OpeningTime" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding TimeLeft}" Header="TimeLeft" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding LastVolunteerName}" Header="LastVolunteerName" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding TotalTime}" Header="TotalTime" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding CallStatus}" Header="CallStatus" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="TotalAssignments" Width="Auto"/>
-                <DataGridTemplateColumn Header="Unassign" Width="Auto">
+                <!-- שימוש ב- * כדי לשמור יחס קבוע בין העמודות -->
+                <DataGridTextColumn Binding="{Binding CallId}" Header="CallId" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="CallType" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding OpeningTime}" Header="OpeningTime" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding TimeLeft}" Header="TimeLeft" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding LastVolunteerName}" Header="LastVolunteerName" Width="3*"/>
+                <DataGridTextColumn Binding="{Binding TotalTime}" Header="TotalTime" Width="1*"/>
+                <DataGridTextColumn Binding="{Binding CallStatus}" Header="CallStatus" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="TotalAssignments" Width="1*"/>
+
+                <DataGridTemplateColumn Header="Unassign" Width="1.5*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Unassign" Click="btnUnassignCall_Click" Visibility="{Binding CallStatus, Converter={StaticResource CallStatusToVisibilityConverter}}" />
+                            <Button Content="Unassign"
+                                    Click="btnUnassignCall_Click"
+                                    Style="{StaticResource UnassignButtonStyle}"
+                                    Visibility="{Binding CallStatus, Converter={StaticResource CallStatusToVisibilityConverter}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Delete" Width="Auto">
+
+                <DataGridTemplateColumn Header="Delete" Width="1.5*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="Delete" Click="btnDeleteCall_Click">
+                            <Button Content="Delete"
+                                    Click="btnDeleteCall_Click"
+                                    Style="{StaticResource DeleteButtonStyle}">
                                 <Button.Visibility>
                                     <MultiBinding Converter="{StaticResource CallStatusAndNeverAssignedToVisibilityConverter}">
                                         <Binding Path="CallStatus"/>
@@ -84,21 +283,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-
         </DataGrid>
 
-        <Button Content="Add" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0, 10" Height="50" Width="100"  Click="btnAddCall_Click" />
+        <Button Content="Add" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,10" Height="50" Width="100"  Click="btnAddCall_Click"   Style="{StaticResource AddButtonStyle}" />
     </Grid>
 </Window>
-
-
-
-
-
-
-
-
-
-
-
-    
