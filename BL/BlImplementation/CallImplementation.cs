@@ -428,7 +428,8 @@ internal class CallImplementation : BlApi.ICall
                 _dal.Assignment.Update(newAssignment);
                 CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
                 CallManager.Observers.NotifyListUpdated(); //stage 5
-
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated();  //stage 5
                 if (!isRequesterNotManager)
                 {
                     var volunteer = _dal.Volunteer?.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with id{volunteerId} dose not exist!");
@@ -479,7 +480,7 @@ internal class CallImplementation : BlApi.ICall
             lock (AdminManager.BlMutex)//stage 7
             {
                 var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
-                if ((assignment.EndTime != null) && (assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation))
+                if ((assignment.EndTime != null) && ((assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation)))
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
                 //.LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
                 if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
@@ -488,6 +489,8 @@ internal class CallImplementation : BlApi.ICall
                 _dal.Assignment.Update(newAssignment);
                 CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
                 CallManager.Observers.NotifyListUpdated(); //stage 5
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)
@@ -546,6 +549,8 @@ internal class CallImplementation : BlApi.ICall
                 _dal.Assignment.Create(newAssignment);
                 CallManager.Observers.NotifyItemUpdated(newAssignment.CallId);  //stage 5
                 CallManager.Observers.NotifyListUpdated(); //stage 5
+                VolunteerManager.Observers.NotifyItemUpdated(newAssignment.VolunteerId);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated(); //stage 5
             }
         }
         catch (DO.DalDoesNotExistException ex)
