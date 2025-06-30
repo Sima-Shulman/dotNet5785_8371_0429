@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Volunteer
 {
@@ -64,8 +65,16 @@ namespace PL.Volunteer
         /// <summary>
         /// Registers an observer to update the volunteer list when changes occur.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         private void voluteerListObserver()
-            => queryVolunteerList();
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    queryVolunteerList();
+                });
+        }
 
 
         /// <summary>

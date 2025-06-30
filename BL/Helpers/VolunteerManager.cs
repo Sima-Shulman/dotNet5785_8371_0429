@@ -1,7 +1,10 @@
-﻿using DalApi;
+﻿using BlApi;
+using DalApi;
+using Helpers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using Factory = DalApi.Factory;
 
 namespace Helpers;
 /// <summary>
@@ -11,7 +14,9 @@ namespace Helpers;
 
 internal static class VolunteerManager
 {
-    private static IDal s_dal = Factory.Get;
+    private static IDal s_dal = DalApi.Factory.Get;
+    private static IBl s_bl = BlApi.Factory.Get();
+
     internal static ObserverManager Observers = new(); //stage 5 
 
     /// <summary>
@@ -132,7 +137,8 @@ internal static class VolunteerManager
     /// <param name="volunteers">Raw volunteer list from data layer.</param>
     /// <returns>List of summarized business object volunteers.</returns>
     public static List<BO.VolunteerInList> GetVolunteerList(IEnumerable<DO.Volunteer> volunteers)
-    => volunteers.Select(v => {
+    => volunteers.Select(v =>
+    {
         lock (AdminManager.BlMutex) //stage 7
             return ConvertDoVolunteerToBoVolunteerInList(v);
     }).ToList();
@@ -257,4 +263,70 @@ internal static class VolunteerManager
             return false;
         return true;
     }
+
+
+    private static readonly Random s_rand = new();
+    private static int s_simulatorCounter = 0;
+
+    internal static void SimulateAssigningCallsToVolunteers()
+    {
+        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
+
+        List<DO.Volunteer?> doVolunteerList;
+        lock (AdminManager.BlMutex)
+            doVolunteerList = s_dal.Volunteer.ReadAll(v => v?.IsActive == true).ToList();
+
+        foreach (var doVolunteer in doVolunteerList)
+        {
+            if (doVolunteer == null) continue;
+            int volunteerId = doVolunteer.Id;
+            DO.Assignment? currentAssignment;
+            lock (AdminManager.BlMutex)
+                currentAssignment = s_dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && a.EndTime == null && a?.StartTime != null).LastOrDefault();
+
+            if (currentAssignment == null)
+            {
+                if (s_rand.Next(100) < 20)
+                {
+                    IEnumerable<BO.OpenCallInList> openCalls;
+
+                    openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
+
+                    var callsWithCoordinates = openCalls.Where(c => c?.CallDistance != null).ToList();
+
+                    var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
+
+                    s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id);
+
+                }
+
+            }
+            else
+            {
+                DO.Call? call;
+                lock (AdminManager.BlMutex)
+                    call = s_dal.Call.Read(currentAssignment.CallId);
+
+                if (call == null) continue;
+
+                double? distance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude,call.Longitude,call.Latitude , doVolunteer.DistanceTypes);
+                if (distance == null) continue;
+
+                TimeSpan timePassed = DateTime.Now - currentAssignment.StartTime;
+
+                TimeSpan minRequiredTime = TimeSpan.FromMinutes(distance.Value * 1.5 + s_rand.Next(2, 6));
+
+                if (timePassed >= minRequiredTime)
+                {
+                    s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.Id);
+                }
+                else if (s_rand.Next(100) < 10)
+                {
+                    s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.Id);
+                }
+            }
+        }
+    }
 }
+
+

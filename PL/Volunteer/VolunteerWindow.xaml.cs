@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace PL.Volunteer;
 
@@ -156,11 +157,17 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     /// <summary>
     /// Observer method to refresh the volunteer details when changes occur.
     /// </summary>
+    private volatile DispatcherOperation? _observerOperation = null; //stage 7
     private void volunteerObserver()
     {
-        int id = CurrentVolunteer!.Id;
-        CurrentVolunteer = null;
-        CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+        if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+            _observerOperation = Dispatcher.BeginInvoke(() =>
+            {
+
+                int id = CurrentVolunteer!.Id;
+                CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+            });
     }
 
     /// <summary>

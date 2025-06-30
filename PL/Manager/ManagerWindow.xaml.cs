@@ -48,6 +48,22 @@ namespace PL.Manager
         public static readonly DependencyProperty RiskRangeProperty =
             DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(ManagerWindow));
 
+        public int Interval
+        {
+            get { return (int)GetValue(IntervalProperty); }
+            set { SetValue(IntervalProperty, value); }
+        }
+        public static readonly DependencyProperty IntervalProperty =
+            DependencyProperty.Register("Interval", typeof(int), typeof(ManagerWindow), new PropertyMetadata(1));
+
+        public bool IsSimulatorRunning
+        {
+            get { return (bool)GetValue(IsSimulatorRunningProperty); }
+            set { SetValue(IsSimulatorRunningProperty, value); }
+        }
+        public static readonly DependencyProperty IsSimulatorRunningProperty =
+            DependencyProperty.Register("IsSimulatorRunning", typeof(bool), typeof(ManagerWindow), new PropertyMetadata(false));
+
         /// <summary>
         /// Handles the Loaded event of the ManagerWindow control.
         /// </summary>
@@ -71,6 +87,8 @@ namespace PL.Manager
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
         }
+
+
 
         /// <summary>
         /// Handles the click event of the buttons to promote the clock by one minute.
@@ -172,7 +190,10 @@ namespace PL.Manager
         /// </summary>
         private void clockObserver()
         {
-            CurrentTime = s_bl.Admin.GetClock();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                CurrentTime = s_bl.Admin.GetClock();
+            });
         }
 
         /// <summary>
@@ -182,5 +203,25 @@ namespace PL.Manager
         {
             RiskRange = s_bl.Admin.GetRiskTimeRange();
         }
+
+
+
+
+        private void btnToggleSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsSimulatorRunning)
+            {
+                s_bl.Admin.StartSimulator(Interval);
+                MessageBox.Show("START");
+                IsSimulatorRunning = true;
+            }
+            else
+            {
+                MessageBox.Show("STOP");
+                s_bl.Admin.StopSimulator();
+                IsSimulatorRunning = false;
+            }
+        }
+
     }
 }

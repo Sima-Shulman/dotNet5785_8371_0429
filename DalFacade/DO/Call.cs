@@ -21,7 +21,7 @@ public record Call
     double Longitude,
     DateTime OpeningTime,
     DateTime? MaxFinishTime
- )
+)
 {
     public int Id { get; init; }
     /// <summary>

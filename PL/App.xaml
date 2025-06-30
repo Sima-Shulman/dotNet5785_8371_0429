@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="Login/LoginWindow.xaml">
     <Application.Resources>
+        <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <local:SimulatorButtonTextConverter x:Key="SimulatorButtonTextConverter"/>
         <local:CallTypeCollection x:Key="CallTypeCollectionKey" />
         <local:NullToCollapsedConverter x:Key="NullToCollapsedConverter" />
         <local:CallStatusCollection x:Key="CallStatusCollectionKey" />

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using static BO.Enums;
 
 namespace PL.Call
@@ -165,8 +166,16 @@ namespace PL.Call
         /// <summary>
         /// Registers the observer for call list updates and queries the initial call list.
         /// </summary>
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+
         private void callListObserver()
-                => queryCallList();
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    queryCallList();
+                });
+        }
 
 
         /// <summary>

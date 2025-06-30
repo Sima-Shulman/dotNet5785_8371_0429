@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using static BO.Enums;
 
 namespace PL;
@@ -68,7 +69,7 @@ public partial class CallHistory : Window
     private IEnumerable<BO.ClosedCallInList> FilterClosedCallsList()
     {
         return (CallType == BO.Enums.CallType.None) ?
-          s_bl?.Call.GetClosedCallsHandledByVolunteer(VolunteerId,null,null) ?? Enumerable.Empty<BO.ClosedCallInList>() :
+          s_bl?.Call.GetClosedCallsHandledByVolunteer(VolunteerId, null, null) ?? Enumerable.Empty<BO.ClosedCallInList>() :
           s_bl.Call.GetClosedCallsHandledByVolunteer(VolunteerId, CallType, null);
     }
 
@@ -83,8 +84,15 @@ public partial class CallHistory : Window
     /// <summary>
     /// Registers an observer to update the closed calls list when there are changes in the call data.
     /// </summary>
+    private volatile DispatcherOperation? _observerOperation = null; //stage 7
     private void closedCallsListObserver()
-            => queryClosedCallsList();
+    {
+        if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+            _observerOperation = Dispatcher.BeginInvoke(() =>
+            {
+                queryClosedCallsList();
+            });
+    }
 
     /// <summary>
     /// Event handler for the Loaded event of the CallListWindow.

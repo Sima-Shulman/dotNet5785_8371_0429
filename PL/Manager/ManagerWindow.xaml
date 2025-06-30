@@ -20,10 +20,10 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="{Binding CurrentTime}"  FontWeight="Bold" FontSize="20" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0"/>
-            <Button Content="Add 1 minute" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Click="btnAddOneMinute_Click" />
-            <Button Content="Add 1 hour" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Click="btnAddOneHour_Click"/>
-            <Button Content="Add 1 day" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Click="btnAddOneDay_Click"/>
-            <Button Content="Addd 1 year" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Click="btnAddOneYear_Click"/>
+            <Button Content="Add 1 minute" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+            <Button Content="Add 1 hour" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="2" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+            <Button Content="Add 1 day" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+            <Button Content="Addd 1 year" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="4" Click="btnAddOneYear_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
         </Grid>
         <!--Risk Range Grid-->
         <Grid>
@@ -46,9 +46,24 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Content="Init DB" Grid.Row="0" Margin="2" Click="btnInitDB_Click" />
-            <Button Content="Reset DB"  Grid.Row="1" Margin="2" Click="btnResetDB_Click"/>
+            <Button Content="Init DB" Grid.Row="0" Margin="2" Click="btnInitDB_Click"  IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+            <Button Content="Reset DB"  Grid.Row="1" Margin="2" Click="btnResetDB_Click"   IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
         </Grid>
+        <!-- Simulator Control Grid -->
+        <Grid Width="250" Height="100" Margin="363,117,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+                <Label Content="Interval (min):"/>
+                <TextBox Width="50" Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" 
+                 IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}"/>
+            </StackPanel>
+            <Button Grid.Row="1" Content="{Binding IsSimulatorRunning, Converter={StaticResource SimulatorButtonTextConverter}}" 
+            Click="btnToggleSimulator_Click"/>
+        </Grid>
+
 
     </Grid>
 </Window>
