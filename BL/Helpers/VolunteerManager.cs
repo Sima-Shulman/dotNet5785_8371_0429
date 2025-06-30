@@ -293,10 +293,11 @@ internal static class VolunteerManager
                     openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
 
                     var callsWithCoordinates = openCalls.Where(c => c?.CallDistance != null).ToList();
-
-                    var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
-
-                    s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id);
+                    if (callsWithCoordinates.Count > 0)
+                    {
+                        var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
+                        s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id);
+                    }
 
                 }
 
@@ -314,7 +315,16 @@ internal static class VolunteerManager
 
                 TimeSpan timePassed = DateTime.Now - currentAssignment.StartTime;
 
-                TimeSpan minRequiredTime = TimeSpan.FromMinutes(distance.Value * 1.5 + s_rand.Next(2, 6));
+                double rawMinutes = distance.Value * 1.5 + s_rand.Next(2, 6);
+
+                // בדיקה אם הערך בתחום סביר (למשל עד 1,000,000 דקות)
+                if (rawMinutes <= 0 || rawMinutes > 1_000_000)
+                {
+                    rawMinutes = 10; // ברירת מחדל אם הערך לא תקין
+                }
+
+                TimeSpan minRequiredTime = TimeSpan.FromMinutes(rawMinutes);
+
 
                 if (timePassed >= minRequiredTime)
                 {
