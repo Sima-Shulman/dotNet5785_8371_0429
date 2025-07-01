@@ -347,7 +347,7 @@
     <Role>Manager</Role>
     <IsActive>true</IsActive>
     <DistanceTypes>DrivingDistance</DistanceTypes>
-    <MaxDistance>80</MaxDistance>
+    <MaxDistance>100</MaxDistance>
     <Password>PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8=</Password>
   </Volunteer>
 </ArrayOfVolunteer>
