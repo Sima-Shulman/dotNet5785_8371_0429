@@ -242,7 +242,19 @@
             Margin="0,60,0,75"
             GridLinesVisibility="None"
             CellStyle="{StaticResource CenteredCellStyle}"
-            ColumnHeaderStyle="{StaticResource CenteredHeaderStyle}">
+            ColumnHeaderStyle="{StaticResource CenteredHeaderStyle}" >
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource NullLatitudeLongitudeToBackgroundConverter}">
+                                <Binding Path="Latitude" />
+                                <Binding Path="Longitude" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
 
             <DataGrid.Columns>
                 --><!-- שימוש ב- * כדי לשמור יחס קבוע בין העמודות --><!--

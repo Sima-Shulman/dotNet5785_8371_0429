@@ -1,5 +1,3 @@
-
-
 using DalApi;
 using DO;
 using Helpers;
@@ -549,6 +547,8 @@ internal class CallImplementation : BlApi.ICall
                 var volunteer = _dal.Volunteer.Read(volunteerId);
                 if (volunteer is null)
                     throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+                if (volunteer.IsActive == false)
+                    throw new BO.BlUnauthorizedException($"Volunteer with ID {volunteerId} is not authorized to treat call with ID={callId} since he is not active!");
                 ///צריך לבדוק שהקריאה לא מידי רחוקה??
                 if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
                     throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
@@ -625,7 +625,6 @@ internal class CallImplementation : BlApi.ICall
             $"Hello {volunteer.FullName},\n\n" +
             $"{message}\n\n" +
             $"Call details:\n" +
-            $"- ID: {call.Id}\n" +
             $"- Description: {call.Description}\n" +
             $"- Address: {call.FullAddress}\n" +
             $"- Opening Time: {call.OpeningTime}\n" +
@@ -651,14 +650,15 @@ internal class CallImplementation : BlApi.ICall
     {
         if (doCall.FullAddress is not null)
         {
-            var (lat, lon) = await Tools.GetCoordinatesFromAddressAsync(doCall.FullAddress);
+            DO.Call call = _dal.Call.ReadAll(c => c?.Description == doCall.Description && c?.FullAddress == doCall.FullAddress && c?.CallType == doCall.CallType && c.MaxFinishTime == doCall.MaxFinishTime && c.OpeningTime == doCall.OpeningTime).FirstOrDefault() ?? throw new BO.BlDoesNotExistException("Call was not found for updating the coordinates"); ;
+            var (lat, lon) = await Tools.GetCoordinatesFromAddressAsync(call.FullAddress);
             if (lat != default && lon != default)
             {
-                doCall = doCall with { Latitude = lat, Longitude = lon };
+                call = call with { Latitude = lat, Longitude = lon };
                 lock (AdminManager.BlMutex)
-                    _dal.Call.Update(doCall);
+                    _dal.Call.Update(call);
                 CallManager.Observers.NotifyListUpdated();
-                CallManager.Observers.NotifyItemUpdated(doCall.Id);
+                CallManager.Observers.NotifyItemUpdated(call.Id);
             }
         }
     }

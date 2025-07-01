@@ -186,6 +186,37 @@ namespace PL
             throw new NotImplementedException();
         }
     }
+
+    public class NullLatitudeLongitudeToBackgroundConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.Length < 2)
+                return Brushes.LightGray;
+
+            // בדיקה אם אחד מהערכים הוא DependencyProperty.UnsetValue או null
+            if (values[0] == DependencyProperty.UnsetValue || values[1] == DependencyProperty.UnsetValue
+                || values[0] == null || values[1] == null)
+            {
+                return Brushes.Red;
+            }
+
+            // ניסיון המרה בטוחה
+            if (values[0] is double latitude && values[1] is double longitude)
+            {
+                return (latitude == 0 && longitude == 0) ? Brushes.Red : Brushes.LightGray;
+            }
+
+            // אם לא הצליח להמיר - אדום כהנחה שהמיקום לא תקין
+            return Brushes.Red;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     //public class CallStatusAnLastVolunteerNameToVisibilityConverter : IMultiValueConverter
     //{
     //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

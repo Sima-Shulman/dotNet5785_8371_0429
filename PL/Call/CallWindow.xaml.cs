@@ -66,7 +66,7 @@ public partial class CallWindow : Window, INotifyPropertyChanged
                     FullAddress = string.Empty,
                     Latitude = 0.0,
                     Longitude = 0.0,
-                    OpeningTime = DateTime.Now,
+                    OpeningTime = s_bl.Admin.GetClock(),
                     MaxFinishTime = null,
                     CallType = CallType.None,
                     CallStatus = CallStatus.None
@@ -160,7 +160,7 @@ public partial class CallWindow : Window, INotifyPropertyChanged
                 MessageBox.Show("Max Finish Time must be after Opening Time.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (CurrentCall.MaxFinishTime < DateTime.Now)
+            if (CurrentCall.MaxFinishTime < s_bl.Admin.GetClock())
             {
                 MessageBox.Show("Max Finish Time cannot be in the past.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;

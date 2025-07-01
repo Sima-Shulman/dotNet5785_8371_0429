@@ -67,7 +67,7 @@ namespace PL.Volunteer
         /// </summary>
         private volatile DispatcherOperation? _observerOperation = null; //stage 7
 
-        private void voluteerListObserver()
+        private void VolunteerListObserver()
         {
             if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
                 _observerOperation = Dispatcher.BeginInvoke(() =>
@@ -83,15 +83,15 @@ namespace PL.Volunteer
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void volunteerListWindow_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Volunteer.AddObserver(voluteerListObserver);
+            => s_bl.Volunteer.AddObserver(VolunteerListObserver);
 
         /// <summary>
         /// Handles the Closed event of the volunteerLisWindow control.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void volunteerLisWindow_Closed(object sender, EventArgs e)
-            => s_bl.Volunteer.RemoveObserver(voluteerListObserver);
+        private void volunteerListWindow_Closed(object sender, EventArgs e)
+            => s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
 
         /// <summary>
         /// Filters the volunteer list based on the selected call type.

@@ -120,7 +120,7 @@ namespace PL
             string tempDir = System.IO.Path.GetTempPath();
             foreach (var file in Directory.GetFiles(tempDir, "map_*.html"))
             {
-                try { File.Delete(file); } catch {  }
+                try { File.Delete(file); } catch { }
             }
 
             string uniqueFileName = $"map_{Guid.NewGuid()}.html";
@@ -218,6 +218,22 @@ namespace PL
                     int id = CurrentVolunteer!.Id;
                     CurrentVolunteer = null;
                     CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+                    if (CurrentVolunteer.CallInProgress != null)
+                    {
+                        CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+                    }
+                    else
+                    {
+                        CurrentCall = null; // Handle the case where CallInProgress is null  
+                    }
+                    OnPropertyChanged(nameof(CurrentVolunteer));
+                    OnPropertyChanged(nameof(CurrentCall));
+                    if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
+                    {
+                        CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+                        ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
+                                (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
+                    }
                 });
         }
 
@@ -230,6 +246,9 @@ namespace PL
         {
             if (CurrentVolunteer!.Id != 0)
                 s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, volunteerObserver);
+            if (CurrentVolunteer.CallInProgress != null)
+                s_bl.Call.AddObserver(CurrentCall!.Id, volunteerObserver);
+
             //צריך לעקוב פה אחרי שינויים ב assignments
             // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
             //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
@@ -245,6 +264,8 @@ namespace PL
         {
             if (CurrentVolunteer!.Id != 0)
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, volunteerObserver);
+            if (CurrentVolunteer.CallInProgress != null)
+                s_bl.Call.RemoveObserver(CurrentCall!.Id, volunteerObserver);
         }
 
 
@@ -255,7 +276,7 @@ namespace PL
         /// <param name="e"></param>
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
-           new CallHistory(CurrentVolunteer!.Id).ShowDialog();
+            new CallHistory(CurrentVolunteer!.Id).ShowDialog();
         }
 
         /// <summary>
@@ -269,7 +290,7 @@ namespace PL
             //צריך לעקוב פה אחרי שינויים ב assignments
             // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
             //אז מעקב אחרי המתנדב עצמו לא יעזור לי כדי לדעת אם הוא לקח קריאה לטיפול.
-            chooseCallWindow.Closed += (s, args) => RefreshCallDetails();
+            //chooseCallWindow.Closed += (s, args) => RefreshCallDetails();
             chooseCallWindow.ShowDialog();
         }
 
@@ -290,20 +311,20 @@ namespace PL
         /// <summary>
         /// Refreshes the call details for the current volunteer.
         /// </summary>
-        private void RefreshCallDetails()
-        {
-            var id = CurrentVolunteer!.Id;
-            CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
-            CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress!.CallId);
-            OnPropertyChanged(nameof(CurrentVolunteer));
-            OnPropertyChanged(nameof(CurrentCall));
-            if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
-            {
-                CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
-                ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
-                        (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
-            }
-        }
+        //private void RefreshCallDetails()
+        //{
+        //    var id = CurrentVolunteer!.Id;
+        //    CurrentVolunteer = s_bl.Volunteer.GetVolunteerDetails(id);
+        //    CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress!.CallId);
+        //    OnPropertyChanged(nameof(CurrentVolunteer));
+        //    OnPropertyChanged(nameof(CurrentCall));
+        //    if (CurrentVolunteer.CallInProgress != null && CurrentVolunteer.CallInProgress.CallStatus != BO.Enums.CallStatus.Expired)
+        //    {
+        //        CurrentCall = s_bl.Call.GetCallDetails(CurrentVolunteer.CallInProgress.CallId);
+        //        ShowMap((double)CurrentVolunteer.Latitude!, (double)CurrentVolunteer.Longitude!,
+        //                (double?)CurrentCall.Latitude, (double?)CurrentCall.Longitude);
+        //    }
+        //}
 
         /// <summary>
         /// Event handler for the End Call button click event.
@@ -314,7 +335,7 @@ namespace PL
         {
             try
             {
-                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id,CurrentVolunteer.CallInProgress!.AssignmentId);
+                s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
 
                 MessageBox.Show("Treatment has been completed!");
@@ -334,7 +355,7 @@ namespace PL
         private void btnCancelCall_Click(object sender, RoutedEventArgs e)
         {
             try
-            {               
+            {
                 s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
                 MessageBox.Show("Treatment was cancelled!");

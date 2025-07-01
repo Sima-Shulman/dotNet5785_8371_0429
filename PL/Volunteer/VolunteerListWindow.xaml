@@ -5,7 +5,9 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Background="#F0F4F8">
+        Background="#F0F4F8"
+        Loaded=" volunteerListWindow_Loaded"
+        Closed="volunteerListWindow_Closed">
 
     <Window.Resources>
         <!-- Brushes -->

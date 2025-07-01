@@ -197,17 +197,17 @@ public static class Initialization
             34.9076, 34.7915, 34.7761, 34.8527, 34.8183, 34.7928, 34.8034, 34.7569, 34.9075, 34.8063
         };
         DateTime systemTime = s_dal!.Config.Clock;
-        DateTime callStartTime;
-        DateTime? callEndTime;
+        DateTime callOpeningTime;
+        DateTime? callMaxFinishTime;
         Random rand = new Random();
         int i = 0;
         foreach (CallType c_type in callsTypes)
         {
             int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callStartTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
-            int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
-            callEndTime = (rand.NextDouble() > 0.5) ? callStartTime.AddMinutes(randomPositiveNumber) : null;
-            s_dal!.Call.Create(new Call(c_type, verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i++], callStartTime, callEndTime));
+            callOpeningTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
+            int randomPositiveNumber = rand.Next(1, 100000); // הגרלת מספר רנדומלי בין 1 ל-1000
+            callMaxFinishTime = (rand.NextDouble() > 0.5) ? callOpeningTime.AddMinutes(randomPositiveNumber) : null;
+            s_dal!.Call.Create(new Call(c_type, verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i++], callOpeningTime, callMaxFinishTime));
         }
 
     }
@@ -224,27 +224,94 @@ public static class Initialization
         {
             Volunteer randomVolunteer;
             if (volunteers.Count > 0)
+            {
                 randomVolunteer = volunteers[rand.Next(volunteers.Count)]!;
+                if (randomVolunteer == null || randomVolunteer.Id == 0)
+                    throw new Exception("Selected volunteer is invalid or has ID 0.");
+            }
             else
+            {
                 throw new Exception("No volunteers available.");
+            }
             TimeSpan duration;
             if (call!.MaxFinishTime.HasValue)
                 duration = call.MaxFinishTime.Value - call.OpeningTime;
             else
                 duration = TimeSpan.Zero;
+
             double randomMinutes = rand.NextDouble() * duration.TotalMinutes;
             DateTime randomStartTime = call.OpeningTime.AddMinutes(randomMinutes);
-            DateTime? randomEndTime = (rand.NextDouble() > 0.5) ? randomStartTime.AddMinutes(rand.NextDouble()) : null;
-            EndType? endType;
+
+            DateTime? randomEndTime;
+
+            if (!call.MaxFinishTime.HasValue)
+            {
+                // MaxFinishTime == null → 50% סיכוי לקבל זמן רנדומלי לפני Config.Clock
+                if (rand.NextDouble() < 0.5)
+                {
+                    double maxMinutes = (s_dal.Config.Clock - randomStartTime).TotalMinutes;
+                    if (maxMinutes > 0)
+                    {
+                        double endMinutes = rand.NextDouble() * maxMinutes;
+                        randomEndTime = randomStartTime.AddMinutes(endMinutes);
+                    }
+                    else
+                    {
+                        randomEndTime = randomStartTime; // fallback
+                    }
+                }
+                else
+                {
+                    randomEndTime = null;
+                }
+            }
+            else if (call.MaxFinishTime.Value < s_dal.Config.Clock)
+            {
+                // תוקף פג → קבע את הזמן הנוכחי
+                randomEndTime = s_dal.Config.Clock;
+            }
+            else // MaxFinishTime > Config.Clock
+            {
+                // 50% מהפעמים זמן רנדומלי לפני Config.Clock ו־MaxFinishTime, אחרת null
+                if (rand.NextDouble() < 0.5)
+                {
+                    DateTime maxAllowed = call.MaxFinishTime.Value < s_dal.Config.Clock
+                        ? call.MaxFinishTime.Value
+                        : s_dal.Config.Clock;
+
+                    double maxMinutes = (maxAllowed - randomStartTime).TotalMinutes;
+                    if (maxMinutes > 0)
+                    {
+                        double endMinutes = rand.NextDouble() * maxMinutes;
+                        randomEndTime = randomStartTime.AddMinutes(endMinutes);
+                    }
+                    else
+                    {
+                        randomEndTime = randomStartTime; // fallback
+                    }
+                }
+                else
+                {
+                    randomEndTime = null;
+                }
+            }
+
+            EndType? endType = null;
             if (randomEndTime == null)
                 endType = null;
-            else if (call.MaxFinishTime != null && randomEndTime > call.MaxFinishTime)
+            else if (call.MaxFinishTime.HasValue && call.MaxFinishTime < s_dal.Config.Clock)
             {
                 endType = EndType.Expired;
             }
             else
             {
-                endType = (EndType)rand.Next(Enum.GetValues(typeof(EndType)).Length - 1);
+                double randomPercentage = rand.NextDouble();
+                if (randomPercentage < 0.33)
+                    endType = EndType.WasTreated;
+                else if (randomPercentage < 0.66)
+                    endType = EndType.SelfCancellation;
+                else
+                    endType = EndType.ManagerCancellation;
             }
             s_dal!.Assignment.Create(new Assignment
             {

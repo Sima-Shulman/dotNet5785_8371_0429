@@ -313,7 +313,7 @@ internal static class VolunteerManager
                 double? distance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude,call.Longitude,call.Latitude , doVolunteer.DistanceTypes);
                 if (distance == null) continue;
 
-                TimeSpan timePassed = DateTime.Now - currentAssignment.StartTime;
+                TimeSpan timePassed = s_bl.Admin.GetClock() - currentAssignment.StartTime;
 
                 double rawMinutes = distance.Value * 1.5 + s_rand.Next(2, 6);
 

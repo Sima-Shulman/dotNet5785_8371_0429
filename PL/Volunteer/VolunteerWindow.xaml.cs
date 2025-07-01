@@ -37,7 +37,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     /// <param name="id"></param>
     public VolunteerWindow(int id = 0)
     {
-        _buttonText = string.Empty; 
+        _buttonText = string.Empty;
         PropertyChanged = delegate { };
 
         ButtonText = id == 0 ? "Add" : "Update";
@@ -179,6 +179,8 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
         if (CurrentVolunteer!.Id != 0)
             s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, volunteerObserver);
+        if (CurrentVolunteer.CallInProgress != null)
+            s_bl.Call.AddObserver(CurrentVolunteer.CallInProgress.CallId, volunteerObserver);
     }
 
     /// <summary>
@@ -190,5 +192,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
     {
         if (CurrentVolunteer!.Id != 0)
             s_bl.Volunteer.RemoveObserver(CurrentVolunteer!.Id, volunteerObserver);
+        if (CurrentVolunteer.CallInProgress != null)
+            s_bl.Call.RemoveObserver(CurrentVolunteer.CallInProgress.CallId, volunteerObserver);
     }
 }
