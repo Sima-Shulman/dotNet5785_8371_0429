@@ -154,20 +154,6 @@ internal class CallImplementation : BlApi.ICall
             DO.Call? existingCall;
             lock (AdminManager.BlMutex)//stage 7
                 existingCall = _dal.Call.Read(boCall.Id) ?? throw new BO.BlDoesNotExistException($"Call with ID={boCall.Id} does not exist");
-            //only if the user wants to update th address of the call
-            //if (boCall.FullAddress != existingCall.FullAddress)
-            //{
-            //    var (latitude, longitude) = Tools.GetCoordinatesFromAddress(boCall.FullAddress!);
-
-            //    boCall.Latitude = latitude;
-            //    boCall.Longitude = longitude;
-            //}
-            //else
-            //{
-            //    boCall.FullAddress = existingCall.FullAddress;
-            //    boCall.Latitude = existingCall.Latitude;
-            //    boCall.Longitude = existingCall.Longitude;
-            //}
             CallManager.ValidateCall(boCall);
             DO.Call updatedCall = CallManager.ConvertBoCallToDoCall(boCall);
             lock (AdminManager.BlMutex)//stage 7
@@ -394,16 +380,12 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer requesting the cancellation.</param>
     /// <param name="assignmentId">The ID of the assignment to cancel.</param>
-    public void MarkCallCancellation(int volunteerId, int assignmentId)
+    public void MarkCallCancellation(int volunteerId, int assignmentId , bool fromSimulator = false)
     {
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        if (!Thread.CurrentThread.Name?.StartsWith("Simulator") == true)
+        if (!fromSimulator)
             AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
-            //var volunteer = _dal.Volunteer.Read(volunteerId) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
-            //var boVolunteer = VolunteerManager.ConvertDoVolunteerToBoVolunteer(volunteer);
-            //var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
             lock (AdminManager.BlMutex)//stage 7
             {
                 var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
@@ -471,20 +453,17 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer marking the call as completed.</param>
     /// <param name="assignmentId">The ID of the assignment to mark as completed.</param>
-    public void MarkCallCompletion(int volunteerId, int assignmentId)
+    public void MarkCallCompletion(int volunteerId, int assignmentId, bool fromSimulator = false)
     {
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        if (!Thread.CurrentThread.Name?.StartsWith("Simulator") == true)
+        if (!fromSimulator)
             AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
-            //var assignment = (_dal.Assignment.ReadAll(a => (a?.VolunteerId == volunteerId) && (a.CallId == callId) && ((a.EndTime == null) || (a.EndType == DO.EndType.SelfCancellation) || (a.EndType == DO.EndType.ManagerCancellation)))
             lock (AdminManager.BlMutex)//stage 7
             {
                 var assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with id{assignmentId} not found.");
                 if ((assignment.EndTime != null) && ((assignment.EndType != DO.EndType.SelfCancellation) || (assignment.EndType != DO.EndType.ManagerCancellation)))
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
-                //.LastOrDefault() ?? throw new BO.BlDoesNotExistException($"No active assignment found for Volunteer ID={volunteerId} and Call ID={callId}."));
                 if (assignment.EndType == DO.EndType.Expired || assignment.EndType == DO.EndType.WasTreated)
                     throw new BO.BlDeletionException($"The assignment with ID={assignment.Id} has already been completed or expired.");
                 DO.Assignment newAssignment = assignment with { EndTime = _dal.Config.Clock, EndType = DO.EndType.WasTreated };
@@ -514,10 +493,9 @@ internal class CallImplementation : BlApi.ICall
     /// </summary>
     /// <param name="volunteerId">The ID of the volunteer selecting the call for treatment.</param>
     /// <param name="callId">The ID of the call to be selected for treatment.</param>
-    public void SelectCallForTreatment(int volunteerId, int callId)
+    public void SelectCallForTreatment(int volunteerId, int callId , bool fromSimulator = false)
     {
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        if (!Thread.CurrentThread.Name?.StartsWith("Simulator") == true)
+        if (!fromSimulator)
             AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {

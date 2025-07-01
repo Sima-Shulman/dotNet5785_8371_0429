@@ -296,7 +296,7 @@ internal static class VolunteerManager
                     if (callsWithCoordinates.Count > 0)
                     {
                         var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
-                        s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id);
+                        s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id, true);
                     }
 
                 }
@@ -317,10 +317,9 @@ internal static class VolunteerManager
 
                 double rawMinutes = distance.Value * 1.5 + s_rand.Next(2, 6);
 
-                // בדיקה אם הערך בתחום סביר (למשל עד 1,000,000 דקות)
                 if (rawMinutes <= 0 || rawMinutes > 1_000_000)
                 {
-                    rawMinutes = 10; // ברירת מחדל אם הערך לא תקין
+                    rawMinutes = 10; 
                 }
 
                 TimeSpan minRequiredTime = TimeSpan.FromMinutes(rawMinutes);
@@ -328,11 +327,11 @@ internal static class VolunteerManager
 
                 if (timePassed >= minRequiredTime)
                 {
-                    s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.Id);
+                    s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.Id , true);
                 }
                 else if (s_rand.Next(100) < 10)
                 {
-                    s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.Id);
+                    s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.Id, true);
                 }
             }
         }
