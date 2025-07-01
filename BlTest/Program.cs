@@ -344,7 +344,7 @@ namespace BlTest
 
                 Description = description,
                 FullAddress = address,
-                OpeningTime = DateTime.Now,
+                OpeningTime = s_bl.Admin.GetClock(),
                 CallType = callType,
                 CallStatus = BO.Enums.CallStatus.Opened
             };

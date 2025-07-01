@@ -49,10 +49,10 @@ internal static class CallManager
                 if (call.MaxFinishTime.HasValue)
                 {
                     if (call.MaxFinishTime <= s_dal.Config.Clock)
-                        return BO.Enums.CallStatus.InTreatmentAtRisk; // InTreatmentAtRisk  
+                        return BO.Enums.CallStatus.Expired; // Expired  
 
                     if ((call.MaxFinishTime.Value - s_dal.Config.Clock) <= s_dal.Config.RiskRange)
-                        return BO.Enums.CallStatus.InTreatment; // InTreatment  
+                        return BO.Enums.CallStatus.InTreatmentAtRisk; // InTreatment  
                 }
                 else
                     return BO.Enums.CallStatus.InTreatment;
@@ -91,9 +91,9 @@ internal static class CallManager
                 List<DO.Assignment?> assignments = s_dal.Assignment.ReadAll(a => a?.CallId == call.Id).ToList();
                 var lastAssignment = assignments.LastOrDefault(a => a?.CallId == call.Id);
                 var lastVolunteerName = lastAssignment is not null ? s_dal.Volunteer.Read(lastAssignment.VolunteerId)?.FullName : null;
-                TimeSpan? timeLeft = call.MaxFinishTime > DateTime.Now ? call.MaxFinishTime - DateTime.Now : null;
+                TimeSpan? timeLeft = ((lastAssignment is null || lastAssignment.EndTime is null) && (call.MaxFinishTime > AdminManager.Now)) ? call.MaxFinishTime - AdminManager.Now : null;
                 BO.Enums.CallStatus callStatus = CalculateCallStatus(call);
-                TimeSpan? totalTime = callStatus == BO.Enums.CallStatus.Closed ? (call.MaxFinishTime - call.OpeningTime) : null;
+                TimeSpan? totalTime = (callStatus == BO.Enums.CallStatus.Closed&& lastAssignment?.EndType==DO.EndType.WasTreated) ? (lastAssignment.EndTime - lastAssignment.StartTime) : null;
                 return new BO.CallInList
                 {
                     AssignmentId = lastAssignment?.Id,
@@ -177,9 +177,16 @@ internal static class CallManager
                     EndTime: AdminManager.Now,
                     EndType: (DO.EndType)BO.Enums.EndType.Expired
                 ));
+                Observers.NotifyItemUpdated(call!.Id);
             });
+
+
+
+         
+            Observers.NotifyListUpdated();
+            VolunteerManager.Observers.NotifyListUpdated();
             AssignmentManager.PeriodicAssignmentUpdates(oldClock, newClock);
-            
+
         }
     }
 

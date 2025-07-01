@@ -6,8 +6,8 @@
     <FullAddress>1 Jaffa Street, Jerusalem</FullAddress>
     <Latitude>31.7683</Latitude>
     <Longitude>35.2137</Longitude>
-    <OpeningTime>2025-06-30T11:36:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T23:49:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T05:14:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1000</Id>
   </Call>
   <Call>
@@ -16,8 +16,8 @@
     <FullAddress>5 Herzl Boulevard, Tel Aviv</FullAddress>
     <Latitude>32.0853</Latitude>
     <Longitude>34.7818</Longitude>
-    <OpeningTime>2025-06-30T09:56:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T15:10:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T00:14:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1001</Id>
   </Call>
   <Call>
@@ -26,8 +26,8 @@
     <FullAddress>12 HaMeginim Street, Haifa</FullAddress>
     <Latitude>32.817</Latitude>
     <Longitude>35.0365</Longitude>
-    <OpeningTime>2025-06-30T06:00:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T01:44:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T13:19:34</MaxFinishTime>
     <Id>1002</Id>
   </Call>
   <Call>
@@ -36,8 +36,8 @@
     <FullAddress>22 Beit David Street, Petah Tikva</FullAddress>
     <Latitude>32.073</Latitude>
     <Longitude>34.8707</Longitude>
-    <OpeningTime>2025-06-30T11:34:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T22:22:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T06:26:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1003</Id>
   </Call>
   <Call>
@@ -46,8 +46,8 @@
     <FullAddress>13 Ben-Gurion Boulevard, Ashdod</FullAddress>
     <Latitude>33.1303</Latitude>
     <Longitude>34.7671</Longitude>
-    <OpeningTime>2025-06-30T16:42:37</OpeningTime>
-    <MaxFinishTime>2025-07-01T09:18:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T10:56:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1004</Id>
   </Call>
   <Call>
@@ -56,7 +56,7 @@
     <FullAddress>34 King George Street, Jerusalem</FullAddress>
     <Latitude>31.7683</Latitude>
     <Longitude>35.2137</Longitude>
-    <OpeningTime>2025-06-30T02:42:37</OpeningTime>
+    <OpeningTime>2025-07-01T08:44:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1005</Id>
   </Call>
@@ -66,8 +66,8 @@
     <FullAddress>10 Herzl Street, Rishon Lezion</FullAddress>
     <Latitude>31.9632</Latitude>
     <Longitude>34.8022</Longitude>
-    <OpeningTime>2025-06-30T07:22:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T12:02:37</MaxFinishTime>
+    <OpeningTime>2025-06-30T22:51:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T01:04:34</MaxFinishTime>
     <Id>1006</Id>
   </Call>
   <Call>
@@ -76,8 +76,8 @@
     <FullAddress>4 Moshe Dayan Boulevard, Rehovot</FullAddress>
     <Latitude>31.897</Latitude>
     <Longitude>34.811</Longitude>
-    <OpeningTime>2025-06-30T14:27:37</OpeningTime>
-    <MaxFinishTime>2025-07-01T05:48:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T04:06:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1007</Id>
   </Call>
   <Call>
@@ -86,7 +86,7 @@
     <FullAddress>27 Bethlehem Road, Jerusalem</FullAddress>
     <Latitude>31.7612</Latitude>
     <Longitude>35.2271</Longitude>
-    <OpeningTime>2025-06-30T03:41:37</OpeningTime>
+    <OpeningTime>2025-07-01T08:47:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1008</Id>
   </Call>
@@ -96,8 +96,8 @@
     <FullAddress>45 David Remez Street, Kfar Saba</FullAddress>
     <Latitude>32.0924</Latitude>
     <Longitude>34.7957</Longitude>
-    <OpeningTime>2025-06-30T07:13:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T17:16:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T02:12:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1009</Id>
   </Call>
   <Call>
@@ -106,7 +106,7 @@
     <FullAddress>33 Jaffa Street, Nazareth</FullAddress>
     <Latitude>32.7116</Latitude>
     <Longitude>35.2793</Longitude>
-    <OpeningTime>2025-06-30T11:58:37</OpeningTime>
+    <OpeningTime>2025-07-01T08:45:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1010</Id>
   </Call>
@@ -116,7 +116,7 @@
     <FullAddress>2 Mea Shearim Street, Jerusalem</FullAddress>
     <Latitude>31.7656</Latitude>
     <Longitude>35.2132</Longitude>
-    <OpeningTime>2025-06-30T02:03:37</OpeningTime>
+    <OpeningTime>2025-07-01T00:35:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1011</Id>
   </Call>
@@ -126,8 +126,8 @@
     <FullAddress>16 Shmuel Hanavi Street, Haifa</FullAddress>
     <Latitude>32.7992</Latitude>
     <Longitude>34.9837</Longitude>
-    <OpeningTime>2025-06-30T14:38:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T22:52:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T02:42:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1012</Id>
   </Call>
   <Call>
@@ -136,8 +136,8 @@
     <FullAddress>29 Arlozorov Street, Tel Aviv</FullAddress>
     <Latitude>32.0782</Latitude>
     <Longitude>34.7684</Longitude>
-    <OpeningTime>2025-06-30T09:26:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T14:24:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T05:46:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T20:51:34</MaxFinishTime>
     <Id>1013</Id>
   </Call>
   <Call>
@@ -146,8 +146,8 @@
     <FullAddress>8 Chaim Weizmann Boulevard, Beersheba</FullAddress>
     <Latitude>31.2583</Latitude>
     <Longitude>34.8114</Longitude>
-    <OpeningTime>2025-06-30T11:07:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T16:05:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T11:42:34</OpeningTime>
+    <MaxFinishTime>2025-07-02T00:09:34</MaxFinishTime>
     <Id>1014</Id>
   </Call>
   <Call>
@@ -156,8 +156,8 @@
     <FullAddress>20 Yosef Maimon Street, Acre</FullAddress>
     <Latitude>32.9257</Latitude>
     <Longitude>35.072</Longitude>
-    <OpeningTime>2025-06-30T06:42:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T19:00:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T05:59:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T07:24:34</MaxFinishTime>
     <Id>1015</Id>
   </Call>
   <Call>
@@ -166,8 +166,8 @@
     <FullAddress>56 Allenby Street, Tel Aviv</FullAddress>
     <Latitude>32.0648</Latitude>
     <Longitude>34.7883</Longitude>
-    <OpeningTime>2025-06-30T08:04:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T07:39:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T15:53:34</MaxFinishTime>
     <Id>1016</Id>
   </Call>
   <Call>
@@ -176,7 +176,7 @@
     <FullAddress>18 King George Street, Haifa</FullAddress>
     <Latitude>32.1093</Latitude>
     <Longitude>34.7821</Longitude>
-    <OpeningTime>2025-06-30T02:09:37</OpeningTime>
+    <OpeningTime>2025-07-01T11:46:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1017</Id>
   </Call>
@@ -186,8 +186,8 @@
     <FullAddress>9 Golomb Street, Eilat</FullAddress>
     <Latitude>29.5623</Latitude>
     <Longitude>34.9519</Longitude>
-    <OpeningTime>2025-06-30T03:26:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T13:32:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T11:27:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T19:06:34</MaxFinishTime>
     <Id>1018</Id>
   </Call>
   <Call>
@@ -196,8 +196,8 @@
     <FullAddress>13 Jerusalem Boulevard, Ashkelon</FullAddress>
     <Latitude>31.8479</Latitude>
     <Longitude>34.6574</Longitude>
-    <OpeningTime>2025-06-30T03:21:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T09:43:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T11:12:34</MaxFinishTime>
     <Id>1019</Id>
   </Call>
   <Call>
@@ -206,8 +206,8 @@
     <FullAddress>31 Herzog Street, Netanya</FullAddress>
     <Latitude>32.3217</Latitude>
     <Longitude>34.7432</Longitude>
-    <OpeningTime>2025-06-30T02:19:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T03:10:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T02:22:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1020</Id>
   </Call>
   <Call>
@@ -216,8 +216,8 @@
     <FullAddress>17 Gaza Street, Ashdod</FullAddress>
     <Latitude>31.763</Latitude>
     <Longitude>34.7755</Longitude>
-    <OpeningTime>2025-06-30T04:26:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T17:37:37</MaxFinishTime>
+    <OpeningTime>2025-06-30T23:29:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T06:50:34</MaxFinishTime>
     <Id>1021</Id>
   </Call>
   <Call>
@@ -226,8 +226,8 @@
     <FullAddress>11 Revolution Boulevard, Petah Tikva</FullAddress>
     <Latitude>32.062</Latitude>
     <Longitude>34.815</Longitude>
-    <OpeningTime>2025-06-30T04:19:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T14:41:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T07:17:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1022</Id>
   </Call>
   <Call>
@@ -236,7 +236,7 @@
     <FullAddress>50 Keren Hayesod Street, Tiberias</FullAddress>
     <Latitude>32.1125</Latitude>
     <Longitude>34.8052</Longitude>
-    <OpeningTime>2025-06-30T05:09:37</OpeningTime>
+    <OpeningTime>2025-07-01T00:21:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1023</Id>
   </Call>
@@ -246,8 +246,8 @@
     <FullAddress>5 Ha'arba'a Street, Tel Aviv</FullAddress>
     <Latitude>32.0541</Latitude>
     <Longitude>34.8872</Longitude>
-    <OpeningTime>2025-06-30T01:43:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T01:56:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T07:45:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T14:24:34</MaxFinishTime>
     <Id>1024</Id>
   </Call>
   <Call>
@@ -256,8 +256,8 @@
     <FullAddress>34 Chaim Ozer Street, Herzliya</FullAddress>
     <Latitude>32.087</Latitude>
     <Longitude>34.8883</Longitude>
-    <OpeningTime>2025-06-30T05:32:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T19:55:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T08:37:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1025</Id>
   </Call>
   <Call>
@@ -266,8 +266,8 @@
     <FullAddress>23 Achuza Street, Herzliya</FullAddress>
     <Latitude>32.2244</Latitude>
     <Longitude>34.8725</Longitude>
-    <OpeningTime>2025-06-30T02:39:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T11:46:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T15:00:34</MaxFinishTime>
     <Id>1026</Id>
   </Call>
   <Call>
@@ -276,7 +276,7 @@
     <FullAddress>15 Duani Boulevard, Ramat Gan</FullAddress>
     <Latitude>32.1097</Latitude>
     <Longitude>34.7934</Longitude>
-    <OpeningTime>2025-06-30T17:08:37</OpeningTime>
+    <OpeningTime>2025-07-01T07:25:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1027</Id>
   </Call>
@@ -286,8 +286,8 @@
     <FullAddress>41 Nordau Street, Bnei Brak</FullAddress>
     <Latitude>31.7944</Latitude>
     <Longitude>34.7522</Longitude>
-    <OpeningTime>2025-06-30T13:11:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T04:09:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T16:33:34</MaxFinishTime>
     <Id>1028</Id>
   </Call>
   <Call>
@@ -296,8 +296,8 @@
     <FullAddress>55 Herzl Boulevard, Holon</FullAddress>
     <Latitude>32.1092</Latitude>
     <Longitude>34.809</Longitude>
-    <OpeningTime>2025-06-30T17:09:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T08:05:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T14:00:34</MaxFinishTime>
     <Id>1029</Id>
   </Call>
   <Call>
@@ -306,8 +306,8 @@
     <FullAddress>30 Salah A-Din Street, Nazareth</FullAddress>
     <Latitude>32.0594</Latitude>
     <Longitude>34.8017</Longitude>
-    <OpeningTime>2025-06-30T08:18:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T11:33:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T13:39:34</MaxFinishTime>
     <Id>1030</Id>
   </Call>
   <Call>
@@ -316,8 +316,8 @@
     <FullAddress>14 Hebron Road, Jerusalem</FullAddress>
     <Latitude>32.0605</Latitude>
     <Longitude>34.7875</Longitude>
-    <OpeningTime>2025-06-30T08:04:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T11:20:37</MaxFinishTime>
+    <OpeningTime>2025-06-30T22:21:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1031</Id>
   </Call>
   <Call>
@@ -326,8 +326,8 @@
     <FullAddress>7 Ben-Zvi Boulevard, Bat Yam</FullAddress>
     <Latitude>32.0975</Latitude>
     <Longitude>34.7784</Longitude>
-    <OpeningTime>2025-06-30T13:51:37</OpeningTime>
-    <MaxFinishTime>2025-07-01T03:58:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T03:04:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1032</Id>
   </Call>
   <Call>
@@ -336,7 +336,7 @@
     <FullAddress>6 Aba Hushi Street, Netanya</FullAddress>
     <Latitude>32.2537</Latitude>
     <Longitude>34.7854</Longitude>
-    <OpeningTime>2025-06-30T08:27:37</OpeningTime>
+    <OpeningTime>2025-07-01T11:49:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1033</Id>
   </Call>
@@ -346,8 +346,8 @@
     <FullAddress>19 HaSolalim Street, Kiryat Shmona</FullAddress>
     <Latitude>31.7712</Latitude>
     <Longitude>34.7989</Longitude>
-    <OpeningTime>2025-06-30T04:22:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T19:47:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T09:10:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1034</Id>
   </Call>
   <Call>
@@ -356,8 +356,8 @@
     <FullAddress>21 Sheinkin Street, Tel Aviv</FullAddress>
     <Latitude>32.1098</Latitude>
     <Longitude>34.8371</Longitude>
-    <OpeningTime>2025-06-30T14:45:37</OpeningTime>
-    <MaxFinishTime>2025-07-01T01:50:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T11:42:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T13:20:34</MaxFinishTime>
     <Id>1035</Id>
   </Call>
   <Call>
@@ -366,7 +366,7 @@
     <FullAddress>8 Shivtei Israel Street, Haifa</FullAddress>
     <Latitude>31.768</Latitude>
     <Longitude>34.8915</Longitude>
-    <OpeningTime>2025-06-30T01:12:37</OpeningTime>
+    <OpeningTime>2025-07-01T07:18:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1036</Id>
   </Call>
@@ -376,7 +376,7 @@
     <FullAddress>10 Knesset Street, Jerusalem</FullAddress>
     <Latitude>31.9535</Latitude>
     <Longitude>34.7785</Longitude>
-    <OpeningTime>2025-06-30T03:38:37</OpeningTime>
+    <OpeningTime>2025-07-01T05:13:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1037</Id>
   </Call>
@@ -386,8 +386,8 @@
     <FullAddress>12 Yehuda Halevi Street, Ramat Gan</FullAddress>
     <Latitude>31.7741</Latitude>
     <Longitude>34.8124</Longitude>
-    <OpeningTime>2025-06-30T09:42:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T11:34:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T00:06:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1038</Id>
   </Call>
   <Call>
@@ -396,7 +396,7 @@
     <FullAddress>4 Eshkol Boulevard, Ashdod</FullAddress>
     <Latitude>32.0767</Latitude>
     <Longitude>34.7972</Longitude>
-    <OpeningTime>2025-06-30T14:05:37</OpeningTime>
+    <OpeningTime>2025-07-01T07:12:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1039</Id>
   </Call>
@@ -406,8 +406,8 @@
     <FullAddress>8 Shmuel Hanavi Street, Tel Aviv</FullAddress>
     <Latitude>31.9533</Latitude>
     <Longitude>34.9076</Longitude>
-    <OpeningTime>2025-06-30T14:11:37</OpeningTime>
-    <MaxFinishTime xsi:nil="true" />
+    <OpeningTime>2025-07-01T00:24:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T06:07:34</MaxFinishTime>
     <Id>1040</Id>
   </Call>
   <Call>
@@ -416,8 +416,8 @@
     <FullAddress>23 Melche Israel Street, Petah Tikva</FullAddress>
     <Latitude>32.2207</Latitude>
     <Longitude>34.7915</Longitude>
-    <OpeningTime>2025-06-30T16:50:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T17:53:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T01:56:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1041</Id>
   </Call>
   <Call>
@@ -426,7 +426,7 @@
     <FullAddress>33 Aben-Gurion Street, Rehovot</FullAddress>
     <Latitude>32.0609</Latitude>
     <Longitude>34.7761</Longitude>
-    <OpeningTime>2025-06-30T05:17:37</OpeningTime>
+    <OpeningTime>2025-06-30T23:30:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1042</Id>
   </Call>
@@ -436,7 +436,7 @@
     <FullAddress>4 French Hill Street, Jerusalem</FullAddress>
     <Latitude>31.9106</Latitude>
     <Longitude>34.8527</Longitude>
-    <OpeningTime>2025-06-30T15:03:37</OpeningTime>
+    <OpeningTime>2025-06-30T21:29:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1043</Id>
   </Call>
@@ -446,8 +446,8 @@
     <FullAddress>10 IDF Street, Ashkelon</FullAddress>
     <Latitude>31.7364</Latitude>
     <Longitude>34.8183</Longitude>
-    <OpeningTime>2025-06-30T07:25:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T22:29:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T10:15:34</OpeningTime>
+    <MaxFinishTime xsi:nil="true" />
     <Id>1044</Id>
   </Call>
   <Call>
@@ -456,8 +456,8 @@
     <FullAddress>2 Yitzhak Navon Street, Rishon Lezion</FullAddress>
     <Latitude>31.9156</Latitude>
     <Longitude>34.7928</Longitude>
-    <OpeningTime>2025-06-30T10:04:37</OpeningTime>
-    <MaxFinishTime>2025-07-01T02:28:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T02:21:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T12:38:34</MaxFinishTime>
     <Id>1045</Id>
   </Call>
   <Call>
@@ -466,7 +466,7 @@
     <FullAddress>19 King David Street, Jerusalem</FullAddress>
     <Latitude>32.0052</Latitude>
     <Longitude>34.8034</Longitude>
-    <OpeningTime>2025-06-30T14:10:37</OpeningTime>
+    <OpeningTime>2025-06-30T23:15:34</OpeningTime>
     <MaxFinishTime xsi:nil="true" />
     <Id>1046</Id>
   </Call>
@@ -476,8 +476,8 @@
     <FullAddress>8 Tel-High Street, Netanya</FullAddress>
     <Latitude>31.8521</Latitude>
     <Longitude>34.7569</Longitude>
-    <OpeningTime>2025-06-30T01:20:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T15:27:37</MaxFinishTime>
+    <OpeningTime>2025-06-30T22:59:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T01:54:34</MaxFinishTime>
     <Id>1047</Id>
   </Call>
   <Call>
@@ -486,8 +486,18 @@
     <FullAddress>27 Golomb Street, Haifa</FullAddress>
     <Latitude>31.7945</Latitude>
     <Longitude>34.9075</Longitude>
-    <OpeningTime>2025-06-30T05:24:37</OpeningTime>
-    <MaxFinishTime>2025-06-30T16:04:37</MaxFinishTime>
+    <OpeningTime>2025-07-01T04:29:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T19:38:34</MaxFinishTime>
     <Id>1048</Id>
+  </Call>
+  <Call>
+    <CallType>CarAccident</CallType>
+    <Description>try</Description>
+    <FullAddress>druk 40 ramat shlomo jerusaelem israel</FullAddress>
+    <Latitude>31.8120289</Latitude>
+    <Longitude>35.2140311</Longitude>
+    <OpeningTime>2025-07-01T12:40:34</OpeningTime>
+    <MaxFinishTime>2025-07-01T13:40:34</MaxFinishTime>
+    <Id>1049</Id>
   </Call>
 </ArrayOfCall>

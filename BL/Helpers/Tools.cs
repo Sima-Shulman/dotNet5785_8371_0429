@@ -64,7 +64,7 @@ internal static class Tools
     /// <returns>The distance in kilometers.</returns>
     public static double CalculateDistance(double? latitudeV, double? longitudeV, double? latitudeC, double? longitudeC, DO.DistanceTypes type)
     {
-        if (latitudeV == null || longitudeV == null || latitudeC == null || longitudeC == null || latitudeC == 0 || longitudeC == 0) return 0;
+        if (latitudeV == null || longitudeV == null || latitudeC == null || longitudeC == null || latitudeC == 0 || longitudeC == 0) throw new BO.BlInvalidFormatException("Invalid call coordinates");
         double latitudeVNotNull = latitudeV.Value;
         double longitudeVNotNull = longitudeV.Value;
         double latitudeCNotNull = latitudeC.Value;
@@ -74,7 +74,7 @@ internal static class Tools
             DO.DistanceTypes.AerialDistance => HaversineDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull),
             DO.DistanceTypes.WalkingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull, "pedestrian"),
             DO.DistanceTypes.DrivingDistance => GetRouteDistance(latitudeVNotNull, longitudeVNotNull, latitudeCNotNull, longitudeCNotNull, "car"),
-            _ => throw new ArgumentException("Invalid distance type", nameof(type))
+            _ => throw new BO.BlInvalidFormatException("Invalid distance type")
         };
     }
     /// <summary>
