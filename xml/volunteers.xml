@@ -331,7 +331,7 @@
     <Latitude>31.759595</Latitude>
     <Longitude>35.215315</Longitude>
     <Role>Manager</Role>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <DistanceTypes>AerialDistance</DistanceTypes>
     <MaxDistance>5</MaxDistance>
     <Password>KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE=</Password>
