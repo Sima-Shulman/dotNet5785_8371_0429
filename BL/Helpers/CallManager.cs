@@ -148,7 +148,7 @@ internal static class CallManager
             Id = call.Id,
             CallType = (DO.CallType)call.CallType,
             Description = call.Description,
-            FullAddress = call.FullAddress,
+            FullAddress = call.FullAddress ?? string.Empty,
             Latitude = call.Latitude,
             Longitude = call.Longitude,
             OpeningTime = call.OpeningTime,

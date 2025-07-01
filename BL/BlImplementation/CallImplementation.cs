@@ -533,9 +533,6 @@ internal class CallImplementation : BlApi.ICall
                     throw new BO.BlUnauthorizedException($"Call with ID={callId} is closed already.You are not authorized to treat it.");
                 if (call.CallStatus == BO.Enums.CallStatus.Expired)
                     throw new BO.BlUnauthorizedException($"Call with ID={callId} is expired already.You are not authorized to treat it.");
-                //var existingAssignments = _dal.Assignment.ReadAll(a => a?.CallId == callId);
-                //if (existingAssignments.Any(a => a?.EndTime != null))
-                //    throw new BO.BlUnauthorizedException($"Call with ID={callId} is in treatment already.You are not authorized to treat it.");
                 var newAssignment = new DO.Assignment
                 {
                     CallId = callId,
@@ -549,7 +546,6 @@ internal class CallImplementation : BlApi.ICall
                     throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
                 if (volunteer.IsActive == false)
                     throw new BO.BlUnauthorizedException($"Volunteer with ID {volunteerId} is not authorized to treat call with ID={callId} since he is not active!");
-                ///צריך לבדוק שהקריאה לא מידי רחוקה??
                 if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
                     throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
                 _dal.Assignment.Create(newAssignment);
