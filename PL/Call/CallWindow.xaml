@@ -60,8 +60,6 @@
                     <DataGridTextColumn Header="Assigned Time" Binding="{Binding StartTime}" Width="*"/>
                     <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="*"/>
                     <DataGridTextColumn Header="End Type" Binding="{Binding EndType}" Width="*"/>
-
-                    <!-- Add more columns as needed -->
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
@@ -74,3 +72,6 @@
     </Grid>
 
 </Window>
+
+    
+    
