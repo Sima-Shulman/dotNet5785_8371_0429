@@ -172,7 +172,7 @@ public partial class ChooseCallWindow : Window
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show("Error selecting call: "+ err);
+                    MessageBox.Show("Error selecting call: " + err);
                 }
             }
             else
@@ -229,7 +229,11 @@ public partial class ChooseCallWindow : Window
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void callListWindow_Loaded(object sender, RoutedEventArgs e)
-        => s_bl.Call.AddObserver(callListObserver);
+    {
+        s_bl.Call.AddObserver(callListObserver);
+        s_bl.Admin.AddConfigObserver(callListObserver); //stage 7
+        s_bl.Admin.AddClockObserver(callListObserver); //stage 7}
+    }
 
     /// <summary>
     /// Handles the Closed event of the call list window to remove the observer for call updates.
@@ -237,8 +241,11 @@ public partial class ChooseCallWindow : Window
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void callLisWindow_Closed(object sender, EventArgs e)
-        => s_bl.Call.RemoveObserver(callListObserver);
-
+    {
+        s_bl.Call.RemoveObserver(callListObserver);
+        s_bl.Admin.RemoveConfigObserver(callListObserver); //stage 7
+        s_bl.Admin.RemoveClockObserver(callListObserver); //stage 7
+    }
 
 
     /// <summary>

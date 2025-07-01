@@ -45,7 +45,8 @@ public partial class CallHistory : Window
 
     // Using a DependencyProperty as the backing store for ClosedCallList.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty ClosedCallsListProperty =
-        DependencyProperty.Register("ClosedCallList", typeof(List<BO.ClosedCallInList>), typeof(CallHistory), new PropertyMetadata(new List<BO.ClosedCallInList>()));
+        DependencyProperty.Register("ClosedCallsList", typeof(List<BO.ClosedCallInList>), typeof(CallHistory), new PropertyMetadata(new List<BO.ClosedCallInList>()));
+
 
 
     public BO.Enums.CallType CallType { get; set; } = BO.Enums.CallType.None;
@@ -99,15 +100,23 @@ public partial class CallHistory : Window
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void callListWindow_Loaded(object sender, RoutedEventArgs e)
-        => s_bl.Call.AddObserver(closedCallsListObserver);
+    private void callHistoryWindow_Closed(object sender, RoutedEventArgs e)
+    {
+        s_bl.Call.AddObserver(closedCallsListObserver);
+        s_bl.Admin.AddClockObserver(closedCallsListObserver);
+        s_bl.Admin.AddConfigObserver(closedCallsListObserver);
+    }
+
 
     /// <summary>
     /// Event handler for the Closed event of the CallListWindow.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void callLisWindow_Closed(object sender, EventArgs e)
-        => s_bl.Call.RemoveObserver(closedCallsListObserver);
-
+    private void callHistoryWindow_Closed(object sender, EventArgs e)
+    {
+        s_bl.Call.RemoveObserver(closedCallsListObserver);
+        s_bl.Admin.RemoveClockObserver(closedCallsListObserver);
+        s_bl.Admin.RemoveConfigObserver(closedCallsListObserver);
+    }
 }

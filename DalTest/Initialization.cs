@@ -380,6 +380,52 @@ public static class Initialization
             DistanceTypes = (DistanceTypes)rand.Next(Enum.GetValues(typeof(DistanceTypes)).Length),
             MaxDistance = rand.Next(0, 100000)
         });
+        //create 3 more volunteers with specific data.
+        s_dal!.Volunteer.Create(new Volunteer() with
+        {
+            Id = 328178371,
+            FullName = "Simi Shulman",
+            CellphoneNumber = "0583295158",
+            Email = "s0583295158@gmail.com",
+            FullAddress = "druk 58 ramat shlomo jerusalem israel",
+            Latitude = 31.8139395,
+            Longitude = 35.216089,
+            Role = DO.Role.Manager,
+            IsActive = true,
+            DistanceTypes = DO.DistanceTypes.AerialDistance,
+            MaxDistance = 5,
+            Password = "PWVuGP9Zc5jh5RqGB1HZZMPeujJMJvoEzwcN2md/Cz8="
+        });
+        s_dal!.Volunteer.Create(new Volunteer() with
+        {
+            Id = 327820429,
+            FullName = "Efrat Barsheshet",
+            CellphoneNumber = "0583246911",
+            Email = "efrat2508@gmail.com",
+            FullAddress = "harav shrira gaon 7 jerusalem  israel",
+            Latitude = 31.759595,
+            Longitude = 35.215315,
+            Role = DO.Role.Manager,
+            IsActive = true,
+            DistanceTypes = DO.DistanceTypes.DrivingDistance,
+            MaxDistance = 8,
+            Password = "KSqEyQvUA0m3YiwXHRrru+ZokSUCmeTpKxxpNqglyGE="
+        });
+        s_dal!.Volunteer.Create(new Volunteer() with
+        {
+            Id = 334600046,
+            FullName ="Brachi Shulman" ,
+            CellphoneNumber = "0583226804",
+            Email ="ssh95158@gmail.com",
+            FullAddress = "druk 70 ramat shlomo jerusalem israel",
+            Latitude = 31.8139637,
+            Longitude = 35.2182104,
+            Role = DO.Role.Volunteer,
+            IsActive = true,
+            DistanceTypes = DO.DistanceTypes.DrivingDistance,
+            MaxDistance = 4,
+            Password = "W+K9RL7b8XF6LpjV0grTGnMEuGrEvrtIjxBjtA7FBR0="
+        });
     }
     //Generate random valid ID numbers.
     private static int GenerateValidIsraeliId(Random rand)

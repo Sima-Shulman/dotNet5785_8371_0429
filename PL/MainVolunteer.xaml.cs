@@ -248,6 +248,8 @@ namespace PL
                 s_bl.Volunteer.AddObserver(CurrentVolunteer.Id, volunteerObserver);
             if (CurrentVolunteer.CallInProgress != null)
                 s_bl.Call.AddObserver(CurrentCall!.Id, volunteerObserver);
+            s_bl.Admin.AddConfigObserver(volunteerObserver); //stage 7
+            s_bl.Admin.AddClockObserver(volunteerObserver); //stage 7
 
             //צריך לעקוב פה אחרי שינויים ב assignments
             // כי בישות של DO.Volunteer אין שדה שמתייחס לזה אם יש קריאה בטיפולו או לא
@@ -266,6 +268,8 @@ namespace PL
                 s_bl.Volunteer.RemoveObserver(CurrentVolunteer.Id, volunteerObserver);
             if (CurrentVolunteer.CallInProgress != null)
                 s_bl.Call.RemoveObserver(CurrentCall!.Id, volunteerObserver);
+            s_bl.Admin.RemoveConfigObserver(volunteerObserver);
+            s_bl.Admin.RemoveClockObserver(volunteerObserver); //stage 7
         }
 
 

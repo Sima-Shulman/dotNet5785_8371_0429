@@ -270,25 +270,30 @@ internal class CallImplementation : BlApi.ICall
                 throw new BO.BlDoesNotExistException($"Volunteer with ID = {volunteerId} does not exist!");
             lock (AdminManager.BlMutex)//stage 7
             {
-                var closedCalls = _dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && (a.EndTime != null && (a.EndType != DO.EndType.SelfCancellation) && (a.EndType != DO.EndType.ManagerCancellation)))
-                             .Where(a => callTypeFilter is null || (BO.Enums.CallType)_dal.Call.Read(a!.CallId)!.CallType == callTypeFilter)
-                         .Select(a =>
-                         {
-                             var call = _dal.Call.Read(a!.CallId);
-                             return new BO.ClosedCallInList
-                             {
-                                 Id = call!.Id,
-                                 CallType = (BO.Enums.CallType)call.CallType,
-                                 FullAddress = call.FullAddress,
-                                 OpeningTime = call.OpeningTime,
-                                 StartTime = a.StartTime,
-                                 EndTime = a.EndTime,
-                                 EndType = (BO.Enums.EndType)a.EndType!
-                             };
-                         });
-                return sortField.HasValue
+                var closedCalls = _dal.Assignment.ReadAll(a => a?.VolunteerId == volunteerId && a.EndType == DO.EndType.WasTreated)
+                                                .Where(a =>
+                                                {
+                                                    var callType = (BO.Enums.CallType)_dal.Call.Read(a!.CallId)!.CallType;
+                                                    return callTypeFilter is null || callTypeFilter == BO.Enums.CallType.None || callType == callTypeFilter;
+                                                })
+                                                .Select(a =>
+                                                 {
+                                                     var call = _dal.Call.Read(a!.CallId);
+                                                     return new BO.ClosedCallInList
+                                                     {
+                                                         Id = call!.Id,
+                                                         CallType = (BO.Enums.CallType)call.CallType,
+                                                         FullAddress = call.FullAddress,
+                                                         OpeningTime = call.OpeningTime,
+                                                         StartTime = a.StartTime,
+                                                         EndTime = a.EndTime,
+                                                         EndType = (BO.Enums.EndType)a.EndType!
+                                                     };
+                                                 });
+                var closedFilteredCalls = sortField.HasValue
                     ? closedCalls.OrderBy(a => a.GetType().GetProperty(sortField.ToString()!)?.GetValue(a))
                     : closedCalls.OrderBy(a => a.Id);
+                return closedFilteredCalls;
             }
         }
         catch (DO.DalAlreadyExistsException ex)

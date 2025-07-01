@@ -49,7 +49,9 @@
         mc:Ignorable="d"
         Title="CallHistory" Height="600" Width="1100"
         WindowStartupLocation="CenterScreen"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="callHistoryWindow_Closed"
+        Closed="callHistoryWindow_Closed">
 
     <Window.Resources>
         <!-- Background gradient -->

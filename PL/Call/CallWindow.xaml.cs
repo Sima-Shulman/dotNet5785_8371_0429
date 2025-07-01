@@ -202,4 +202,25 @@ public partial class CallWindow : Window, INotifyPropertyChanged
 
 
     }
+
+    private void CallObserver()
+    {
+        CurrentCall = s_bl.Call.GetCallDetails(CurrentCall.Id);
+    }
+    private void CallWindow_Loaded(object sender, EventArgs e)
+    {
+        if (CurrentCall != null)
+            s_bl.Call.AddObserver(CurrentCall.Id, CallObserver);
+        s_bl.Admin.AddClockObserver(CallObserver);
+        s_bl.Admin.AddConfigObserver(CallObserver);
+    }
+
+    private void CallWindow_Closed(object sender, EventArgs e)
+    {
+        if (CurrentCall != null)
+            s_bl.Call.RemoveObserver(CurrentCall.Id, CallObserver);
+        s_bl.Admin.RemoveClockObserver(CallObserver);
+        s_bl.Admin.RemoveConfigObserver(CallObserver);
+
+    }
 }
