@@ -82,23 +82,18 @@ internal class AdminImplementation : IAdmin
     }
     #region Stage 5
     public void AddClockObserver(Action clockObserver) {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-
         AdminManager.ClockUpdatedObservers += clockObserver;
     }
     public void RemoveClockObserver(Action clockObserver) {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.ClockUpdatedObservers -= clockObserver;
     }
     public void AddConfigObserver(Action configObserver)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         AdminManager.ConfigUpdatedObservers += configObserver;
 
     }
     public void RemoveConfigObserver(Action configObserver)
     {
-        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         AdminManager.ConfigUpdatedObservers -= configObserver;
 
     }

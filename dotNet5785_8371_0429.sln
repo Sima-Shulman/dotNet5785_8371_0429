@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D048E432-68C4-46C1-BBB8-AD2A3C996420}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		דוח סיכום פרויקט אפרת ברששת 327820429 וסימה שולמן 328178371.docx = דוח סיכום פרויקט אפרת ברששת 327820429 וסימה שולמן 328178371.docx
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalFacade", "DalFacade\DalFacade.csproj", "{FCFC9E20-5091-49CD-A153-CE7EEA51638A}"
