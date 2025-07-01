@@ -205,7 +205,7 @@ public static class Initialization
         {
             int randomNegativeSeconds = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callOpeningTime = systemTime.AddMinutes(-randomNegativeSeconds); // הפחתה מהזמן הראשי
-            int randomPositiveNumber = rand.Next(1, 1000); // הגרלת מספר רנדומלי בין 1 ל-1000
+            int randomPositiveNumber = rand.Next(1, 100000); // הגרלת מספר רנדומלי בין 1 ל-1000
             callMaxFinishTime = (rand.NextDouble() > 0.5) ? callOpeningTime.AddMinutes(randomPositiveNumber) : null;
             s_dal!.Call.Create(new Call(c_type, verbalDescriptions[i], addressesInIsrael[i], callsLatitudes[i], callsLongitudes[i++], callOpeningTime, callMaxFinishTime));
         }

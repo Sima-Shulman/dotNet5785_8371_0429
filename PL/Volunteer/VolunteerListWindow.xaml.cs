@@ -90,7 +90,7 @@ namespace PL.Volunteer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void volunteerLisWindow_Closed(object sender, EventArgs e)
+        private void volunteerListWindow_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
 
         /// <summary>

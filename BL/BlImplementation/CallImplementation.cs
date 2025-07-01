@@ -1,5 +1,3 @@
-
-
 using DalApi;
 using DO;
 using Helpers;
@@ -549,6 +547,8 @@ internal class CallImplementation : BlApi.ICall
                 var volunteer = _dal.Volunteer.Read(volunteerId);
                 if (volunteer is null)
                     throw new BO.BlDoesNotExistException($"Volunteer with ID={volunteerId} does not exist.");
+                if (volunteer.IsActive == false)
+                    throw new BO.BlUnauthorizedException($"Volunteer with ID {volunteerId} is not authorized to treat call with ID={callId} since he is not active!");
                 ///צריך לבדוק שהקריאה לא מידי רחוקה??
                 if (volunteer.MaxDistance < Tools.CalculateDistance(volunteer.Latitude, volunteer.Longitude, call.Latitude, call.Longitude, volunteer.DistanceTypes))
                     throw new BO.BlUnauthorizedException($"Volunteer with ID={volunteerId} is not authorized to treat call with ID={callId} because it is too far.");
