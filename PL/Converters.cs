@@ -15,7 +15,7 @@ namespace PL
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return (bool)value ? "עצור סימולטור" : "הפעל סימולטור";
+            return (bool)value ? "Stop simulator" : "Run simulator";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

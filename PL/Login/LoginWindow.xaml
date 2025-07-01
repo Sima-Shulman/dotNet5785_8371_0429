@@ -5,64 +5,176 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Login"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800"
+        Title="LoginWindow" Height="600" Width="480"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-
     <Window.Resources>
         <!-- Background gradient -->
         <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#f0f4f8" Offset="0"/>
-            <GradientStop Color="#d9e2ec" Offset="1"/>
+            <GradientStop Color="#f1f5f9" Offset="0"/>
+            <GradientStop Color="#e2e8f0" Offset="0.5"/>
+            <GradientStop Color="#cbd5e1" Offset="1"/>
         </LinearGradientBrush>
+
+        <!-- Card background -->
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#E0FFFFFF" Opacity="0.75"/>
+
+        <!-- Logo style -->
+        <Style x:Key="CleanLogoStyle" TargetType="Border">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Background" Value="#2d3748"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,18"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#64748b" BlurRadius="8" ShadowDepth="2" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Logo icon -->
+        <Style x:Key="LogoIconStyle" TargetType="TextBlock">
+            <Setter Property="Text" Value="👥"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Title style -->
+        <Style x:Key="CleanTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Subtitle style -->
+        <Style x:Key="CleanSubTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#64748b"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+        </Style>
 
         <!-- Label style -->
         <Style TargetType="Label">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#374151"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
         </Style>
 
         <!-- TextBox style -->
         <Style TargetType="TextBox">
-            <Setter Property="Height" Value="35"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
             <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#aaa"/>
+            <Setter Property="Foreground" Value="#1f2937"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Focusable="false" 
+                                        HorizontalScrollBarVisibility="Hidden" 
+                                        VerticalScrollBarVisibility="Hidden"
+                                        VerticalAlignment="Stretch"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#374151"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#6b7280"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Button style -->
         <Style TargetType="Button">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Width" Value="150"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Background" Value="#0078D7"/>
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="#374151"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1f2937"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#111827"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
     <!-- Main background -->
     <Grid Background="{StaticResource WindowBackgroundBrush}">
-        <!-- Centered login card -->
-        <Border Width="450" Padding="30"
-                Background="White"
+        <!-- Background pattern -->
+        <Canvas>
+            <Rectangle Width="150" Height="150" Canvas.Left="350" Canvas.Top="80" Opacity="0.05">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#64748b" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Width="120" Height="120" Canvas.Left="30" Canvas.Top="400" Opacity="0.03">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#374151" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Canvas>
+
+        <!-- Login card -->
+        <Border Width="380" Padding="32"
+                Background="{StaticResource CardBackgroundBrush}"
                 CornerRadius="12"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
             <Border.Effect>
-                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="3"/>
+                <DropShadowEffect Color="#e2e8f0" BlurRadius="16" ShadowDepth="4" Opacity="0.8"/>
             </Border.Effect>
 
-            <!-- Your original layout, with spacing fixes -->
+            <!-- Content -->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -70,15 +182,29 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Label Content="Enter ID Number:" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,5"/>
-                <TextBox Grid.Row="1" HorizontalAlignment="Stretch" Text="{Binding UserId, Mode=TwoWay}" />
+                <!-- Logo -->
+                <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Border Style="{StaticResource CleanLogoStyle}"/>
+                    <TextBlock Style="{StaticResource LogoIconStyle}"/>
+                </Grid>
 
-                <Label Content="Enter Password:" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,5"/>
-                <TextBox Grid.Row="3" HorizontalAlignment="Stretch" Text="{Binding Password, Mode=TwoWay}" />
+                <!-- Title -->
+                <TextBlock Grid.Row="1" Text="Volunteer Management System" Style="{StaticResource CleanTitleStyle}"/>
 
-                <Button Grid.Row="4" Content="Login" HorizontalAlignment="Center" Click="loginBtn_Click"/>
+                <!-- Subtitle -->
+                <TextBlock Grid.Row="2" Text="Welcome back! Please sign in to your account" Style="{StaticResource CleanSubTitleStyle}"/>
+
+                <!-- Your original layout, with spacing fixes -->
+                <Label Content="Enter ID Number:" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                <TextBox Grid.Row="4" HorizontalAlignment="Stretch" Text="{Binding UserId, Mode=TwoWay}" />
+                <Label Content="Enter Password:" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,10,0,5"/>
+                <TextBox Grid.Row="6" HorizontalAlignment="Stretch" Text="{Binding Password, Mode=TwoWay}" />
+                <Button Grid.Row="7" Content="Login" HorizontalAlignment="Center" Click="loginBtn_Click"/>
             </Grid>
         </Border>
     </Grid>

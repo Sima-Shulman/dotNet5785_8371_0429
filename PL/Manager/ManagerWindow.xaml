@@ -1,4 +1,4 @@
-﻿<Window x:Class="PL.Manager.ManagerWindow"
+﻿<!--<Window x:Class="PL.Manager.ManagerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,7 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
     <Window.Resources>
-        <!-- Background -->
+        --><!-- Background --><!--
         <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#E0F7FA" Offset="0"/>
             <GradientStop Color="#F1F8FF" Offset="1"/>
@@ -20,7 +20,7 @@
 
 
 
-        <!-- TextBox style -->
+        --><!-- TextBox style --><!--
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="28"/>
             <Setter Property="FontSize" Value="14"/>
@@ -30,7 +30,7 @@
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
-        <!-- Button style -->
+        --><!-- Button style --><!--
         <Style TargetType="Button">
             <Setter Property="Height" Value="34"/>
             <Setter Property="Width" Value="150"/>
@@ -45,7 +45,7 @@
     </Window.Resources>
 
     <Grid Background="{StaticResource WindowBackgroundBrush}">
-        <!-- Centered manager card -->
+        --><!-- Centered manager card --><!--
         <Border Width="600" Padding="30" Background="White" CornerRadius="15"
                 HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border.Effect>
@@ -59,7 +59,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <!-- Clock Section -->
+                --><!-- Clock Section --><!--
                 <GroupBox Header="Clock" Margin="0,0,0,10">
                     <StackPanel>
                         <Label Content="{Binding CurrentTime}" FontSize="20" HorizontalAlignment="Center"/>
@@ -72,7 +72,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <!-- Risk Section -->
+                --><!-- Risk Section --><!--
                 <GroupBox Header="Risk Range" Grid.Row="1" Margin="0,0,0,10">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                         <Label Content="Risk:" VerticalAlignment="Center"/>
@@ -81,27 +81,28 @@
                     </StackPanel>
                 </GroupBox>
 
-                <!-- Bottom Buttons -->
+                --><!-- Bottom Buttons --><!--
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
+
                     </Grid.ColumnDefinitions>
 
-                    <!-- Left column -->
+                    --><!-- Left column --><!--
                     <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                         <Button Content="Handle Volunteers" Click="btnHandleVolunteers_Click"/>
                         <Button Content="Handle Calls" Click="btnHandleCalls_Click"/>
                     </StackPanel>
 
-                    <!-- Right column -->
+                    --><!-- Right column --><!--
                     <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                         <Button Content="Init DB" Click="btnInitDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
                         <Button Content="Reset DB" Click="btnResetDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
                     </StackPanel>
 
-                    <!-- Simulator Control Grid -->
+                    --><!-- Simulator Control Grid --><!--
                     <Grid Width="250" Height="100"  Grid.Column="2" HorizontalAlignment="Center" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -115,6 +116,275 @@
                         <Button Grid.Row="1" Content="{Binding IsSimulatorRunning, Converter={StaticResource SimulatorButtonTextConverter}}" 
                              Click="btnToggleSimulator_Click"/>
                     </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>-->
+
+    
+    
+<Window x:Class="PL.Manager.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Manager"
+        mc:Ignorable="d"
+        Title="ManagerWindow" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Loaded="ManagerWindow_Loaded"
+        Closed="ManagerWindow_Closed"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+
+    <Window.Resources>
+        <!-- Background gradient -->
+        <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f1f5f9" Offset="0"/>
+            <GradientStop Color="#e2e8f0" Offset="0.5"/>
+            <GradientStop Color="#cbd5e1" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Card background -->
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#E0FFFFFF" Opacity="0.75"/>
+
+        <!-- Header style -->
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,30"/>
+        </Style>
+
+        <!-- Section title style -->
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <!-- Label style -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+
+        <!-- TextBox style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1f2937"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                        Focusable="false" 
+                                        HorizontalScrollBarVisibility="Hidden" 
+                                        VerticalScrollBarVisibility="Hidden"
+                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#374151"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#6b7280"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Button style -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#374151"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1f2937"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#111827"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#9ca3af"/>
+                                <Setter Property="Foreground" Value="#6b7280"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Section card style -->
+        <Style x:Key="SectionCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#e2e8f0" BlurRadius="8" ShadowDepth="2" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main background -->
+    <Grid Background="{StaticResource WindowBackgroundBrush}">
+        <!-- Background pattern -->
+        <Canvas>
+            <Rectangle Width="200" Height="200" Canvas.Left="800" Canvas.Top="120" Opacity="0.05">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#64748b" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Width="150" Height="150" Canvas.Left="80" Canvas.Top="480" Opacity="0.03">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#374151" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Canvas>
+
+        <!-- Main card -->
+        <Border Width="900" Padding="40"
+                Background="{StaticResource CardBackgroundBrush}"
+                CornerRadius="15"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Border.Effect>
+                <DropShadowEffect Color="#e2e8f0" BlurRadius="16" ShadowDepth="4" Opacity="0.8"/>
+            </Border.Effect>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <TextBlock Grid.Row="0" Text="Manager Dashboard" Style="{StaticResource HeaderStyle}"/>
+
+                <!-- Top Row -->
+                <Grid Grid.Row="1" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Clock Section -->
+                    <Border Grid.Column="0" Style="{StaticResource SectionCardStyle}" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="System Clock" Style="{StaticResource SectionTitleStyle}"/>
+                            <Label Content="{Binding CurrentTime}" FontSize="24" HorizontalAlignment="Center" Margin="0,10"/>
+                            <UniformGrid Columns="2" Margin="0,15,0,0">
+                                <Button Content="Add 1 minute" Click="btnAddOneMinute_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                                <Button Content="Add 1 hour" Click="btnAddOneHour_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                                <Button Content="Add 1 day" Click="btnAddOneDay_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                                <Button Content="Add 1 year" Click="btnAddOneYear_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Risk and Simulator Section -->
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <!-- Risk Section -->
+                        <Border Style="{StaticResource SectionCardStyle}" Margin="0,0,0,5">
+                            <StackPanel>
+                                <TextBlock Text="Risk Configuration" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,10"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Risk Range:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBox Width="60" Text="{Binding RiskRange}"/>
+                                    <Button Content="Update" Click="btnUpdateRiskRange_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Simulator Control -->
+                        <Border Style="{StaticResource SectionCardStyle}" Margin="0,5,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Simulator Control" Style="{StaticResource SectionTitleStyle}" Margin="0,0,0,10"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Label Content="Interval (min):" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                    <TextBox Width="60" Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" 
+                                            IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}"/>
+                                    <Button Content="{Binding IsSimulatorRunning, Converter={StaticResource SimulatorButtonTextConverter}}" 
+                                           Click="btnToggleSimulator_Click" Width="100"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Bottom Row -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Management Actions -->
+                    <Border Grid.Column="0" Style="{StaticResource SectionCardStyle}" Margin="0,0,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Management Actions" Style="{StaticResource SectionTitleStyle}"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Button Content="Handle Volunteers" Click="btnHandleVolunteers_Click"/>
+                                <Button Content="Handle Calls" Click="btnHandleCalls_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Database Operations -->
+                    <Border Grid.Column="1" Style="{StaticResource SectionCardStyle}" Margin="10,0,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Database Operations" Style="{StaticResource SectionTitleStyle}"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                                <Button Content="Initialize Database" Click="btnInitDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                                <Button Content="Reset Database" Click="btnResetDB_Click" IsEnabled="{Binding IsSimulatorRunning, Converter={StaticResource InverseBooleanConverter}}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Grid>
         </Border>
