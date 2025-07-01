@@ -211,12 +211,16 @@ public partial class CallWindow : Window, INotifyPropertyChanged
     {
         if (CurrentCall != null)
             s_bl.Call.AddObserver(CurrentCall.Id, CallObserver);
+        s_bl.Admin.AddClockObserver(CallObserver);
+        s_bl.Admin.AddConfigObserver(CallObserver);
     }
 
     private void CallWindow_Closed(object sender, EventArgs e)
     {
         if (CurrentCall != null)
             s_bl.Call.RemoveObserver(CurrentCall.Id, CallObserver);
+        s_bl.Admin.RemoveClockObserver(CallObserver);
+        s_bl.Admin.RemoveConfigObserver(CallObserver);
 
     }
 }

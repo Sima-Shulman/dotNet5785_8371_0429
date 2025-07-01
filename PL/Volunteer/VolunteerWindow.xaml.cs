@@ -181,6 +181,8 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             s_bl.Volunteer.AddObserver(CurrentVolunteer!.Id, volunteerObserver);
         if (CurrentVolunteer.CallInProgress != null)
             s_bl.Call.AddObserver(CurrentVolunteer.CallInProgress.CallId, volunteerObserver);
+        s_bl.Admin.AddConfigObserver(volunteerObserver);
+        s_bl.Admin.AddClockObserver(volunteerObserver);
     }
 
     /// <summary>
@@ -194,5 +196,7 @@ public partial class VolunteerWindow : Window, INotifyPropertyChanged
             s_bl.Volunteer.RemoveObserver(CurrentVolunteer!.Id, volunteerObserver);
         if (CurrentVolunteer.CallInProgress != null)
             s_bl.Call.RemoveObserver(CurrentVolunteer.CallInProgress.CallId, volunteerObserver);
+        s_bl.Admin.RemoveConfigObserver(volunteerObserver);
+        s_bl.Admin.RemoveClockObserver(volunteerObserver);
     }
 }

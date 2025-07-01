@@ -83,7 +83,11 @@ namespace PL.Volunteer
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void volunteerListWindow_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Volunteer.AddObserver(VolunteerListObserver);
+        {
+            s_bl.Volunteer.AddObserver(VolunteerListObserver);
+            s_bl.Admin.AddClockObserver(VolunteerListObserver);
+            s_bl.Admin.AddConfigObserver(VolunteerListObserver);
+        }
 
         /// <summary>
         /// Handles the Closed event of the volunteerLisWindow control.
@@ -91,7 +95,11 @@ namespace PL.Volunteer
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void volunteerListWindow_Closed(object sender, EventArgs e)
-            => s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
+        {
+            s_bl.Volunteer.RemoveObserver(VolunteerListObserver);
+            s_bl.Admin.RemoveClockObserver(VolunteerListObserver);
+            s_bl.Admin.RemoveConfigObserver(VolunteerListObserver);
+        }
 
         /// <summary>
         /// Filters the volunteer list based on the selected call type.

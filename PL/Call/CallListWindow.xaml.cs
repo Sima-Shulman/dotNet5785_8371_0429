@@ -185,7 +185,11 @@ namespace PL.Call
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void callListWindow_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Call.AddObserver(callListObserver);
+        {
+            s_bl.Call.AddObserver(callListObserver);
+            s_bl.Admin.AddConfigObserver(callListObserver); // Registering for configuration changes
+            s_bl.Admin.AddClockObserver(callListObserver); // Registering for clock changes
+        }
 
 
         /// <summary>
@@ -194,7 +198,12 @@ namespace PL.Call
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void callLisWindow_Closed(object sender, EventArgs e)
-            => s_bl.Call.RemoveObserver(callListObserver);
+        {
+            s_bl.Call.RemoveObserver(callListObserver);
+            s_bl.Admin.RemoveConfigObserver(callListObserver); 
+            s_bl.Admin.RemoveClockObserver(callListObserver); 
+
+        }
 
 
     }
