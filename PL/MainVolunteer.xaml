@@ -1,4 +1,4 @@
-﻿<Window x:Class="PL.MainVolunteer"
+﻿<!--<Window x:Class="PL.MainVolunteer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -33,8 +33,8 @@
                 <Label Content="Email"/>
                 <TextBox Text="{Binding CurrentVolunteer.Email}" />
 
-                <!--<Label Content="Password"/>
-                <TextBox Text="{Binding CurrentVolunteer.Password}" />-->
+                --><!--<Label Content="Password"/>
+                <TextBox Text="{Binding CurrentVolunteer.Password}" />--><!--
 
                 <Label Content="Full Address"/>
                 <TextBox Text="{Binding CurrentVolunteer.FullAddress}" />
@@ -103,5 +103,568 @@
 
     </Grid>
 
-</Window>
+</Window>-->
 
+<Window x:Class="PL.MainVolunteer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+        mc:Ignorable="d"
+        Title="MainVolunteer" Height="720" Width="1200"  
+        Loaded="volunteerWindow_Loaded"
+        Closed="volunteerWindow_Closed"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+
+    <Window.Resources>
+        <!-- Background gradient -->
+        <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#f1f5f9" Offset="0"/>
+            <GradientStop Color="#e2e8f0" Offset="0.5"/>
+            <GradientStop Color="#cbd5e1" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Card background -->
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#E0FFFFFF" Opacity="0.75"/>
+
+        <!-- Header style -->
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <!-- Label style -->
+        <Style TargetType="Label">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="0,5,0,3"/>
+        </Style>
+
+        <!-- TextBox style -->
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="2,2"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1f2937"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                        Margin="{TemplateBinding Padding}"
+                                        VerticalAlignment="Center"
+                                        HorizontalScrollBarVisibility="Hidden"
+                                        VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#374151"/>
+                                <Setter Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#f8fafc"/>
+                                <Setter Property="Foreground" Value="#6b7280"/>
+                                <Setter Property="BorderBrush" Value="#e2e8f0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ComboBox style -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1f2937"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <Grid>
+                                <ToggleButton Name="ToggleButton" 
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Focusable="false"
+                                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                            ClickMode="Press">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="16"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Path Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Data="M 0 0 L 3 3 L 6 0 Z" Fill="#6b7280"/>
+                                    </Grid>
+                                </ToggleButton>
+                                <ContentPresenter Name="ContentSite" IsHitTestVisible="False"
+                                                Content="{TemplateBinding SelectionBoxItem}"
+                                                ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                Margin="8,3,18,3"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Left"/>
+                                <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                    <Grid Name="DropDown" SnapsToDevicePixels="True"
+                                          MinWidth="{TemplateBinding ActualWidth}"
+                                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border Background="White" BorderThickness="1" BorderBrush="#d1d5db" CornerRadius="4"/>
+                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#374151"/>
+                                <Setter Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Button style -->
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Background" Value="#374151"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1f2937"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#111827"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#9ca3af"/>
+                                <Setter Property="Foreground" Value="#6b7280"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Update button style -->
+        <Style x:Key="UpdateButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#059669"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#047857"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#065f46"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- End call button style -->
+        <Style x:Key="EndCallButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#dc2626"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#b91c1c"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#991b1b"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Cancel call button style -->
+        <Style x:Key="CancelCallButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="#f59e0b"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#d97706"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#b45309"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- CheckBox style -->
+        <Style TargetType="CheckBox">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- GroupBox style -->
+        <Style TargetType="GroupBox">
+            <Setter Property="Background" Value="{StaticResource CardBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#e2e8f0" BlurRadius="4" ShadowDepth="1" Opacity="0.3"/>
+                            </Border.Effect>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <ContentPresenter Grid.Row="0" 
+                                                ContentSource="Header" 
+                                                Margin="6,0,0,6"
+                                                TextBlock.FontSize="13"
+                                                TextBlock.FontWeight="SemiBold"
+                                                TextBlock.Foreground="#374151"/>
+                                <ContentPresenter Grid.Row="1" 
+                                                Margin="{TemplateBinding Padding}"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- DataGrid style -->
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#f3f4f6"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#f9fafb"/>
+            <Setter Property="CanUserResizeRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="11"/>
+        </Style>
+
+        <!-- DataGrid header style -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#f8fafc"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="BorderBrush" Value="#e5e7eb"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- DataGrid cell style -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#dbeafe"/>
+                    <Setter Property="Foreground" Value="#1e40af"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- TextBlock style for call details -->
+        <Style x:Key="CallDetailStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+        </Style>
+
+        <!-- TextBlock style for call description -->
+        <Style x:Key="CallDescriptionStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1e293b"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main background -->
+    <Grid Background="{StaticResource WindowBackgroundBrush}">
+        <!-- Background pattern -->
+        <Canvas>
+            <Rectangle Width="200" Height="200" Canvas.Left="1000" Canvas.Top="150" Opacity="0.02">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#64748b" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Width="120" Height="120" Canvas.Left="50" Canvas.Top="450" Opacity="0.015">
+                <Rectangle.Fill>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#374151" Offset="0"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Canvas>
+
+        <!-- Main content -->
+        <Grid Margin="15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel -->
+            <Border Grid.Column="0" Background="{StaticResource CardBackgroundBrush}" 
+                    CornerRadius="8" Padding="15" Margin="0,0,8,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#e2e8f0" BlurRadius="6" ShadowDepth="2" Opacity="0.4"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="Personal Information" Style="{StaticResource HeaderStyle}"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Column 1 -->
+                        <Label Grid.Row="0" Grid.Column="0" Content="ID"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CurrentVolunteer.Id}" IsEnabled="False" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Content="Full Name"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentVolunteer.FullName}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Content="Cellphone Number"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentVolunteer.CellphoneNumber}" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Content="Email"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentVolunteer.Email}" />
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="Full Address"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.FullAddress}" />
+
+                        <!-- Column 2 -->
+                        <Label Grid.Row="0" Grid.Column="3" Content="Max Distance"/>
+                        <TextBox Grid.Row="0" Grid.Column="4" Text="{Binding CurrentVolunteer.MaxDistance}" />
+
+                        <Label Grid.Row="1" Grid.Column="3" Content="Distance Type"/>
+                        <ComboBox Grid.Row="1" Grid.Column="4" SelectedValue="{Binding CurrentVolunteer.DistanceType}" 
+                               ItemsSource="{Binding Source={StaticResource DistanceTypeCollectionKey}}" />
+
+                        <Label Grid.Row="2" Grid.Column="3" Content="Is Active"/>
+                        <CheckBox Grid.Row="2" Grid.Column="4" IsChecked="{Binding CurrentVolunteer.IsActive}" 
+                               IsEnabled="{Binding CurrentVolunteer.CallInProgress, Converter={StaticResource NullToTrueConverter}}" />
+                        
+                        <Label Grid.Row="3" Grid.Column="3" Content="Role"/>
+                        <TextBox Grid.Row="3" Grid.Column="4" Text="{Binding CurrentVolunteer.Role}" IsEnabled="False" />
+                    </Grid>
+
+                    <GroupBox Header="Assignments" Margin="0,15,0,10"
+                              Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}">
+                        <DataGrid ItemsSource="{Binding CurrentCall.AssignmentsList}" AutoGenerateColumns="False" IsEnabled="False"
+                                  ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  MaxHeight="200">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Volunteer ID" Binding="{Binding VolunteerId}" Width="0.8*"/>
+                                <DataGridTextColumn Header="Volunteer" Binding="{Binding VolunteerFullName}" Width="1.2*"/>
+                                <DataGridTextColumn Header="Assigned Time" Binding="{Binding StartTime}" Width="1*"/>
+                                <DataGridTextColumn Header="End Time" Binding="{Binding EndTime}" Width="1*"/>
+                                <DataGridTextColumn Header="End Type" Binding="{Binding EndType}" Width="0.8*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
+                    
+                    <Button Content="Update" 
+                         Click="btnAddUpdate_Click" 
+                         Height="40" Width="180" 
+                         Style="{StaticResource UpdateButtonStyle}"
+                         HorizontalAlignment="Center"
+                         Margin="0,20,0,0"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- Right Panel -->
+            <Border Grid.Column="1" Background="{StaticResource CardBackgroundBrush}" 
+                    CornerRadius="8" Padding="15" Margin="8,0,0,0">
+                <Border.Effect>
+                    <DropShadowEffect Color="#e2e8f0" BlurRadius="6" ShadowDepth="2" Opacity="0.4"/>
+                </Border.Effect>
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBlock Text="Current Call Status" Style="{StaticResource HeaderStyle}"/>
+                    
+                    <GroupBox Header="Current Call" Margin="0,0,0,10" Height="160"
+                              Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding CurrentCall.Description}" 
+                                     TextWrapping="Wrap" 
+                                     Style="{StaticResource CallDescriptionStyle}"/>
+                            <TextBlock Text="{Binding CurrentCall.CallType, StringFormat='Call Type: {0}'}" 
+                                     Style="{StaticResource CallDetailStyle}"/>
+                            <TextBlock Text="{Binding CurrentCall.FullAddress, StringFormat='Address: {0}'}" 
+                                     Style="{StaticResource CallDetailStyle}"/>
+                            <TextBlock Text="{Binding CurrentCall.OpeningTime, StringFormat='Opening Time: {0:dd/MM/yyyy HH:mm}'}" 
+                                     Style="{StaticResource CallDetailStyle}"/>
+                            <TextBlock Text="{Binding CurrentCall.MaxFinishTime, StringFormat='Max Finish Time: {0:dd/MM/yyyy HH:mm}'}" 
+                                     Style="{StaticResource CallDetailStyle}"/>
+                            <TextBlock Text="{Binding CurrentCall.CallStatus, StringFormat='Status: {0}'}" 
+                                     FontWeight="Bold" 
+                                     Style="{StaticResource CallDetailStyle}"
+                                     Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </GroupBox>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,10" Height="32" HorizontalAlignment="Center">
+                        <Button Content="End Call" Width="100"
+                                Click="btnEndCall_Click"
+                                Style="{StaticResource EndCallButtonStyle}"
+                                Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}"
+                                Margin="0,0,5,0"/>
+                        <Button Content="Cancel Call" Width="100"
+                                Click="btnCancelCall_Click"
+                                Style="{StaticResource CancelCallButtonStyle}"
+                                Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}"
+                                Margin="5,0,0,0"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Vertical" Margin="0,10" HorizontalAlignment="Center">
+                        <Button Content="View Closed Calls" Click="btnHistory_Click" Width="180" />
+                        <Button Content="Choose a Call" Click="btnChooseCall_Click" Width="180" 
+                                        Visibility="{Binding CurrentCall, Converter={StaticResource NullToCollapsedConverter}}" />
+                    </StackPanel>
+
+                    <Border CornerRadius="8" BorderBrush="#d1d5db" BorderThickness="1" Margin="0,10,0,0" Background="White"
+                            Visibility="{Binding CurrentCall, Converter={StaticResource NullToVisibilityConverter}}">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#e2e8f0" BlurRadius="6" ShadowDepth="2" Opacity="0.4"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Background="#f8fafc" CornerRadius="8,8,0,0" Padding="10,8">
+                                <TextBlock Text="Location Map" FontWeight="SemiBold" FontSize="13" Foreground="#374151" HorizontalAlignment="Center"/>
+                            </Border>
+                            <wv2:WebView2 Name="webView" Grid.Row="1" Height="230" Margin="5"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

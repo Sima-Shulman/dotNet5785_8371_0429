@@ -294,15 +294,6 @@ namespace PL
             chooseCallWindow.ShowDialog();
         }
 
-        /// <summary>
-        /// Event handler for the Exit button click event.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnExit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
 
 
         //צריך לעקוב פה אחרי שינויים ב assignments

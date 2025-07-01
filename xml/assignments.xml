@@ -416,4 +416,20 @@
     <End_time>2025-07-01T15:06:09</End_time>
     <EndType>ManagerCancellation</EndType>
   </Assignment>
+  <Assignment>
+    <Id>53</Id>
+    <CallId>1000</CallId>
+    <VolunteerId>327820429</VolunteerId>
+    <Start_time>2025-07-01T15:06:09</Start_time>
+    <End_time>2025-07-01T15:06:09</End_time>
+    <EndType>ManagerCancellation</EndType>
+  </Assignment>
+  <Assignment>
+    <Id>54</Id>
+    <CallId>1000</CallId>
+    <VolunteerId>327820429</VolunteerId>
+    <Start_time>2025-07-01T15:06:09</Start_time>
+    <End_time>2025-07-01T15:06:09</End_time>
+    <EndType>WasTreated</EndType>
+  </Assignment>
 </ArrayOfAssignment>
