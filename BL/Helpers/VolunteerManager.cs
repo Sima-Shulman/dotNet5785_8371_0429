@@ -289,14 +289,15 @@ internal static class VolunteerManager
                 if (s_rand.Next(100) < 20)
                 {
                     IEnumerable<BO.OpenCallInList> openCalls;
-
-                    openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
+                    lock (AdminManager.BlMutex)
+                        openCalls = s_bl.Call.GetOpenCallsForVolunteer(volunteerId);
 
                     var callsWithCoordinates = openCalls.Where(c => c?.CallDistance != null).ToList();
                     if (callsWithCoordinates.Count > 0)
                     {
                         var selectedCall = callsWithCoordinates[s_rand.Next(callsWithCoordinates.Count)];
-                        s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id, true);
+                        lock (AdminManager.BlMutex)
+                            s_bl.Call.SelectCallForTreatment(doVolunteer.Id, selectedCall.Id, true);
                     }
 
                 }
@@ -313,7 +314,9 @@ internal static class VolunteerManager
                 double? distance = Tools.CalculateDistance(doVolunteer.Latitude, doVolunteer.Longitude,call.Longitude,call.Latitude , doVolunteer.DistanceTypes);
                 if (distance == null) continue;
 
-                TimeSpan timePassed = s_bl.Admin.GetClock() - currentAssignment.StartTime;
+                TimeSpan timePassed;
+                lock (AdminManager.BlMutex)
+                    timePassed = s_bl.Admin.GetClock() - currentAssignment.StartTime;
 
                 double rawMinutes = distance.Value * 1.5 + s_rand.Next(2, 6);
 
@@ -327,11 +330,13 @@ internal static class VolunteerManager
 
                 if (timePassed >= minRequiredTime)
                 {
-                    s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.Id , true);
+                    lock (AdminManager.BlMutex)
+                        s_bl.Call.MarkCallCompletion(volunteerId, currentAssignment.Id, true);
                 }
                 else if (s_rand.Next(100) < 10)
                 {
-                    s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.Id, true);
+                    lock (AdminManager.BlMutex)
+                        s_bl.Call.MarkCallCancellation(volunteerId, currentAssignment.Id, true);
                 }
             }
         }
