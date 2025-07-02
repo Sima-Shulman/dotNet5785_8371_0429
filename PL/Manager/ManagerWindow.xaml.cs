@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Manager
 {
@@ -22,7 +23,8 @@ namespace PL.Manager
     public partial class ManagerWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
+        private volatile DispatcherOperation _callStatisticsObserverOperation = null!;
+        private static CallListWindow callListWindow = null!;
         /// <summary>
         /// Initializes a new instance of the <see cref="ManagerWindow"/> class.
         /// </summary>
@@ -31,6 +33,7 @@ namespace PL.Manager
         {
             Id = id;
             InitializeComponent();
+            LoadCallStatistics();   
         }
         public DateTime CurrentTime
         {
@@ -65,7 +68,6 @@ namespace PL.Manager
         }
         public static readonly DependencyProperty IsSimulatorRunningProperty =
             DependencyProperty.Register("IsSimulatorRunning", typeof(bool), typeof(ManagerWindow), new PropertyMetadata(false));
-
         /// <summary>
         /// Handles the Loaded event of the ManagerWindow control.
         /// </summary>
@@ -77,6 +79,7 @@ namespace PL.Manager
             RiskRange = s_bl.Admin.GetRiskTimeRange();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
+            s_bl.Call.AddObserver(callStatisticsObserver);
         }
 
         /// <summary>
@@ -88,6 +91,7 @@ namespace PL.Manager
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Call.RemoveObserver(callStatisticsObserver);
             App.Current.Properties["IsManagerLoggedIn"] = false;
         }
 
@@ -223,6 +227,121 @@ namespace PL.Manager
                 IsSimulatorRunning = false;
             }
         }
+
+
+        public int OpenCallsCount
+        {
+            get { return (int)GetValue(OpenCallsCountProperty); }
+            set { SetValue(OpenCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty OpenCallsCountProperty =
+            DependencyProperty.Register("OpenCallsCount", typeof(int), typeof(ManagerWindow));
+
+        public int InProgressCallsCount
+        {
+            get { return (int)GetValue(InProgressCallsCountProperty); }
+            set { SetValue(InProgressCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty InProgressCallsCountProperty =
+            DependencyProperty.Register("InProgressCallsCount", typeof(int), typeof(ManagerWindow));
+
+        public int ClosedCallsCount
+        {
+            get { return (int)GetValue(ClosedCallsCountProperty); }
+            set { SetValue(ClosedCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty ClosedCallsCountProperty =
+            DependencyProperty.Register("ClosedCallsCount", typeof(int), typeof(ManagerWindow));
+
+        public int ExpiredCallsCount
+        {
+            get { return (int)GetValue(ExpiredCallsCountProperty); }
+            set { SetValue(ExpiredCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty ExpiredCallsCountProperty =
+            DependencyProperty.Register("ExpiredCallsCount", typeof(int), typeof(ManagerWindow));
+
+        public int OpenAtRiskCallsCount
+        {
+            get { return (int)GetValue(OpenAtRiskCallsCountProperty); }
+            set { SetValue(OpenAtRiskCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty OpenAtRiskCallsCountProperty =
+            DependencyProperty.Register("OpenAtRiskCallsCount", typeof(int), typeof(ManagerWindow));
+
+        public int InProgressAtRiskCallsCount
+        {
+            get { return (int)GetValue(InProgressAtRiskCallsCountProperty); }
+            set { SetValue(InProgressAtRiskCallsCountProperty, value); }
+        }
+        public static readonly DependencyProperty InProgressAtRiskCallsCountProperty =
+            DependencyProperty.Register("InProgressAtRiskCallsCount", typeof(int), typeof(  ManagerWindow));
+
+        private void LoadCallStatistics()
+        {
+            try
+            {
+                var counts = s_bl.Call.GetCallQuantitiesByStatus();
+                // Array indices correspond to CallStatus enum values:
+                // 0: Open, 1: InProgress, 2: Closed, 3: Expired, 4: OpenAtRisk, 5: InProgressAtRisk
+                OpenCallsCount = counts.Length > 0 ? counts[0] : 0;
+                InProgressCallsCount = counts.Length > 1 ? counts[1] : 0;
+                ClosedCallsCount = counts.Length > 2 ? counts[2] : 0;
+                ExpiredCallsCount = counts.Length > 3 ? counts[3] : 0;
+                OpenAtRiskCallsCount = counts.Length > 4 ? counts[4] : 0;
+                InProgressAtRiskCallsCount = counts.Length > 5 ? counts[5] : 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading call statistics: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void callStatisticsObserver()
+        {
+            if (_callStatisticsObserverOperation is null || _callStatisticsObserverOperation.Status == DispatcherOperationStatus.Completed)
+                _callStatisticsObserverOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    LoadCallStatistics();
+                });
+        }
+
+
+        private void OpenCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.Opened);
+        private void InProgressCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.InTreatment);
+        private void ClosedCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.Closed);
+        private void ExpiredCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.Expired);
+        private void OpenAtRiskCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.OpenedAtRisk);
+        private void InProgressAtRiskCalls_Click(object sender, RoutedEventArgs e) => OpenCallListWithFilter(BO.Enums.CallStatus.InTreatmentAtRisk);
+
+        private void OpenCallListWithFilter(BO.Enums.CallStatus status)
+        {
+            try
+            {
+                if (callListWindow == null || !callListWindow.IsVisible)
+                {
+                    callListWindow = new CallListWindow(Id);
+                    callListWindow.SelectedStatus = status; // Set the filter
+                    callListWindow.Closed += (s, args) => callListWindow = null!;
+                    callListWindow.Show();
+                }
+                else
+                {
+                    if (callListWindow.WindowState == WindowState.Minimized)
+                        callListWindow.WindowState = WindowState.Normal;
+                    callListWindow.SelectedStatus = status; // Update the filter
+                    callListWindow.Activate();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening call list: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+
 
     }
 }

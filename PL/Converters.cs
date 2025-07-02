@@ -216,25 +216,5 @@ namespace PL
             throw new NotImplementedException();
         }
     }
-
-    //public class CallStatusAnLastVolunteerNameToVisibilityConverter : IMultiValueConverter
-    //{
-    //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        if (values.Length < 2)
-    //            return Visibility.Collapsed;
-
-    //        BO.Enums.CallStatus callStatus = (BO.Enums.CallStatus)values[0];
-    //        bool isOpened = callStatus == BO.Enums.CallStatus.Opened || callStatus == BO.Enums.CallStatus.OpenedAtRisk;
-    //        bool neverAssigned = TotalAssignments == 0;
-
-    //        return (isOpened && neverAssigned) ? Visibility.Visible : Visibility.Collapsed;
-    //    }
-
-    //    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }
 

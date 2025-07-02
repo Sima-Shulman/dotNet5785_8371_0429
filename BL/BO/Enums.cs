@@ -51,13 +51,13 @@ public class Enums
     /// </summary>
     public enum CallStatus
     {
-        None,
-        InTreatment,
-        InTreatmentAtRisk,
         Opened,
+        InTreatment,
         Closed,
         Expired,
-        OpenedAtRisk
+        OpenedAtRisk,
+        InTreatmentAtRisk,
+        None,
     }
 
     /// <summary>

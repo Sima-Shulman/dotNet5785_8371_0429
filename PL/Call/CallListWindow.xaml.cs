@@ -33,11 +33,17 @@ namespace PL.Call
         }
         public BO.Enums.CallType CallType { get; set; } = BO.Enums.CallType.None;
 
-        public BO.Enums.CallStatus CallStatus { get; set; } = BO.Enums.CallStatus.None;
+        //public BO.Enums.CallStatus CallStatus { get; set; } = BO.Enums.CallStatus.None;
 
         public BO.CallInList? SelectedCall { get; set; }
 
-
+        public BO.Enums.CallStatus? SelectedStatus
+        {
+            get => (BO.Enums.CallStatus?)GetValue(SelectedStatusProperty);
+            set => SetValue(SelectedStatusProperty, value);
+        }
+        public static readonly DependencyProperty SelectedStatusProperty =
+            DependencyProperty.Register("SelectedStatus", typeof(BO.Enums.CallStatus?), typeof(CallListWindow), new PropertyMetadata(BO.Enums.CallStatus.None, OnFilterChanged));
         public IEnumerable<BO.CallInList> CallList
         {
             get { return (IEnumerable<BO.CallInList>)GetValue(CallListProperty); }
@@ -47,6 +53,11 @@ namespace PL.Call
         public static readonly DependencyProperty CallListProperty =
             DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(PL.Call.CallListWindow), new PropertyMetadata(null));
 
+        private static void OnFilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is CallListWindow window)
+                window.queryCallList();
+        }
         /// <summary>
         /// Handles the selection change event of the Call Type filter combo box.
         /// </summary>
@@ -149,8 +160,8 @@ namespace PL.Call
 
                 var filteredCalls = allCalls;
 
-                if (CallStatus != BO.Enums.CallStatus.None)
-                    filteredCalls = filteredCalls.Where(c => c.CallStatus == CallStatus);
+                if (SelectedStatus != BO.Enums.CallStatus.None)
+                    filteredCalls = filteredCalls.Where(c => c.CallStatus == SelectedStatus);
 
                 if (CallType != BO.Enums.CallType.None)
                     filteredCalls = filteredCalls.Where(c => c.CallType == CallType);
