@@ -215,12 +215,10 @@ namespace PL.Manager
             if (!IsSimulatorRunning)
             {
                 s_bl.Admin.StartSimulator(Interval);
-                MessageBox.Show("START");
                 IsSimulatorRunning = true;
             }
             else
             {
-                MessageBox.Show("STOP");
                 s_bl.Admin.StopSimulator();
                 IsSimulatorRunning = false;
             }

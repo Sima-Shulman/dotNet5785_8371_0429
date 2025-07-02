@@ -25,7 +25,7 @@ namespace PL.Call
     {
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public int AdminId { get; set; }    
+        public int AdminId { get; set; }
         public CallListWindow(int id)
         {
             AdminId = id;
@@ -143,17 +143,25 @@ namespace PL.Call
         /// <returns></returns>
         private IEnumerable<BO.CallInList> FilterCallList()
         {
-            var allCalls = s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>();
+            try
+            {
+                var allCalls = s_bl?.Call.GetCallsList() ?? Enumerable.Empty<BO.CallInList>();
 
-            var filteredCalls = allCalls;
+                var filteredCalls = allCalls;
 
-            if (CallStatus != BO.Enums.CallStatus.None)
-                filteredCalls = filteredCalls.Where(c => c.CallStatus == CallStatus);
+                if (CallStatus != BO.Enums.CallStatus.None)
+                    filteredCalls = filteredCalls.Where(c => c.CallStatus == CallStatus);
 
-            if (CallType != BO.Enums.CallType.None)
-                filteredCalls = filteredCalls.Where(c => c.CallType == CallType);
+                if (CallType != BO.Enums.CallType.None)
+                    filteredCalls = filteredCalls.Where(c => c.CallType == CallType);
 
-            return filteredCalls;
+                return filteredCalls;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return Enumerable.Empty<BO.CallInList>();
+            }
         }
 
         /// <summary>
@@ -200,8 +208,8 @@ namespace PL.Call
         private void callLisWindow_Closed(object sender, EventArgs e)
         {
             s_bl.Call.RemoveObserver(callListObserver);
-            s_bl.Admin.RemoveConfigObserver(callListObserver); 
-            s_bl.Admin.RemoveClockObserver(callListObserver); 
+            s_bl.Admin.RemoveConfigObserver(callListObserver);
+            s_bl.Admin.RemoveClockObserver(callListObserver);
 
         }
 

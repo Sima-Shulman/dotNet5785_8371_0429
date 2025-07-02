@@ -88,9 +88,7 @@ public partial class ChooseCallWindow : Window
         {
             window.Volunteer.MaxDistance = newValue.Value;
             s_bl.Volunteer.UpdateVolunteerDetails(window._volunteerId, window.Volunteer);
-            MessageBox.Show($"Max distance updated to {newValue.Value} km.", "Update Successful", MessageBoxButton.OK, MessageBoxImage.Information);
             window.CallList = s_bl.Call.GetOpenCallsForVolunteer(window._volunteerId);
-            MessageBox.Show("CallList is updated!");
         }
     }
 
@@ -119,9 +117,7 @@ public partial class ChooseCallWindow : Window
         var newValue = (string)e.NewValue;
         window.Volunteer.FullAddress = newValue;
         s_bl.Volunteer.UpdateVolunteerDetails(window._volunteerId, window.Volunteer);
-        MessageBox.Show($"Max distance updated to {newValue} km.", "Update Successful", MessageBoxButton.OK, MessageBoxImage.Information);
         window.CallList = s_bl.Call.GetOpenCallsForVolunteer(window._volunteerId);
-        MessageBox.Show("CallList is updated!");
     }
 
     /// <summary>
@@ -135,7 +131,7 @@ public partial class ChooseCallWindow : Window
         {
             MessageBox.Show($"Call {SelectedCall.Id} description {SelectedCall.Description}", "Call Details", MessageBoxButton.OK, MessageBoxImage.Information);
             var Call = s_bl.Call.GetCallDetails(SelectedCall.Id);
-            ShowMap((double)Volunteer.Latitude, (double)Volunteer.Longitude,
+            ShowMap((double)Volunteer.Latitude!, (double)Volunteer.Longitude!,
         (double?)Call.Latitude, (double?)Call.Longitude);
 
         }

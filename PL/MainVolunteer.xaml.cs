@@ -163,7 +163,6 @@ namespace PL
                 }
 
                 s_bl.Volunteer.UpdateVolunteerDetails(CurrentVolunteer.Id, CurrentVolunteer);
-                MessageBox.Show("Volunteer details updated successfully.");
             }
             catch (Exception ex)
             {
@@ -332,8 +331,6 @@ namespace PL
             {
                 s_bl.Call.MarkCallCompletion(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
-
-                MessageBox.Show("Treatment has been completed!");
             }
             catch (Exception ex)
             {
@@ -353,7 +350,6 @@ namespace PL
             {
                 s_bl.Call.MarkCallCancellation(CurrentVolunteer!.Id, CurrentVolunteer.CallInProgress!.AssignmentId);
                 CurrentCall = null;
-                MessageBox.Show("Treatment was cancelled!");
             }
             catch (Exception ex)
             {

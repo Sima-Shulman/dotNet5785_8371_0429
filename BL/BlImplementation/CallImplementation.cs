@@ -189,8 +189,8 @@ internal class CallImplementation : BlApi.ICall
             lock (AdminManager.BlMutex)//stage 7
             {
                 DO.Call call = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exist");
-                if (_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) != BO.Enums.CallStatus.Opened)
-                    throw new BO.BlDeletionException($"Cannot delete call with ID={callId} as they are handling calls.");
+                if (_dal.Assignment.ReadAll(a => a!.CallId == callId).Any() || CallManager.CalculateCallStatus(call) == BO.Enums.CallStatus.InTreatment || CallManager.CalculateCallStatus(call) == BO.Enums.CallStatus.InTreatmentAtRisk)
+                    throw new BO.BlDeletionException($"Cannot delete call with ID={callId} as they are being handled now calls.");
                 _dal.Call.Delete(callId);
             }
             CallManager.Observers.NotifyListUpdated(); //stage 5                                                    

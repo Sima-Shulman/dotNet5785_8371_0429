@@ -66,7 +66,6 @@ namespace PL.Login
                 var userRole = s_bl.Volunteer.Login(UserId.Value, Password);
                 if (userRole == BO.Enums.Role.Volunteer)
                 {
-                    MessageBox.Show("Login successful!");
                     new MainVolunteer(UserId.Value).Show();
                 }
                 else if (userRole == BO.Enums.Role.Manager)
@@ -79,7 +78,6 @@ namespace PL.Login
                 );
                     if (result == MessageBoxResult.Yes)
                     {
-                        MessageBox.Show("You are navigated to manager window.");
                         if (App.Current.Properties["IsManagerLoggedIn"] is true)
                         {
                             MessageBox.Show("A Manager is already logged in to the system.");
@@ -90,7 +88,6 @@ namespace PL.Login
                     }
                     else if (result == MessageBoxResult.No)
                     {
-                        MessageBox.Show("You are navigated to volunteer window.");
                         new MainVolunteer(UserId.Value).Show();
                     }
                 }
